@@ -1,0 +1,27 @@
+{
+  "private": true,
+  "name": "nativeui-monorepo",
+  "version": "0.0.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm -r --parallel --filter ./apps/* run dev",
+    "build": "pnpm -r --filter ./packages/* run build",
+    "lint": "pnpm -r lint || true",
+    "test": "pnpm -r test || true",
+    "release": "pnpm -r --filter @nativeui/primitives build && changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/react": "18.3.3",
+    "typescript": "^5.5.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "18.3.3",
+      "typescript": "5.5.4"
+    }
+  }
+}
