@@ -1,7 +1,10 @@
 {
-  "name": "@nativeui/primitives",
-  "version": "0.1.2",
+  "name": "@native-ui-org/primitives",
+  "version": "0.1.3",
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "main": "dist/index.cjs",
   "module": "dist/index.js",
