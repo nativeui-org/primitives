@@ -1,6 +1,6 @@
 {
   "name": "@nativeui/primitives",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "sideEffects": false,
   "main": "dist/index.cjs",
@@ -15,7 +15,6 @@
     }
   },
   "peerDependencies": {
-    "react": ">=18",
     "react-native": ">=0.74"
   },
   "devDependencies": {
