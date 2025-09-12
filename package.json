@@ -11,7 +11,7 @@
     "build": "pnpm -r --filter ./packages/* run build",
     "lint": "pnpm -r lint || true",
     "test": "pnpm -r test || true",
-    "release": "pnpm -r --filter @nativeui/primitives build && changeset publish"
+    "release": "pnpm -r --filter @native-ui-org/primitives build && changeset publish"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
