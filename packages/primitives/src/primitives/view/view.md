@@ -30,9 +30,9 @@ This component exists to provide a **unified API across iOS, Android, and Web**,
 | `asChild` | `boolean`             | all      | Render the child element directly instead of wrapping it in a `View`.       |
 | `style`   | `StyleProp<ViewStyle>` | all      | Standard RN `style` prop.                                                   |
 | `role`    | `string`              | web      | Landmark or widget role (e.g. `"region"`, `"button"`, `"heading"`).     |
-| `tabIndex`| `0 | -1`              | web      | Controls tab navigation order.                                              |
-| `dir`     | `"ltr" | "rtl" | "auto"` | web      | Text direction hint for the DOM element.                                    |
-| `aria-*`  | `string | boolean`    | web      | Any ARIA attribute supported by React Native Web.                           |
+| `tabIndex`| `0 \| -1`              | web      | Controls tab navigation order.                                              |
+| `dir`     | `"ltr" \| "rtl" \| "auto"` | web      | Text direction hint for the DOM element.                                    |
+| `aria-*`  | `string \| boolean`    | web      | Any ARIA attribute supported by React Native Web.                           |
 | `...props`| `RNViewProps`         | all      | All other React Native `View` props (e.g. `onLayout`, `testID`, accessibility). |
 
 ---
