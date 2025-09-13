@@ -6,37 +6,32 @@ const EVENT_RE = /^on[A-Z]/;
 /**
  * Slot
  *
- * A utility component that allows passing props down to a child element
- * without wrapping it in an extra DOM node or native view.
+ * A tiny utility that lets a parent component "become" its child
+ * by cloning it with additional props, without adding an extra wrapper.
  *
- * - Merges `className` values.
- * - Composes event handlers (child handler is called first).
- * - Child props always take precedence over slot props.
- * - Forwards refs correctly.
+ * Philosophy:
+ * - RN-first, no styling: we do NOT touch `className` or `style`.
+ * - Child props always win over injected props (no surprises).
+ * - Event handlers are composed (child first, then injected).
+ * - Refs are composed (forwarded ref + child's ref).
  *
- * Inspired by Radix UI's Slot, adapted for React Native + Web.
+ * Typical usage: <View asChild><section /></View>
+ * This renders <section> directly with View's props, avoiding a wrapper node.
  */
 export function Slot(props: { children?: React.ReactNode } & InjectedProps) {
-  const { children, ...slotProps } = props;
+  const { children, ...injected } = props;
 
   if (!React.isValidElement(children)) {
-    // Only a single valid React element can be slotted
+    // Enforce a single valid React element
     return React.Children.count(children) > 1 ? React.Children.only(null) : null;
   }
 
   const childProps = (children.props ?? {}) as Record<string, any>;
-  const injected = (slotProps ?? {}) as Record<string, any>;
-
   const next: Record<string, any> = { ...childProps };
 
-  // Merge className values
-  if (typeof injected.className === "string" && injected.className.length) {
-    next.className = [childProps.className, injected.className].filter(Boolean).join(" ");
-  }
-
-  // Compose event handlers (child first, then slot)
+  // Compose event handlers: child first, then injected
   for (const key of Object.keys(injected)) {
-    const val = injected[key];
+    const val = (injected as any)[key];
     if (EVENT_RE.test(key) && typeof val === "function") {
       const theirs = childProps[key];
       const ours = val;
@@ -50,17 +45,17 @@ export function Slot(props: { children?: React.ReactNode } & InjectedProps) {
     }
   }
 
-  // Copy all other props, but never overwrite child's
+  // Copy all other injected props but never overwrite child's
   for (const [k, v] of Object.entries(injected)) {
-    if (k === "className" || EVENT_RE.test(k)) continue;
+    if (EVENT_RE.test(k)) continue;
     if (next[k] === undefined) next[k] = v;
   }
 
-  // Ref handling: compose forwarded ref with child's ref
+  // Compose refs (forwarded + child's)
   const childType = (children as any).type;
-  let refProp: { ref?: React.Ref<any> } = {};
+  const refProp: { ref?: React.Ref<any> } = {};
   if (childType !== React.Fragment) {
-    const childRef: any = (children as any).ref ?? children.props.ref;
+    const childRef: any = (children as any).ref ?? (children.props as any).ref;
     refProp.ref = (node: any) => {
       const fwd = (props as any).ref;
       if (typeof fwd === "function") fwd(node);
