@@ -234,7 +234,11 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
 
     if (Platform.OS === "web") {
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        document.body.style.overflow = "";
+      };
     }
   }, [open, onOpenChange]);
 
@@ -286,8 +290,9 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
     return null;
   }
 
-  return (
-    <Portal>
+  if (Platform.OS === "web") {
+    const ReactDOM = require("react-dom");
+    return ReactDOM.createPortal(
       <div
         ref={(node) => {
           (contentRef as any).current = node;
@@ -298,7 +303,7 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
           position: "fixed",
           left: position.x,
           top: position.y,
-          zIndex: 1000000,
+          zIndex: 999999,
           minWidth: 220,
           maxWidth: 280,
           backgroundColor: "#ffffff",
@@ -312,9 +317,12 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
         } as any}
       >
         {children}
-      </div>
-    </Portal>
-  );
+      </div>,
+      document.body
+    );
+  }
+
+  return null;
 });
 
 ContextMenuContent.displayName = "ContextMenuContent";

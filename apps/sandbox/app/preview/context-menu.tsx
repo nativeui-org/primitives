@@ -80,30 +80,20 @@ export default function ContextMenuPreview() {
               
               <ContextMenuContent>
                 <ContextMenuItem onPress={handleShare}>
-                  <View style={styles.menuItem}>
-                    <Text style={styles.menuItemText}>📤 Share</Text>
-                  </View>
+                  <Text>Share</Text>
                 </ContextMenuItem>
                 <ContextMenuItem onPress={handleRename}>
-                  <View style={styles.menuItem}>
-                    <Text style={styles.menuItemText}>✏️ Rename</Text>
-                  </View>
+                  <Text>Rename</Text>
                 </ContextMenuItem>
                 <ContextMenuItem onPress={handleArchive}>
-                  <View style={styles.menuItem}>
-                    <Text style={styles.menuItemText}>📦 Archive</Text>
-                  </View>
+                  <Text>Archive</Text>
                 </ContextMenuItem>
                 <ContextMenuItem onPress={handleExport}>
-                  <View style={styles.menuItem}>
-                    <Text style={styles.menuItemText}>💾 Export</Text>
-                  </View>
+                  <Text>Export</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem onPress={handleDelete} destructive>
-                  <View style={styles.menuItem}>
-                    <Text style={[styles.menuItemText, styles.destructive]}>🗑️ Delete</Text>
-                  </View>
+                  <Text>Delete</Text>
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
@@ -123,30 +113,20 @@ export default function ContextMenuPreview() {
               
               <ContextMenuContent>
                 <ContextMenuItem onPress={handleShare}>
-                  <View style={styles.menuItem}>
-                    <Text style={styles.menuItemText}>📤 Share</Text>
-                  </View>
+                  <Text>Share</Text>
                 </ContextMenuItem>
                 <ContextMenuItem onPress={handleRename}>
-                  <View style={styles.menuItem}>
-                    <Text style={styles.menuItemText}>✏️ Rename</Text>
-                  </View>
+                  <Text>Rename</Text>
                 </ContextMenuItem>
                 <ContextMenuItem onPress={handleArchive}>
-                  <View style={styles.menuItem}>
-                    <Text style={styles.menuItemText}>📦 Archive</Text>
-                  </View>
+                  <Text>Archive</Text>
                 </ContextMenuItem>
                 <ContextMenuItem onPress={handleExport}>
-                  <View style={styles.menuItem}>
-                    <Text style={styles.menuItemText}>💾 Export</Text>
-                  </View>
+                  <Text>Export</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem onPress={handleDelete} destructive>
-                  <View style={styles.menuItem}>
-                    <Text style={[styles.menuItemText, styles.destructive]}>🗑️ Delete</Text>
-                  </View>
+                  <Text>Delete</Text>
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
@@ -412,7 +392,7 @@ const styles = StyleSheet.create({
     opacity: 0.5,
     ...Platform.select({
       web: {
-        cursor: "not-allowed",
+        cursor: "not-allowed" as any,
         ":hover": {
           backgroundColor: "#fff",
         },
