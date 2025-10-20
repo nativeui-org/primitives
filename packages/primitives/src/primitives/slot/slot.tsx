@@ -3,8 +3,6 @@ import { Platform } from "react-native";
 
 type InjectedProps = Record<string, unknown>;
 const EVENT_RE = /^on[A-Z]/;
-
-// Props that should be filtered out when rendering to DOM elements on web
 const RN_SPECIFIC_PROPS = new Set([
   "onPress",
   "onPressIn",
@@ -36,18 +34,15 @@ export function Slot(props: { children?: React.ReactNode } & InjectedProps): Rea
   const { children, ...injected } = props;
 
   if (!React.isValidElement(children)) {
-    // Enforce a single valid React element
     return null;
   }
 
   const childProps = (children.props ?? {}) as Record<string, any>;
   const next: Record<string, any> = { ...childProps };
 
-  // Compose event handlers: child first, then injected
   for (const key of Object.keys(injected)) {
     const val = (injected as any)[key];
     if (EVENT_RE.test(key) && typeof val === "function") {
-      // On web, skip RN-specific event handlers when child is a DOM element
       if (Platform.OS === "web") {
         const childType = (children as any).type;
         const isDOMElement = typeof childType === "string";
@@ -68,7 +63,6 @@ export function Slot(props: { children?: React.ReactNode } & InjectedProps): Rea
     }
   }
 
-  // Copy all other injected props but never overwrite child's
   for (const [k, v] of Object.entries(injected)) {
     if (EVENT_RE.test(k)) continue;
 
@@ -93,7 +87,6 @@ export function Slot(props: { children?: React.ReactNode } & InjectedProps): Rea
     if (next[k] === undefined) next[k] = v;
   }
 
-  // Compose refs (forwarded + child's)
   const childType = (children as any).type;
   const refProp: { ref?: React.Ref<any> } = {};
   if (childType !== React.Fragment) {

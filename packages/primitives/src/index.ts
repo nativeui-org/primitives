@@ -7,3 +7,5 @@ export * from "./primitives/alert";
 export * from "./primitives/portal";
 export * from "./primitives/aspect-ratio";
 export * from "./primitives/avatar";
+export * from "./primitives/checkbox";
+export * from "./primitives/checkbox-group";

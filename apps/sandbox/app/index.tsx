@@ -11,6 +11,8 @@ const primitives = [
   { name: "Portal", path: "/preview/portal", description: "Render children outside React tree" },
   { name: "Aspect Ratio", path: "/preview/aspect-ratio", description: "Maintain specific aspect ratios for responsive content" },
   { name: "Avatar", path: "/preview/avatar", description: "User profile images with intelligent fallback text support" },
+  { name: "Checkbox", path: "/preview/checkbox", description: "Individual checkbox with clickable labels" },
+  { name: "CheckboxGroup", path: "/preview/checkbox-group", description: "Manage multiple checkboxes with coordinated state" },
 ];
 
 export default function Home() {

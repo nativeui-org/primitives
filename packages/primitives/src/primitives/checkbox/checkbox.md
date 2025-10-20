@@ -1,0 +1,103 @@
+# Checkbox Primitive
+
+A component for selecting one or more options individually.
+
+---
+
+## What is Checkbox?
+
+Checkbox provides a way to select options. It can be used standalone or within a CheckboxGroup for coordinated state management. The component is highly customizable and supports the `asChild` pattern for complete control over rendering.
+
+**Platform behavior:**
+- **Web & Native**: Consistent rendering with proper accessibility
+- **Accessibility**: Full ARIA support and screen reader compatibility
+- **State Management**: Controlled and uncontrolled modes
+- **Customizable**: Complete control via asChild pattern
+
+---
+
+## API
+
+### Checkbox
+
+| Prop              | Type                      | Default | Description                                    |
+|-------------------|---------------------------|---------|------------------------------------------------|
+| `checked`         | `boolean`                 | -       | Whether the checkbox is checked                |
+| `indeterminate`   | `boolean`                 | `false` | Whether the checkbox is in indeterminate state |
+| `disabled`        | `boolean`                 | `false` | Whether the checkbox is disabled               |
+| `required`        | `boolean`                 | `false` | Whether the checkbox is required               |
+| `value`           | `string`                  | -       | The value (used in groups)                     |
+| `onCheckedChange` | `(checked: boolean) => void` | -    | Callback when checked state changes            |
+| `asChild`         | `boolean`                 | `false` | Use Slot pattern                               |
+
+---
+
+## Examples
+
+### Basic usage
+
+```tsx
+import { Checkbox } from "@native-ui-org/primitives";
+
+const [checked, setChecked] = useState(false);
+
+<Checkbox 
+  checked={checked} 
+  onCheckedChange={setChecked} 
+/>
+```
+
+### Indeterminate state
+
+```tsx
+<Checkbox 
+  checked={false}
+  indeterminate={true}
+  onCheckedChange={setChecked} 
+/>
+```
+
+### Disabled state
+
+```tsx
+<Checkbox 
+  checked={true}
+  disabled={true}
+/>
+```
+
+### With label
+
+```tsx
+<View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+  <Checkbox 
+    checked={agreeToTerms} 
+    onCheckedChange={setAgreeToTerms}
+    required
+  />
+  <Text>I agree to the terms and conditions</Text>
+</View>
+```
+
+### Custom styling with asChild
+
+```tsx
+<Checkbox asChild checked={isChecked}>
+  <Pressable style={styles.customCheckbox}>
+    <View style={[
+      styles.checkbox,
+      isChecked && styles.checked
+    ]}>
+      {isChecked && <Text style={styles.checkmark}>✓</Text>}
+    </View>
+  </Pressable>
+</Checkbox>
+```
+
+---
+
+## Changelog
+
+| Version | Changes                                    |
+|---------|--------------------------------------------|
+| `0.1.0` | Initial release. Basic checkbox functionality. |
