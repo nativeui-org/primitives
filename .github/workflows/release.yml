@@ -12,7 +12,9 @@ jobs:
       pull-requests: write
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+        with: 
+          fetch-depth: 0
+          token: ${{ secrets.CHANGESETS_TOKEN }}
 
       - uses: pnpm/action-setup@v4
         with: { version: 10 }
@@ -31,5 +33,5 @@ jobs:
           publish: pnpm -w changeset publish
           createGithubReleases: true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
