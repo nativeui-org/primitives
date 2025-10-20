@@ -14,21 +14,27 @@ test("forwards web a11y props", () => {
   expect(element).toHaveAttribute("aria-level", "1");
 });
 
-test("renders as HTML element when as prop is provided", () => {
+test("adds correct accessibility role when as prop is provided", () => {
   render(<Text as="h1">Main Title</Text>);
   const element = screen.getByText("Main Title");
-  expect(element.tagName).toBe("H1");
+  expect(element).toHaveAttribute("role", "heading");
+  expect(element).toHaveAttribute("aria-level", "1");
 });
 
-test("renders as different HTML elements", () => {
+test("adds correct accessibility roles for different as values", () => {
   const { rerender } = render(<Text as="p">Paragraph text</Text>);
-  expect(screen.getByText("Paragraph text").tagName).toBe("P");
+  let element = screen.getByText("Paragraph text");
+  expect(element).toHaveAttribute("role", "paragraph");
+  
+  rerender(<Text as="h2">Heading 2 text</Text>);
+  element = screen.getByText("Heading 2 text");
+  expect(element).toHaveAttribute("role", "heading");
+  expect(element).toHaveAttribute("aria-level", "2");
   
   rerender(<Text as="span">Span text</Text>);
-  expect(screen.getByText("Span text").tagName).toBe("SPAN");
-  
-  rerender(<Text as="strong">Strong text</Text>);
-  expect(screen.getByText("Strong text").tagName).toBe("STRONG");
+  element = screen.getByText("Span text");
+  // span doesn't add special role
+  expect(element).toBeInTheDocument();
 });
 
 test("asChild outputs child without wrapper", () => {

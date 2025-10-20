@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Platform, Text as RNText, type TextProps as RNTextProps } from "react-native";
+import { Text as RNText, type TextProps as RNTextProps } from "react-native";
 import { Slot } from "../slot";
 
 type WebA11yProps = {
@@ -75,26 +75,18 @@ function mapAsToA11y(as?: TextProps["as"]): WebA11yProps {
  * </Text>
  */
 export const Text = React.forwardRef<any, TextProps>((props, ref) => {
-  const { asChild, as, role, children, ...rest } = props;
+  const { asChild, as, role, ...rest } = props;
 
   if (asChild) {
     const Comp: any = Slot;
-    return <Comp ref={ref} role={role} {...rest}>{children}</Comp>;
-  }
-
-  if (Platform.OS === "web" && as) {
-    const webA11y = mapAsToA11y(as);
-    const finalRole = (webA11y.role || role) as any;
-    return (
-      <Slot ref={ref} role={finalRole} {...rest}>
-        {React.createElement(as, {}, children)}
-      </Slot>
-    );
+    return <Comp ref={ref} role={role} {...rest} />;
   }
 
   const webA11y = mapAsToA11y(as);
-  const finalRole = (webA11y.role || role) as any;
-  return <RNText ref={ref} role={finalRole} {...rest}>{children}</RNText>;
+  const { role: webRole, ...webA11yRest } = webA11y;
+  const finalRole = (webRole || role) as any;
+
+  return <RNText ref={ref} role={finalRole} {...webA11yRest} {...rest} />;
 });
 
 Text.displayName = "Text";
