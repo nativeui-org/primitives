@@ -10,7 +10,7 @@
     "dev": "pnpm -r --parallel --filter ./apps/* run dev",
     "build": "pnpm -r --filter ./packages/* run build",
     "lint": "pnpm -r lint || true",
-    "release:primitives": "release-it",
+    "release:primitives": "release-it --cwd packages/primitives",
     "release": "pnpm release:primitives",
     "test": "pnpm -r --filter @native-ui-org/primitives run test"
   },
