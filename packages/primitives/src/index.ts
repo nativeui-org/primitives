@@ -6,3 +6,4 @@ export * from "./primitives/accordion";
 export * from "./primitives/alert";
 export * from "./primitives/portal";
 export * from "./primitives/aspect-ratio";
+export * from "./primitives/avatar";

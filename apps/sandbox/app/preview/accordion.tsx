@@ -29,7 +29,24 @@ export default function AccordionPreview() {
 
       <View style={styles.content}>
         <View style={styles.section}>
-          <Text as="h2" style={styles.sectionTitle}>Single Mode (Uncontrolled)</Text>
+          <Text as="h2" style={styles.sectionTitle}>Accordion Primitive</Text>
+          <Text as="p" style={styles.description}>
+            Grouped collapsible components with single or multiple selection modes. Perfect for FAQs, navigation menus, and content organization.
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text as="h3" style={styles.subTitle}>Platform Behavior</Text>
+          <Text as="p" style={styles.description}>
+            • <Text style={styles.bold}>Web:</Text> Uses ARIA attributes (aria-expanded, aria-controls, role="button"){"\n"}
+            • <Text style={styles.bold}>Native:</Text> Uses accessibilityRole and accessibilityState{"\n"}
+            • <Text style={styles.bold}>Selection:</Text> Single or multiple item selection modes{"\n"}
+            • <Text style={styles.bold}>Composition:</Text> asChild pattern for flexible rendering
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text as="h3" style={styles.subTitle}>Single Mode (Uncontrolled)</Text>
           <Text as="p" style={styles.description}>
             Only one item can be open at a time
           </Text>
@@ -294,6 +311,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 8,
     color: "#000",
+  },
+  subTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 8,
+    color: "#000",
+  },
+  bold: {
+    fontWeight: "600",
   },
   description: {
     fontSize: 14,

@@ -8,8 +8,9 @@ const primitives = [
   { name: "Collapsible", path: "/preview/collapsible", description: "Expandable content with controlled/uncontrolled state" },
   { name: "Accordion", path: "/preview/accordion", description: "Grouped collapsibles with single or multiple selection" },
   { name: "Alert", path: "/preview/alert", description: "Cross-platform alerts: native on mobile, custom on web" },
-  { name: "Portal", path: "/preview/portal", description: "Render children outside React tree (web: DOM portal, native: normal)" },
+  { name: "Portal", path: "/preview/portal", description: "Render children outside React tree" },
   { name: "Aspect Ratio", path: "/preview/aspect-ratio", description: "Maintain specific aspect ratios for responsive content" },
+  { name: "Avatar", path: "/preview/avatar", description: "User profile images with intelligent fallback text support" },
 ];
 
 export default function Home() {

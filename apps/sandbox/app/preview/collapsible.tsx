@@ -28,7 +28,24 @@ export default function CollapsiblePreview() {
 
       <View style={styles.content}>
         <View style={styles.section}>
-          <Text as="h2" style={styles.sectionTitle}>Basic (Uncontrolled)</Text>
+          <Text as="h2" style={styles.sectionTitle}>Collapsible Primitive</Text>
+          <Text as="p" style={styles.description}>
+            Expandable content component with controlled and uncontrolled state support. Perfect for accordions, dropdowns, and collapsible sections.
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text as="h3" style={styles.subTitle}>Platform Behavior</Text>
+          <Text as="p" style={styles.description}>
+            • <Text style={styles.bold}>Web:</Text> Uses proper ARIA attributes (aria-expanded, aria-controls){"\n"}
+            • <Text style={styles.bold}>Native:</Text> Uses accessibilityRole and accessibilityState{"\n"}
+            • <Text style={styles.bold}>State:</Text> Supports both controlled and uncontrolled modes{"\n"}
+            • <Text style={styles.bold}>Composition:</Text> asChild pattern for flexible rendering
+          </Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text as="h3" style={styles.subTitle}>Basic (Uncontrolled)</Text>
           <Text as="p" style={styles.description}>
             Click to toggle content visibility
           </Text>
@@ -186,6 +203,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 8,
     color: "#000",
+  },
+  subTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 8,
+    color: "#000",
+  },
+  bold: {
+    fontWeight: "600",
   },
   description: {
     fontSize: 14,
