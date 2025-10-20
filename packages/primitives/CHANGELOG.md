@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.10
+
+### Patch Changes
+
+- 5de76cf: Update CI
+- f0620a7: Update CI
+
 ## 0.2.9
 
 ### Patch Changes
