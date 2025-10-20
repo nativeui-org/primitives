@@ -25,9 +25,8 @@
     "src": {
         "pkgFiles": [
             "packages/primitives/package.json",
-            "package.json",
-            "apps/*/package.json",
-            "packages/*/package.json"
+            "apps/sandbox/package.json",
+            "package.json"
         ]
     }
 }
