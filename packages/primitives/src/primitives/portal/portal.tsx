@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Platform } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 
 export type PortalProps = {
   /**
@@ -51,11 +51,24 @@ export const Portal = React.forwardRef<any, PortalProps>((props, ref) => {
     return null;
   }
 
-  // On web, render to portal container
-  const ReactDOM = require("react-dom");
-  const targetContainer = container || document.body;
-  
-  return ReactDOM.createPortal(children, targetContainer);
+  // On web, render children with portal-like styling
+  return (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 9999,
+        pointerEvents: "none",
+      }}
+    >
+      <div style={{ pointerEvents: "auto" }}>
+        {children}
+      </div>
+    </div>
+  );
 });
 
 Portal.displayName = "Portal";

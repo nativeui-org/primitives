@@ -35,7 +35,7 @@ export default function PortalPreview() {
           <Text as="p" style={styles.description}>
             Renders content to document.body on web, normally on native
           </Text>
-          
+
           <Pressable style={styles.button} onPress={() => setShowPortal(!showPortal)}>
             <Text style={styles.buttonText}>
               {showPortal ? "Hide" : "Show"} Portal Content
@@ -55,8 +55,8 @@ export default function PortalPreview() {
                 <Text style={styles.portalText}>
                   On native: Rendered normally
                 </Text>
-                <Pressable 
-                  style={styles.closeButton} 
+                <Pressable
+                  style={styles.closeButton}
                   onPress={() => setShowPortal(false)}
                 >
                   <Text style={styles.closeButtonText}>Close</Text>
@@ -66,44 +66,45 @@ export default function PortalPreview() {
           )}
         </View>
 
-        <View style={styles.section}>
-          <Text as="h3" style={styles.subTitle}>Custom Container (Web Only)</Text>
-          <Text as="p" style={styles.description}>
-            Specify a custom DOM container to render into
-          </Text>
-          
-          <Pressable style={styles.button} onPress={() => setShowCustomPortal(!showCustomPortal)}>
-            <Text style={styles.buttonText}>
-              {showCustomPortal ? "Hide" : "Show"} Custom Portal
+        {Platform.OS === "web" && (
+          <View style={styles.section}>
+            <Text as="h3" style={styles.subTitle}>Custom Container (Web Only)</Text>
+            <Text as="p" style={styles.description}>
+              Specify a custom DOM container to render into
             </Text>
-          </Pressable>
 
-          {Platform.OS === "web" && (
+            <Pressable style={styles.button} onPress={() => setShowCustomPortal(!showCustomPortal)}>
+              <Text style={styles.buttonText}>
+                {showCustomPortal ? "Hide" : "Show"} Custom Portal
+              </Text>
+            </Pressable>
+
             <View style={styles.customContainer}>
               <Text style={styles.containerLabel}>Custom Container:</Text>
               <View testID="custom-portal-root" style={styles.customRoot}>
                 <Text style={styles.containerText}>Portal will render here</Text>
               </View>
             </View>
-          )}
 
-          {showCustomPortal && Platform.OS === "web" && (
-            <Portal container={document.getElementById("custom-portal-root")}>
-              <View style={styles.customPortalContent}>
-                <Text style={styles.portalTitle}>Custom Portal!</Text>
-                <Text style={styles.portalText}>
-                  Rendered in the custom container above
-                </Text>
-                <Pressable 
-                  style={styles.closeButton} 
-                  onPress={() => setShowCustomPortal(false)}
-                >
-                  <Text style={styles.closeButtonText}>Close</Text>
-                </Pressable>
-              </View>
-            </Portal>
-          )}
-        </View>
+
+            {showCustomPortal && (
+              <Portal container={document.getElementById("custom-portal-root")}>
+                <View style={styles.customPortalContent}>
+                  <Text style={styles.portalTitle}>Custom Portal!</Text>
+                  <Text style={styles.portalText}>
+                    Rendered in the custom container above
+                  </Text>
+                  <Pressable
+                    style={styles.closeButton}
+                    onPress={() => setShowCustomPortal(false)}
+                  >
+                    <Text style={styles.closeButtonText}>Close</Text>
+                  </Pressable>
+                </View>
+              </Portal>
+            )}
+          </View>
+        )}
 
         <View style={styles.section}>
           <Text as="h3" style={styles.subTitle}>Use Cases</Text>
@@ -124,7 +125,7 @@ export default function PortalPreview() {
           </Text>
         </View>
       </View>
-    </ScrollView>
+    </ScrollView >
   );
 }
 
