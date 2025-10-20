@@ -1,5 +1,13 @@
 # @native-ui-org/sandbox
 
+## 0.2.2
+
+### Patch Changes
+
+- 63a82f2: update something
+- Updated dependencies [63a82f2]
+  - @native-ui-org/primitives@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes
