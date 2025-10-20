@@ -1,17 +1,19 @@
 import * as React from "react";
-import { View, Pressable, Platform, type ViewProps } from "react-native";
+import { Pressable, Platform, type ViewProps } from "react-native";
 import { Slot } from "../slot";
 
-export type CheckboxProps = ViewProps & {
+export type CheckedState = boolean | "indeterminate";
+
+export type CheckboxProps = Omit<ViewProps, "children"> & {
   /**
-   * Whether the checkbox is checked.
+   * The controlled checked state.
    */
-  checked?: boolean;
+  checked?: CheckedState;
 
   /**
-   * Whether the checkbox is in an indeterminate state.
+   * The default checked state (uncontrolled).
    */
-  indeterminate?: boolean;
+  defaultChecked?: CheckedState;
 
   /**
    * Whether the checkbox is disabled.
@@ -24,24 +26,34 @@ export type CheckboxProps = ViewProps & {
   required?: boolean;
 
   /**
-   * The value of the checkbox (used in groups).
+   * The value (used in CheckboxGroup).
    */
   value?: string;
 
   /**
-   * Unique identifier for the checkbox (used with CheckboxLabel).
+   * The name for form submission (web only).
+   */
+  name?: string;
+
+  /**
+   * The unique ID for the checkbox.
    */
   id?: string;
 
   /**
-   * Callback fired when the checkbox state changes.
+   * Callback when the checked state changes.
    */
-  onCheckedChange?: (checked: boolean) => void;
+  onCheckedChange?: (checked: CheckedState) => void;
 
   /**
    * Replace the host element by cloning the child.
    */
   asChild?: boolean;
+
+  /**
+   * The checkbox indicator and content.
+   */
+  children?: React.ReactNode;
 };
 
 export const CheckboxContext = React.createContext<{
@@ -52,140 +64,135 @@ export const CheckboxContext = React.createContext<{
 }>({});
 
 export const CheckboxItemContext = React.createContext<{
-  id?: string;
-  checked?: boolean;
-  disabled?: boolean;
-  onPress?: () => void;
-}>({});
+  checked: CheckedState;
+  disabled: boolean;
+}>({
+  checked: false,
+  disabled: false,
+});
 
-export const useCheckbox = () => {
-  const context = React.useContext(CheckboxContext);
-  return context;
-};
-
-export const useCheckboxItem = () => {
-  const context = React.useContext(CheckboxItemContext);
-  return context;
-};
+export const useCheckbox = () => React.useContext(CheckboxContext);
+export const useCheckboxItem = () => React.useContext(CheckboxItemContext);
 
 /**
- * Checkbox component for selecting one or more options.
+ * Checkbox component for selecting options.
  * 
  * @example
- * // Basic usage
  * <Checkbox checked={isChecked} onCheckedChange={setIsChecked} />
  * 
  * @example
- * // With asChild
  * <Checkbox asChild checked={isChecked}>
- *   <Pressable>
- *     <CustomCheckboxIcon />
- *   </Pressable>
+ *   <Pressable><CustomIndicator /></Pressable>
  * </Checkbox>
  */
 export const Checkbox = React.forwardRef<any, CheckboxProps>((props, ref) => {
   const {
     checked: checkedProp,
-    indeterminate = false,
-    disabled: disabledProp,
+    defaultChecked = false,
+    disabled: disabledProp = false,
     required = false,
     value,
+    name,
     id,
     onCheckedChange,
     asChild,
     children,
-    style,
     ...rest
   } = props;
 
   const groupContext = useCheckbox();
   const isInGroup = groupContext.value !== undefined;
-  const checked = isInGroup 
-    ? groupContext.value?.includes(value || "") ?? false
-    : checkedProp ?? false;
-  const disabled = disabledProp ?? groupContext.disabled ?? false;
 
-  const handlePress = React.useCallback(() => {
+  const [internalChecked, setInternalChecked] = React.useState<CheckedState>(defaultChecked);
+  
+  const checked: CheckedState = React.useMemo(() => {
+    if (isInGroup && value) {
+      return groupContext.value?.includes(value) ?? false;
+    }
+    return checkedProp ?? internalChecked;
+  }, [isInGroup, value, groupContext.value, checkedProp, internalChecked]);
+
+  const disabled = disabledProp || groupContext.disabled || false;
+
+  const handleToggle = React.useCallback(() => {
     if (disabled) return;
+
+    const nextChecked: CheckedState = checked === "indeterminate" ? true : !checked;
 
     if (isInGroup && groupContext.onValueChange && value) {
       const currentValue = groupContext.value || [];
-      const newValue = checked
+      const newValue = checked 
         ? currentValue.filter(v => v !== value)
         : [...currentValue, value];
       groupContext.onValueChange(newValue);
-    } else if (onCheckedChange) {
-      onCheckedChange(!checked);
+    } else {
+      if (checkedProp === undefined) {
+        setInternalChecked(nextChecked);
+      }
+      onCheckedChange?.(nextChecked);
     }
-  }, [disabled, isInGroup, groupContext, value, checked, onCheckedChange]);
+  }, [disabled, checked, isInGroup, groupContext, value, checkedProp, onCheckedChange]);
+
+  const handleKeyDown = React.useCallback((e: any) => {
+    if (Platform.OS === "web" && (e.key === " " || e.key === "Enter")) {
+      e.preventDefault();
+      handleToggle();
+    }
+  }, [handleToggle]);
 
   const itemContextValue = React.useMemo(() => ({
-    id,
     checked,
     disabled,
-    onPress: handlePress,
-  }), [id, checked, disabled, handlePress]);
+  }), [checked, disabled]);
+
+  const ariaChecked = checked === "indeterminate" ? "mixed" : checked;
 
   const Comp = asChild ? Slot : Pressable;
 
-  const checkboxElement = (
-    <Comp
-      ref={ref}
-      onPress={handlePress}
-      disabled={disabled}
-      style={style}
-      accessibilityRole="checkbox"
-      accessibilityState={{
-        checked: indeterminate ? "mixed" : checked,
-        disabled,
-      }}
-      {...(Platform.OS !== "web" && { accessibilityRequired: required })}
-      {...(id && Platform.OS === "web" && { id })}
-      {...rest}
-    >
-      {asChild ? children : (
-        <View
-          style={{
-            width: 20,
-            height: 20,
-            borderWidth: 2,
-            borderColor: checked ? "#007AFF" : "#ccc",
-            backgroundColor: checked ? "#007AFF" : "transparent",
-            borderRadius: 4,
-            justifyContent: "center",
-            alignItems: "center",
-            opacity: disabled ? 0.5 : 1,
-          }}
-        >
-          {checked && !indeterminate && (
-            <View
-              style={{
-                width: 6,
-                height: 10,
-                borderBottomWidth: 2,
-                borderRightWidth: 2,
-                borderColor: "white",
-                transform: [{ rotate: "45deg" }],
-              }}
-            />
-          )}
-          {indeterminate && (
-            <View
-              style={{
-                width: 8,
-                height: 2,
-                backgroundColor: "white",
-              }}
-            />
-          )}
-        </View>
-      )}
-    </Comp>
-  );
-
   return (
     <CheckboxItemContext.Provider value={itemContextValue}>
-      {checkboxElement}
+      <Comp
+        ref={ref}
+        role="checkbox"
+        onPress={handleToggle}
+        disabled={disabled}
+        accessibilityRole="checkbox"
+        accessibilityState={{
+          checked: ariaChecked === "mixed" ? "mixed" : ariaChecked,
+          disabled,
+        }}
+        {...(Platform.OS === "web" && {
+          "aria-checked": ariaChecked,
+          "aria-disabled": disabled,
+          "aria-required": required,
+          tabIndex: disabled ? -1 : 0,
+          onKeyDown: handleKeyDown,
+        })}
+        {...(id && { id })}
+        {...rest}
+      >
+        {children}
+      </Comp>
+
+      {Platform.OS === "web" && name && (
+        <input
+          type="checkbox"
+          name={name}
+          value={value}
+          checked={checked === true}
+          disabled={disabled}
+          required={required}
+          tabIndex={-1}
+          style={{
+            position: "absolute",
+            opacity: 0,
+            pointerEvents: "none",
+            width: 1,
+            height: 1,
+          }}
+          onChange={() => {}}
+        />
+      )}
     </CheckboxItemContext.Provider>
   );
 });

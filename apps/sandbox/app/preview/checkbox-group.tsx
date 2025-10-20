@@ -1,13 +1,12 @@
 import { Stack } from "expo-router";
 import { View, Text } from "@native-ui-org/primitives";
-import { Checkbox, CheckboxGroup, CheckboxLabel } from "@native-ui-org/primitives";
+import { Checkbox, CheckboxGroup, CheckboxLabel, CheckboxIndicator } from "@native-ui-org/primitives";
 import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
 import React, { useState } from "react";
 
 export default function CheckboxGroupPreview() {
   const [notifications, setNotifications] = useState<string[]>(["email"]);
   const [tasks, setTasks] = useState<string[]>(["task-1"]);
-  const [filters, setFilters] = useState<string[]>(["all"]);
 
   return (
     <ScrollView style={styles.container}>
@@ -17,24 +16,24 @@ export default function CheckboxGroupPreview() {
         <View style={styles.section}>
           <Text as="h2" style={styles.sectionTitle}>CheckboxGroup Primitive</Text>
           <Text as="p" style={styles.description}>
-            Manage multiple related checkboxes with coordinated state. Perfect for settings and filters.
+            Manage multiple checkboxes with coordinated state. Perfect for settings and multi-select.
           </Text>
         </View>
 
         <View style={styles.section}>
           <Text as="h3" style={styles.subTitle}>Platform Behavior</Text>
           <Text as="p" style={styles.description}>
-            • <Text style={styles.bold}>Web:</Text> Group semantics with proper ARIA{"\n"}
-            • <Text style={styles.bold}>Native:</Text> Coordinated state management{"\n"}
-            • <Text style={styles.bold}>State:</Text> Controlled and uncontrolled modes{"\n"}
-            • <Text style={styles.bold}>Values:</Text> Array of selected values
+            • <Text style={styles.bold}>Web:</Text> Group semantics with role="group"{"\n"}
+            • <Text style={styles.bold}>Native:</Text> Coordinated state across checkboxes{"\n"}
+            • <Text style={styles.bold}>State:</Text> Array of selected values{"\n"}
+            • <Text style={styles.bold}>Controlled:</Text> Parent manages selections
           </Text>
         </View>
 
         <View style={styles.section}>
-          <Text as="h3" style={styles.subTitle}>Basic Group</Text>
+          <Text as="h3" style={styles.subTitle}>Notification Settings</Text>
           <Text as="p" style={styles.description}>
-            Multiple checkboxes with shared state
+            User preferences for notifications
           </Text>
           
           <CheckboxGroup value={notifications} onValueChange={setNotifications}>
@@ -46,7 +45,11 @@ export default function CheckboxGroupPreview() {
                     : [...prev, "email"]
                 );
               }}>
-                <Checkbox id="email" value="email" />
+                <Checkbox id="email" value="email" style={styles.checkboxBox}>
+                  <CheckboxIndicator>
+                    <View style={styles.checkmark} />
+                  </CheckboxIndicator>
+                </Checkbox>
                 <CheckboxLabel htmlFor="email" style={styles.label}>
                   Email notifications
                 </CheckboxLabel>
@@ -59,7 +62,11 @@ export default function CheckboxGroupPreview() {
                     : [...prev, "push"]
                 );
               }}>
-                <Checkbox id="push" value="push" />
+                <Checkbox id="push" value="push" style={styles.checkboxBox}>
+                  <CheckboxIndicator>
+                    <View style={styles.checkmark} />
+                  </CheckboxIndicator>
+                </Checkbox>
                 <CheckboxLabel htmlFor="push" style={styles.label}>
                   Push notifications
                 </CheckboxLabel>
@@ -72,23 +79,27 @@ export default function CheckboxGroupPreview() {
                     : [...prev, "sms"]
                 );
               }}>
-                <Checkbox id="sms" value="sms" />
+                <Checkbox id="sms" value="sms" style={styles.checkboxBox}>
+                  <CheckboxIndicator>
+                    <View style={styles.checkmark} />
+                  </CheckboxIndicator>
+                </Checkbox>
                 <CheckboxLabel htmlFor="sms" style={styles.label}>
-                  SMS notifications
+                  SMS alerts
                 </CheckboxLabel>
               </Pressable>
             </View>
           </CheckboxGroup>
           
           <Text style={styles.hint}>
-            Selected: {notifications.length > 0 ? notifications.join(", ") : "none"}
+            Selected: {notifications.join(", ") || "none"}
           </Text>
         </View>
 
         <View style={styles.section}>
           <Text as="h3" style={styles.subTitle}>Todo List</Text>
           <Text as="p" style={styles.description}>
-            Task management with strikethrough effect
+            Task completion tracker
           </Text>
           
           <CheckboxGroup value={tasks} onValueChange={setTasks}>
@@ -100,7 +111,11 @@ export default function CheckboxGroupPreview() {
                     : [...prev, "task-1"]
                 );
               }}>
-                <Checkbox id="task-1" value="task-1" />
+                <Checkbox id="task-1" value="task-1" style={styles.checkboxBox}>
+                  <CheckboxIndicator>
+                    <View style={styles.checkmark} />
+                  </CheckboxIndicator>
+                </Checkbox>
                 <CheckboxLabel 
                   htmlFor="task-1" 
                   style={[styles.label, tasks.includes("task-1") && styles.completed]}
@@ -116,7 +131,11 @@ export default function CheckboxGroupPreview() {
                     : [...prev, "task-2"]
                 );
               }}>
-                <Checkbox id="task-2" value="task-2" />
+                <Checkbox id="task-2" value="task-2" style={styles.checkboxBox}>
+                  <CheckboxIndicator>
+                    <View style={styles.checkmark} />
+                  </CheckboxIndicator>
+                </Checkbox>
                 <CheckboxLabel 
                   htmlFor="task-2" 
                   style={[styles.label, tasks.includes("task-2") && styles.completed]}
@@ -132,7 +151,11 @@ export default function CheckboxGroupPreview() {
                     : [...prev, "task-3"]
                 );
               }}>
-                <Checkbox id="task-3" value="task-3" />
+                <Checkbox id="task-3" value="task-3" style={styles.checkboxBox}>
+                  <CheckboxIndicator>
+                    <View style={styles.checkmark} />
+                  </CheckboxIndicator>
+                </Checkbox>
                 <CheckboxLabel 
                   htmlFor="task-3" 
                   style={[styles.label, tasks.includes("task-3") && styles.completed]}
@@ -149,57 +172,42 @@ export default function CheckboxGroupPreview() {
         </View>
 
         <View style={styles.section}>
-          <Text as="h3" style={styles.subTitle}>Filters</Text>
+          <Text as="h3" style={styles.subTitle}>Uncontrolled Group</Text>
           <Text as="p" style={styles.description}>
-            Product category filters
+            Group manages its own state with defaultValue
           </Text>
           
-          <CheckboxGroup value={filters} onValueChange={setFilters}>
+          <CheckboxGroup defaultValue={["option-1"]}>
             <View style={styles.group}>
-              <Pressable style={styles.row} onPress={() => {
-                setFilters(prev => 
-                  prev.includes("all") 
-                    ? prev.filter(v => v !== "all") 
-                    : [...prev, "all"]
-                );
+              <Pressable style={styles.row} onPress={(e: any) => {
+                const checkbox = (e.currentTarget as HTMLElement)?.querySelector('[role="checkbox"]');
+                (checkbox as any)?.click?.();
               }}>
-                <Checkbox id="all" value="all" />
-                <CheckboxLabel htmlFor="all" style={styles.label}>
-                  All categories
+                <Checkbox id="option-1" value="option-1" style={styles.checkboxBox}>
+                  <CheckboxIndicator>
+                    <View style={styles.checkmark} />
+                  </CheckboxIndicator>
+                </Checkbox>
+                <CheckboxLabel htmlFor="option-1" style={styles.label}>
+                  Option 1 (default selected)
                 </CheckboxLabel>
               </Pressable>
               
-              <Pressable style={styles.row} onPress={() => {
-                setFilters(prev => 
-                  prev.includes("electronics") 
-                    ? prev.filter(v => v !== "electronics") 
-                    : [...prev, "electronics"]
-                );
+              <Pressable style={styles.row} onPress={(e: any) => {
+                const checkbox = (e.currentTarget as HTMLElement)?.querySelector('[role="checkbox"]');
+                (checkbox as any)?.click?.();
               }}>
-                <Checkbox id="electronics" value="electronics" />
-                <CheckboxLabel htmlFor="electronics" style={styles.label}>
-                  Electronics
-                </CheckboxLabel>
-              </Pressable>
-              
-              <Pressable style={styles.row} onPress={() => {
-                setFilters(prev => 
-                  prev.includes("clothing") 
-                    ? prev.filter(v => v !== "clothing") 
-                    : [...prev, "clothing"]
-                );
-              }}>
-                <Checkbox id="clothing" value="clothing" />
-                <CheckboxLabel htmlFor="clothing" style={styles.label}>
-                  Clothing
+                <Checkbox id="option-2" value="option-2" style={styles.checkboxBox}>
+                  <CheckboxIndicator>
+                    <View style={styles.checkmark} />
+                  </CheckboxIndicator>
+                </Checkbox>
+                <CheckboxLabel htmlFor="option-2" style={styles.label}>
+                  Option 2
                 </CheckboxLabel>
               </Pressable>
             </View>
           </CheckboxGroup>
-          
-          <Text style={styles.hint}>
-            Active filters: {filters.length}
-          </Text>
         </View>
       </View>
     </ScrollView>
@@ -260,6 +268,26 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     color: "#000",
+  },
+  checkboxBox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: "#007AFF",
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  checkmark: {
+    width: 12,
+    height: 12,
+    backgroundColor: "#007AFF",
+    borderRadius: 2,
+  },
+  indeterminateMark: {
+    width: 12,
+    height: 2,
+    backgroundColor: "#007AFF",
   },
   completed: {
     textDecorationLine: "line-through",

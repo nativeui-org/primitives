@@ -1,14 +1,13 @@
 import { Stack } from "expo-router";
 import { View, Text } from "@native-ui-org/primitives";
-import { Checkbox, CheckboxLabel } from "@native-ui-org/primitives";
+import { Checkbox, CheckboxLabel, CheckboxIndicator } from "@native-ui-org/primitives";
 import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
 import React, { useState } from "react";
 
 export default function CheckboxPreview() {
-  const [basic, setBasic] = useState(false);
+  const [controlled, setControlled] = useState(false);
   const [terms, setTerms] = useState(false);
   const [privacy, setPrivacy] = useState(false);
-  const [newsletter, setNewsletter] = useState(true);
 
   return (
     <ScrollView style={styles.container}>
@@ -18,33 +17,64 @@ export default function CheckboxPreview() {
         <View style={styles.section}>
           <Text as="h2" style={styles.sectionTitle}>Checkbox Primitive</Text>
           <Text as="p" style={styles.description}>
-            Single checkbox component for individual selections. Click the label to toggle.
+            Unstyled checkbox primitive. Use CheckboxIndicator to show checked state.
           </Text>
         </View>
 
         <View style={styles.section}>
           <Text as="h3" style={styles.subTitle}>Platform Behavior</Text>
           <Text as="p" style={styles.description}>
-            • <Text style={styles.bold}>Web:</Text> Native label element with ARIA attributes{"\n"}
-            • <Text style={styles.bold}>Native:</Text> Touch-friendly with accessibility support{"\n"}
-            • <Text style={styles.bold}>Labels:</Text> Click text to toggle checkbox state
+            • <Text style={styles.bold}>Web:</Text> Native label with ARIA (aria-checked, aria-disabled, aria-required){"\n"}
+            • <Text style={styles.bold}>Native:</Text> Accessibility role and state{"\n"}
+            • <Text style={styles.bold}>Keyboard:</Text> Space/Enter to toggle (web){"\n"}
+            • <Text style={styles.bold}>Form:</Text> Hidden input for HTML form submission
           </Text>
         </View>
 
         <View style={styles.section}>
-          <Text as="h3" style={styles.subTitle}>Basic Usage</Text>
+          <Text as="h3" style={styles.subTitle}>Controlled</Text>
           <Text as="p" style={styles.description}>
-            Simple checkbox with clickable label
+            Parent manages state
           </Text>
-          
-          <Pressable style={styles.row} onPress={() => setBasic(!basic)}>
-            <Checkbox 
-              id="basic"
-              checked={basic} 
-              onCheckedChange={setBasic}
-            />
-            <CheckboxLabel htmlFor="basic" style={styles.label}>
-              Enable feature
+
+          <Pressable style={styles.row} onPress={() => setControlled(!controlled)}>
+            <Checkbox
+              id="controlled"
+              checked={controlled}
+              onCheckedChange={(checked) => setControlled(checked === true)}
+              style={styles.checkboxBox}
+            >
+              <CheckboxIndicator>
+                <View style={styles.checkmark} />
+              </CheckboxIndicator>
+            </Checkbox>
+            <CheckboxLabel htmlFor="controlled" style={styles.label}>
+              Controlled checkbox
+            </CheckboxLabel>
+          </Pressable>
+        </View>
+
+        <View style={styles.section}>
+          <Text as="h3" style={styles.subTitle}>Uncontrolled</Text>
+          <Text as="p" style={styles.description}>
+            Internal state with defaultChecked
+          </Text>
+
+          <Pressable style={styles.row} onPress={(e: any) => {
+            const checkbox = (e.currentTarget as HTMLElement)?.querySelector('[role="checkbox"]');
+            (checkbox as any)?.click?.();
+          }}>
+            <Checkbox
+              id="uncontrolled"
+              defaultChecked={true}
+              style={styles.checkboxBox}
+            >
+              <CheckboxIndicator>
+                <View style={styles.checkmark} />
+              </CheckboxIndicator>
+            </Checkbox>
+            <CheckboxLabel htmlFor="uncontrolled" style={styles.label}>
+              Uncontrolled checkbox (default checked)
             </CheckboxLabel>
           </Pressable>
         </View>
@@ -52,29 +82,41 @@ export default function CheckboxPreview() {
         <View style={styles.section}>
           <Text as="h3" style={styles.subTitle}>Form Example</Text>
           <Text as="p" style={styles.description}>
-            Agreement checkboxes for terms and privacy
+            Agreement checkboxes with validation
           </Text>
-          
+
           <View style={styles.group}>
             <Pressable style={styles.row} onPress={() => setTerms(!terms)}>
-              <Checkbox 
+              <Checkbox
                 id="terms"
-                checked={terms} 
-                onCheckedChange={setTerms}
+                name="terms"
+                checked={terms}
+                onCheckedChange={(checked) => setTerms(checked === true)}
                 required
-              />
+                style={styles.checkboxBox}
+              >
+                <CheckboxIndicator>
+                  <View style={styles.checkmark} />
+                </CheckboxIndicator>
+              </Checkbox>
               <CheckboxLabel htmlFor="terms" style={styles.label}>
                 I agree to the Terms of Service
               </CheckboxLabel>
             </Pressable>
-            
+
             <Pressable style={styles.row} onPress={() => setPrivacy(!privacy)}>
-              <Checkbox 
+              <Checkbox
                 id="privacy"
-                checked={privacy} 
-                onCheckedChange={setPrivacy}
+                name="privacy"
+                checked={privacy}
+                onCheckedChange={(checked) => setPrivacy(checked === true)}
                 required
-              />
+                style={styles.checkboxBox}
+              >
+                <CheckboxIndicator>
+                  <View style={styles.checkmark} />
+                </CheckboxIndicator>
+              </Checkbox>
               <CheckboxLabel htmlFor="privacy" style={styles.label}>
                 I have read the Privacy Policy
               </CheckboxLabel>
@@ -83,47 +125,45 @@ export default function CheckboxPreview() {
         </View>
 
         <View style={styles.section}>
-          <Text as="h3" style={styles.subTitle}>Default Checked</Text>
-          <Text as="p" style={styles.description}>
-            Checkbox starting in checked state
-          </Text>
-          
-          <Pressable style={styles.row} onPress={() => setNewsletter(!newsletter)}>
-            <Checkbox 
-              id="newsletter"
-              checked={newsletter} 
-              onCheckedChange={setNewsletter}
-            />
-            <CheckboxLabel htmlFor="newsletter" style={styles.label}>
-              Subscribe to newsletter
-            </CheckboxLabel>
-          </Pressable>
-        </View>
-
-        <View style={styles.section}>
           <Text as="h3" style={styles.subTitle}>States</Text>
           <Text as="p" style={styles.description}>
             Different visual states
           </Text>
-          
+
           <View style={styles.stateRow}>
             <View style={styles.stateItem}>
-              <Checkbox checked={false} />
+              <Checkbox checked={false} style={styles.checkboxBox}>
+                <CheckboxIndicator>
+                  <View style={styles.checkmark} />
+                </CheckboxIndicator>
+              </Checkbox>
               <Text style={styles.stateLabel}>Unchecked</Text>
             </View>
-            
+
             <View style={styles.stateItem}>
-              <Checkbox checked={true} />
+              <Checkbox checked={true} style={styles.checkboxBox}>
+                <CheckboxIndicator>
+                  <View style={styles.checkmark} />
+                </CheckboxIndicator>
+              </Checkbox>
               <Text style={styles.stateLabel}>Checked</Text>
             </View>
-            
+
             <View style={styles.stateItem}>
-              <Checkbox indeterminate={true} />
+              <Checkbox checked="indeterminate" style={styles.checkboxBox}>
+                <CheckboxIndicator>
+                  <View style={styles.indeterminateMark} />
+                </CheckboxIndicator>
+              </Checkbox>
               <Text style={styles.stateLabel}>Indeterminate</Text>
             </View>
-            
+
             <View style={styles.stateItem}>
-              <Checkbox checked={true} disabled={true} />
+              <Checkbox checked={true} disabled={true} style={styles.checkboxBox}>
+                <CheckboxIndicator>
+                  <View style={styles.checkmark} />
+                </CheckboxIndicator>
+              </Checkbox>
               <Text style={styles.stateLabel}>Disabled</Text>
             </View>
           </View>
@@ -177,7 +217,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   group: {
-    gap: 12,
+    gap: 16,
   },
   row: {
     flexDirection: "row",
@@ -187,6 +227,27 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     color: "#000",
+  },
+  checkboxBox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: "#007AFF",
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent",
+  },
+  checkmark: {
+    width: 12,
+    height: 12,
+    backgroundColor: "#007AFF",
+    borderRadius: 2,
+  },
+  indeterminateMark: {
+    width: 12,
+    height: 2,
+    backgroundColor: "#007AFF",
   },
   stateRow: {
     flexDirection: "row",
