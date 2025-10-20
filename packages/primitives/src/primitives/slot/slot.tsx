@@ -1,7 +1,21 @@
 import * as React from "react";
+import { Platform } from "react-native";
 
 type InjectedProps = Record<string, unknown>;
 const EVENT_RE = /^on[A-Z]/;
+
+// Props that should be filtered out when rendering to DOM elements on web
+const RN_SPECIFIC_PROPS = new Set([
+  "onPress",
+  "onPressIn",
+  "onPressOut",
+  "onLongPress",
+  "accessibilityRole",
+  "accessibilityState",
+  "accessibilityLabel",
+  "accessibilityHint",
+  "accessible",
+]);
 
 /**
  * Slot
@@ -33,6 +47,15 @@ export function Slot(props: { children?: React.ReactNode } & InjectedProps): Rea
   for (const key of Object.keys(injected)) {
     const val = (injected as any)[key];
     if (EVENT_RE.test(key) && typeof val === "function") {
+      // On web, skip RN-specific event handlers when child is a DOM element
+      if (Platform.OS === "web") {
+        const childType = (children as any).type;
+        const isDOMElement = typeof childType === "string";
+        if (isDOMElement && RN_SPECIFIC_PROPS.has(key)) {
+          continue;
+        }
+      }
+
       const theirs = childProps[key];
       const ours = val;
       next[key] =
@@ -48,6 +71,25 @@ export function Slot(props: { children?: React.ReactNode } & InjectedProps): Rea
   // Copy all other injected props but never overwrite child's
   for (const [k, v] of Object.entries(injected)) {
     if (EVENT_RE.test(k)) continue;
+
+    if (Platform.OS === "web") {
+      const childType = (children as any).type;
+      const isDOMElement = typeof childType === "string";
+
+      if (isDOMElement) {
+        if (k === "testID") {
+          if (next["data-testid"] === undefined) {
+            next["data-testid"] = v;
+          }
+          continue;
+        }
+
+        if (RN_SPECIFIC_PROPS.has(k)) {
+          continue;
+        }
+      }
+    }
+
     if (next[k] === undefined) next[k] = v;
   }
 
