@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.6
+
+### Patch Changes
+
+- 5725c1f: Update CI configuration
+
 ## 0.2.5
 
 ### Patch Changes
