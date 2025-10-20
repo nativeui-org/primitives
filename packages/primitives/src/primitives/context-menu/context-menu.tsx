@@ -232,12 +232,20 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
       }
     };
 
+    const preventScroll = (e: Event) => {
+      e.preventDefault();
+    };
+
     if (Platform.OS === "web") {
       document.addEventListener("mousedown", handleClickOutside);
       document.body.style.overflow = "hidden";
+      document.addEventListener("wheel", preventScroll, { passive: false });
+      document.addEventListener("touchmove", preventScroll, { passive: false });
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
         document.body.style.overflow = "";
+        document.removeEventListener("wheel", preventScroll);
+        document.removeEventListener("touchmove", preventScroll);
       };
     }
   }, [open, onOpenChange]);
