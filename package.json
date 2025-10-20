@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "nativeui-monorepo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "workspaces": [
     "apps/*",
     "packages/*"
