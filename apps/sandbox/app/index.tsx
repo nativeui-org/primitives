@@ -9,6 +9,7 @@ const primitives = [
   { name: "Accordion", path: "/preview/accordion", description: "Grouped collapsibles with single or multiple selection" },
   { name: "Alert", path: "/preview/alert", description: "Cross-platform alerts: native on mobile, custom on web" },
   { name: "Portal", path: "/preview/portal", description: "Render children outside React tree (web: DOM portal, native: normal)" },
+  { name: "Aspect Ratio", path: "/preview/aspect-ratio", description: "Maintain specific aspect ratios for responsive content" },
 ];
 
 export default function Home() {

@@ -5,3 +5,4 @@ export * from "./primitives/collapsible";
 export * from "./primitives/accordion";
 export * from "./primitives/alert";
 export * from "./primitives/portal";
+export * from "./primitives/aspect-ratio";
