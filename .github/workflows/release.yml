@@ -29,6 +29,9 @@ jobs:
       - name: Build packages
         run: pnpm -r --filter @native-ui-org/primitives run build
 
+      - name: Configure npm auth
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
       - name: Version or Publish
         uses: changesets/action@v1
         with:
