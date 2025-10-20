@@ -1,0 +1,31 @@
+{
+    "plugins": {
+        "@release-it/conventional-changelog": {
+            "preset": "conventionalcommits",
+            "infile": "packages/primitives/CHANGELOG.md"
+        }
+    },
+    "git": {
+        "tagName": "primitives@${version}",
+        "commitMessage": "chore(primitives): release ${version}",
+        "requireCleanWorkingDir": true,
+        "push": true
+    },
+    "github": {
+        "release": true,
+        "releaseName": "primitives@${version}"
+    },
+    "npm": {
+        "publish": true,
+        "publishPath": "packages/primitives"
+    },
+    "hooks": {
+        "before:init": "echo Releasing @native-ui-org/primitives…",
+        "before:release": "pnpm --filter ./packages/primitives build"
+    },
+    "src": {
+        "pkgFiles": [
+            "packages/primitives/package.json"
+        ]
+    }
+}

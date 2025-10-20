@@ -10,7 +10,8 @@
     "dev": "pnpm -r --parallel --filter ./apps/* run dev",
     "build": "pnpm -r --filter ./packages/* run build",
     "lint": "pnpm -r lint || true",
-    "release": "pnpm -r --filter @native-ui-org/primitives build && changeset publish",
+    "release:primitives": "release-it",
+    "release": "pnpm release:primitives",
     "test": "pnpm -r --filter @native-ui-org/primitives run test"
   },
   "devDependencies": {
@@ -19,6 +20,7 @@
     "@babel/preset-typescript": "^7.27.1",
     "@changesets/cli": "^2.27.1",
     "@react-native/babel-preset": "^0.81.1",
+    "@release-it/conventional-changelog": "^10.0.1",
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
     "@testing-library/react-native": "^13.3.3",
@@ -27,10 +29,11 @@
     "babel-jest": "^30.1.2",
     "jest": "^30.1.3",
     "jest-environment-jsdom": "^30.1.2",
-    "react-native-web": "^0.21.1",
-    "react-test-renderer": "19.1.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "react-native-web": "^0.21.1",
+    "react-test-renderer": "19.1.0",
+    "release-it": "^19.0.5",
     "typescript": "5.9.3"
   },
   "pnpm": {
