@@ -1,5 +1,15 @@
 # @native-ui-org/sandbox
 
+## 0.2.10
+
+### Patch Changes
+
+- 5de76cf: Update CI
+- f0620a7: Update CI
+- Updated dependencies [5de76cf]
+- Updated dependencies [f0620a7]
+  - @native-ui-org/primitives@0.2.10
+
 ## 0.2.9
 
 ### Patch Changes
