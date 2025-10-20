@@ -73,9 +73,6 @@ importers:
       react-test-renderer:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
-      release-it:
-        specifier: ^19.0.5
-        version: 19.0.5(@types/node@24.8.1)
       typescript:
         specifier: 5.9.3
         version: 5.9.3
