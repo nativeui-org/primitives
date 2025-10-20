@@ -1,6 +1,6 @@
 {
   "name": "@native-ui-org/primitives",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "private": false,
   "publishConfig": {
     "access": "public"

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- 9e42285: update changesets
+
 ## [0.3.0](https://github.com/nativeui-org/primitives/compare/primitives@0.2.0...primitives@0.3.0) (2025-10-20)
 
 ## [0.2.0](https://github.com/nativeui-org/primitives/compare/primitives@0.1.0...primitives@0.2.0) (2025-10-20)
