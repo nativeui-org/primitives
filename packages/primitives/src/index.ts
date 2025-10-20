@@ -9,3 +9,4 @@ export * from "./primitives/aspect-ratio";
 export * from "./primitives/avatar";
 export * from "./primitives/checkbox";
 export * from "./primitives/checkbox-group";
+export * from "./primitives/context-menu";
