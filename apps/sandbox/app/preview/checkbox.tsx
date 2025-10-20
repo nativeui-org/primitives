@@ -60,10 +60,7 @@ export default function CheckboxPreview() {
             Internal state with defaultChecked
           </Text>
 
-          <Pressable style={styles.row} onPress={(e: any) => {
-            const checkbox = (e.currentTarget as HTMLElement)?.querySelector('[role="checkbox"]');
-            (checkbox as any)?.click?.();
-          }}>
+          <Pressable style={styles.row}>
             <Checkbox
               id="uncontrolled"
               defaultChecked={true}

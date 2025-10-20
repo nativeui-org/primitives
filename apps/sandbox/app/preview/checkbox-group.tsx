@@ -179,10 +179,7 @@ export default function CheckboxGroupPreview() {
           
           <CheckboxGroup defaultValue={["option-1"]}>
             <View style={styles.group}>
-              <Pressable style={styles.row} onPress={(e: any) => {
-                const checkbox = (e.currentTarget as HTMLElement)?.querySelector('[role="checkbox"]');
-                (checkbox as any)?.click?.();
-              }}>
+              <View style={styles.row}>
                 <Checkbox id="option-1" value="option-1" style={styles.checkboxBox}>
                   <CheckboxIndicator>
                     <View style={styles.checkmark} />
@@ -191,12 +188,9 @@ export default function CheckboxGroupPreview() {
                 <CheckboxLabel htmlFor="option-1" style={styles.label}>
                   Option 1 (default selected)
                 </CheckboxLabel>
-              </Pressable>
+              </View>
               
-              <Pressable style={styles.row} onPress={(e: any) => {
-                const checkbox = (e.currentTarget as HTMLElement)?.querySelector('[role="checkbox"]');
-                (checkbox as any)?.click?.();
-              }}>
+              <View style={styles.row}>
                 <Checkbox id="option-2" value="option-2" style={styles.checkboxBox}>
                   <CheckboxIndicator>
                     <View style={styles.checkmark} />
@@ -205,7 +199,7 @@ export default function CheckboxGroupPreview() {
                 <CheckboxLabel htmlFor="option-2" style={styles.label}>
                   Option 2
                 </CheckboxLabel>
-              </Pressable>
+              </View>
             </View>
           </CheckboxGroup>
         </View>
