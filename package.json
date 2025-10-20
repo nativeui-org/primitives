@@ -48,5 +48,8 @@
       "react",
       "react-dom"
     ]
+  },
+  "dependencies": {
+    "@changesets/changelog-github": "^0.5.1"
   }
 }
