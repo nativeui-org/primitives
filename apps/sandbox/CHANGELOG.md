@@ -1,5 +1,13 @@
 # @native-ui-org/sandbox
 
+## 0.2.6
+
+### Patch Changes
+
+- 5725c1f: Update CI configuration
+- Updated dependencies [5725c1f]
+  - @native-ui-org/primitives@0.2.6
+
 ## 0.2.5
 
 ### Patch Changes
