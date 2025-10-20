@@ -1,5 +1,13 @@
 # @native-ui-org/sandbox
 
+## 0.2.9
+
+### Patch Changes
+
+- 6fae496: Test CI
+- Updated dependencies [6fae496]
+  - @native-ui-org/primitives@0.2.9
+
 ## 0.2.8
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.9
+
+### Patch Changes
+
+- 6fae496: Test CI
+
 ## 0.2.8
 
 ### Patch Changes
