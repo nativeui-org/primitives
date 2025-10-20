@@ -1,0 +1,153 @@
+# Portal Primitive
+
+A component for rendering children outside the normal React tree hierarchy.
+
+---
+
+## What is Portal?
+
+Portal allows you to render children into a different part of the DOM tree, typically outside the current component's container. This is essential for modals, tooltips, dropdowns, and other overlay components.
+
+**Platform behavior:**
+- **Web**: Renders children to a DOM container (default: `document.body`)
+- **Native**: Renders children normally (no portal behavior needed)
+
+---
+
+## When should you use it?
+
+✅ Use Portal if:
+- You need to render **overlays** (modals, tooltips, dropdowns)
+- You want to **escape z-index stacking context** issues
+- You need to render **outside parent containers** with overflow hidden
+- You're building **floating UI components**
+
+⚠️ Consider alternatives if:
+- You just need conditional rendering (use `{condition && <Component />}`)
+- You're building simple layouts (use normal React tree)
+
+---
+
+## API
+
+### Portal
+
+| Prop        | Type           | Default        | Description                                    |
+|--------------|----------------|----------------|------------------------------------------------|
+| `children`   | `React.ReactNode` | -              | Content to render in the portal                |
+| `container`  | `Element \| null` | `document.body` | DOM container to render into (web only)        |
+
+---
+
+## Examples
+
+### Basic usage
+
+```tsx
+import { Portal } from "@native-ui-org/primitives";
+
+function Modal() {
+  return (
+    <Portal>
+      <div className="modal-overlay">
+        <div className="modal-content">
+          Modal content
+        </div>
+      </div>
+    </Portal>
+  );
+}
+```
+
+### Custom container
+
+```tsx
+import { Portal } from "@native-ui-org/primitives";
+
+function CustomModal() {
+  const modalRoot = document.getElementById('modal-root');
+  
+  return (
+    <Portal container={modalRoot}>
+      <div className="modal">
+        Content rendered in custom container
+      </div>
+    </Portal>
+  );
+}
+```
+
+### Tooltip example
+
+```tsx
+import { Portal } from "@native-ui-org/primitives";
+
+function Tooltip({ children, content }) {
+  const [open, setOpen] = useState(false);
+  
+  return (
+    <>
+      <div onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
+        {children}
+      </div>
+      
+      {open && (
+        <Portal>
+          <div className="tooltip">
+            {content}
+          </div>
+        </Portal>
+      )}
+    </>
+  );
+}
+```
+
+---
+
+## Platform Differences
+
+### Web
+- Uses `ReactDOM.createPortal()` to render to DOM container
+- Defaults to `document.body` if no container specified
+- Waits for mount to avoid SSR hydration issues
+- Enables true overlay behavior
+
+### Native (iOS/Android)
+- Renders children normally in React tree
+- No portal behavior (not needed on mobile)
+- No performance overhead
+
+---
+
+## Implementation Details
+
+### SSR Safety
+Portal waits for mount before rendering to avoid hydration mismatches:
+
+```tsx
+const [mounted, setMounted] = React.useState(false);
+
+React.useEffect(() => {
+  setMounted(true);
+}, []);
+
+if (!mounted) {
+  return null; // SSR-safe
+}
+```
+
+### Container Selection
+```tsx
+const targetContainer = container || document.body;
+return ReactDOM.createPortal(children, targetContainer);
+```
+
+---
+
+## Changelog
+
+| Version | Changes                                    |
+|---------|--------------------------------------------|
+| `0.1.0` | Initial release. Basic portal functionality. |
+
