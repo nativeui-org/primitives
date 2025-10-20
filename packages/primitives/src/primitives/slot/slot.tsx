@@ -18,7 +18,7 @@ const EVENT_RE = /^on[A-Z]/;
  * Typical usage: <View asChild><section /></View>
  * This renders <section> directly with View's props, avoiding a wrapper node.
  */
-export function Slot(props: { children?: React.ReactNode } & InjectedProps) {
+export function Slot(props: { children?: React.ReactNode } & InjectedProps): React.ReactElement | null {
   const { children, ...injected } = props;
 
   if (!React.isValidElement(children)) {
@@ -38,9 +38,9 @@ export function Slot(props: { children?: React.ReactNode } & InjectedProps) {
       next[key] =
         typeof theirs === "function"
           ? (...args: unknown[]) => {
-              (theirs as any)(...args);
-              (ours as any)(...args);
-            }
+            (theirs as any)(...args);
+            (ours as any)(...args);
+          }
           : ours;
     }
   }

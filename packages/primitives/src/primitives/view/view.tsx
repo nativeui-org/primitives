@@ -18,6 +18,11 @@ export type ViewProps = RNViewProps & {
    * Useful to avoid extra wrappers or to render semantic elements on web.
    */
   asChild?: boolean;
+
+  /**
+   * CSS class name for styling (Tailwind).
+   */
+  className?: string;
 };
 
 /**
