@@ -1,5 +1,17 @@
 # @native-ui-org/sandbox
 
+## 0.2.5
+
+### Patch Changes
+
+- e47eed9: Creating View and Text components
+- 4207aa9: Update CI Configuration
+- 003353e: Updating CI Configuration when release
+- Updated dependencies [e47eed9]
+- Updated dependencies [4207aa9]
+- Updated dependencies [003353e]
+  - @native-ui-org/primitives@0.2.5
+
 ## 0.2.4
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.5
+
+### Patch Changes
+
+- e47eed9: Creating View and Text components
+- 4207aa9: Update CI Configuration
+- 003353e: Updating CI Configuration when release
+
 ## 0.2.4
 
 ### Patch Changes
