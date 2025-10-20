@@ -1,5 +1,13 @@
 # @native-ui-org/sandbox
 
+## 0.2.8
+
+### Patch Changes
+
+- 0f18a8c: Update CI
+- Updated dependencies [0f18a8c]
+  - @native-ui-org/primitives@0.2.8
+
 ## 0.2.7
 
 ### Patch Changes
