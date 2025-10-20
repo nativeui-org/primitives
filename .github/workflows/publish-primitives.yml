@@ -1,0 +1,40 @@
+name: Publish @native-ui-org/primitives
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    if: startsWith(github.event.release.tag_name, 'primitives@')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build primitives
+        run: pnpm -r --filter @native-ui-org/primitives run build
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          cd packages/primitives
+          npm publish --access public
