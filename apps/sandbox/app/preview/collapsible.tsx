@@ -4,7 +4,6 @@ import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@native-ui-
 import { StyleSheet, Platform, ScrollView } from "react-native";
 import React from "react";
 
-// Chevron icon using CSS borders (no external deps)
 function ChevronIcon({ color = "#666" }: { color?: string }) {
   const { open } = useCollapsible();
   
