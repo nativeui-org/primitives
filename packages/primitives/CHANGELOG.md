@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.7
+
+### Patch Changes
+
+- c754036: Update CI
+
 ## 0.2.6
 
 ### Patch Changes
