@@ -43,7 +43,7 @@ jobs:
         with:
           version: pnpm changeset version
           publish: pnpm changeset publish
-          createGithubReleases: ${{ fromJSON(steps.changesets.outputs.hasChangesets) == false }}
+          createGithubReleases: false
           title: "chore: release primitives"
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
