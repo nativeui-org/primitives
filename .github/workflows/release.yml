@@ -43,8 +43,29 @@ jobs:
         with:
           version: pnpm changeset version
           publish: pnpm changeset publish
-          createGithubReleases: true
+          createGithubReleases: ${{ fromJSON(steps.changesets.outputs.hasChangesets) == false }}
+          title: "chore: release primitives"
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create custom GitHub Releases
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          for package in $(echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '.[] | @base64'); do
+            pkg=$(echo "$package" | base64 --decode | jq -r '.name')
+            version=$(echo "$package" | base64 --decode | jq -r '.version')
+            shortName=$(echo "$pkg" | sed 's/@native-ui-org\///')
+            tag="${shortName}@${version}"
+            
+            git tag "$tag" || true
+            git push origin "$tag" || true
+            
+            gh release create "$tag" \
+              --title "primitives@${version}" \
+              --notes "Release primitives version ${version}" \
+              --repo nativeui-org/primitives
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
