@@ -75,16 +75,26 @@ function mapAsToA11y(as?: TextProps["as"]): WebA11yProps {
  * </Text>
  */
 export const Text = React.forwardRef<any, TextProps>((props, ref) => {
-  const { asChild, as, role, ...rest } = props;
+  const { asChild, as, role, children, ...rest } = props;
 
   if (asChild) {
     const Comp: any = Slot;
-    return <Comp ref={ref} role={role} {...rest} />;
+    return <Comp ref={ref} role={role} {...rest}>{children}</Comp>;
+  }
+
+  if (Platform.OS === "web" && as) {
+    const webA11y = mapAsToA11y(as);
+    const finalRole = (webA11y.role || role) as any;
+    return (
+      <Slot ref={ref} role={finalRole} {...rest}>
+        {React.createElement(as, {}, children)}
+      </Slot>
+    );
   }
 
   const webA11y = mapAsToA11y(as);
   const finalRole = (webA11y.role || role) as any;
-  return <RNText ref={ref} role={finalRole} {...rest} />;
+  return <RNText ref={ref} role={finalRole} {...rest}>{children}</RNText>;
 });
 
 Text.displayName = "Text";

@@ -23,7 +23,7 @@ export function Slot(props: { children?: React.ReactNode } & InjectedProps): Rea
 
   if (!React.isValidElement(children)) {
     // Enforce a single valid React element
-    return React.Children.count(children) > 1 ? React.Children.only(null) : null;
+    return null;
   }
 
   const childProps = (children.props ?? {}) as Record<string, any>;
