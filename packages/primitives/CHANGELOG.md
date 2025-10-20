@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Patch Changes
+
+- 80d662d: test something
+
 ## 0.2.0
 
 ### Minor Changes
