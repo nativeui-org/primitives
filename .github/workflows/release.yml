@@ -7,6 +7,9 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }
@@ -21,9 +24,6 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # 1) If there are un-“versioned” changesets, open/update a PR
-      # 2) If the PR has already been merged (so versions bumped), publish to npm
-      # 3) Create a GitHub Release (notes from the changelogs)
       - name: Version or Publish
         uses: changesets/action@v1
         with:
