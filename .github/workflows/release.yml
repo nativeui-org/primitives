@@ -29,15 +29,24 @@ jobs:
       - name: Build packages
         run: pnpm -r --filter @native-ui-org/primitives run build
 
-      - name: Configure npm auth
-        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
-
-      - name: Version or Publish
+      - name: Version packages
+        id: changesets
         uses: changesets/action@v1
         with:
           version: pnpm changeset version
-          publish: pnpm changeset publish
-          createGithubReleases: true
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm
+        if: steps.changesets.outputs.published == 'true'
+        run: |
+          cd packages/primitives
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub Release
+        if: steps.changesets.outputs.published == 'true'
+        run: pnpm changeset tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
