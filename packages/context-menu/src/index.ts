@@ -1,11 +1,10 @@
-// This file will be used for web, index.native.ts for native
 export { 
   ContextMenu, 
   ContextMenuTrigger, 
   ContextMenuContent, 
   ContextMenuItem, 
   ContextMenuSeparator 
-} from './ContextMenu.web';
+} from './components/ContextMenu';
 
 export type { 
   ContextMenuProps, 
@@ -13,4 +12,4 @@ export type {
   ContextMenuContentProps, 
   ContextMenuItemProps, 
   ContextMenuSeparatorProps 
-} from './ContextMenu';
+} from './components/ContextMenu';

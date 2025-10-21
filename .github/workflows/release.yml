@@ -28,7 +28,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - name: Build packages
-        run: pnpm -r --filter @native-ui-org/primitives run build
+        run: |
+          pnpm -r --filter @native-ui-org/primitives run build
+          pnpm -r --filter @native-ui-org/context-menu run build
 
       - name: Configure pnpm for npm
         run: |
@@ -53,19 +55,44 @@ jobs:
       - name: Create custom GitHub Releases
         if: steps.changesets.outputs.published == 'true'
         run: |
+          # Collect all published packages
+          packages=()
+          versions=()
           for package in $(echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '.[] | @base64'); do
             pkg=$(echo "$package" | base64 --decode | jq -r '.name')
             version=$(echo "$package" | base64 --decode | jq -r '.version')
+            packages+=("$pkg")
+            versions+=("$version")
+            
+            # Create git tags for each package
             shortName=$(echo "$pkg" | sed 's/@native-ui-org\///')
             tag="${shortName}@${version}"
-            
             git tag "$tag" || true
             git push origin "$tag" || true
-            
-            gh release create "$tag" \
-              --title "primitives@${version}" \
-              --notes "Release primitives version ${version}" \
-              --repo nativeui-org/primitives
           done
+          
+          # Create a single release with all packages
+          if [ ${#packages[@]} -gt 0 ]; then
+            # Use the first package version as the main release version
+            mainVersion=${versions[0]}
+            releaseTitle="primitives@${mainVersion}"
+            
+            # Build release notes
+            releaseNotes="Release primitives version ${mainVersion}\n\n"
+            releaseNotes+="## Published Packages\n\n"
+            
+            for i in "${!packages[@]}"; do
+              pkg="${packages[$i]}"
+              version="${versions[$i]}"
+              shortName=$(echo "$pkg" | sed 's/@native-ui-org\///')
+              releaseNotes+="- **${shortName}**: ${version}\n"
+            done
+            
+            # Create the release
+            gh release create "v${mainVersion}" \
+              --title "$releaseTitle" \
+              --notes "$releaseNotes" \
+              --repo nativeui-org/primitives
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
