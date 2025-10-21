@@ -1,8 +1,15 @@
 # Changelog
 
+## 0.2.0
+
+### Minor Changes
+
+- 832e7f5: releasing context menu for all package
+
 ## [0.1.0] - 2024-10-21
 
 ### 🎉 New features
+
 - **Cross-platform context menu** - Right-click on web, long-press on mobile
 - **Platform-specific icons** - SF Symbols on iOS, Material Icons on Android, Lucide on web
 - **Web Portal rendering** - Custom context menu with proper positioning
@@ -14,14 +21,17 @@
 - **TypeScript support** - Full type definitions included
 
 ### 🛠 Breaking changes
+
 - Initial release - no breaking changes
 
 ### 🐛 Bug fixes
+
 - Fixed menu not closing after item selection on web
 - Fixed icon rendering for React components on web
 - Fixed TypeScript types for context menu functions
 
 ### 💡 Others
+
 - Comprehensive documentation with examples
 - Ready for npm publication
 - Clean package structure with proper config files
