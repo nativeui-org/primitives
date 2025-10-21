@@ -1,5 +1,19 @@
 # @native-ui-org/sandbox
 
+## 0.4.0
+
+### Minor Changes
+
+- e02ee5d: release
+- ed533db: Releasing all 3 packages
+
+### Patch Changes
+
+- Updated dependencies [e02ee5d]
+- Updated dependencies [ed533db]
+  - @native-ui-org/context-menu@1.0.0
+  - @native-ui-org/primitives@0.3.1
+
 ## 0.3.0
 
 ### Minor Changes

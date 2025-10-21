@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0
+
+### Major Changes
+
+- e02ee5d: release
+- ed533db: Releasing all 3 packages
+
 ## 0.3.0
 
 ### Minor Changes
