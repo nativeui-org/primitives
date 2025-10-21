@@ -67,7 +67,12 @@ jobs:
             
             # Extract changelog content for this specific package
             changelogContent=""
-            changelogFile="packages/${shortName}/CHANGELOG.md"
+            if [ "$shortName" = "sandbox" ]; then
+              changelogFile="apps/sandbox/CHANGELOG.md"
+            else
+              changelogFile="packages/${shortName}/CHANGELOG.md"
+            fi
+            
             if [ -f "$changelogFile" ]; then
               # Extract the changelog section for this version
               changelogContent=$(awk "/^## \[${version}\]/,/^## \[/" "$changelogFile" | head -n -1)
@@ -75,41 +80,56 @@ jobs:
             
             # Build release notes based on package type
             releaseTitle="${shortName}@${version}"
-            releaseNotes="## 🚀 Release ${version}\n\n"
+            
+            # Create a temporary file for release notes
+            releaseNotesFile=$(mktemp)
+            
+            echo "## 🚀 Release ${version}" >> "$releaseNotesFile"
+            echo "" >> "$releaseNotesFile"
             
             # Add changelog if available
             if [ -n "$changelogContent" ]; then
-              releaseNotes+="### 📝 Changelog\n\n"
-              releaseNotes+="$changelogContent\n"
+              echo "### 📝 Changelog" >> "$releaseNotesFile"
+              echo "" >> "$releaseNotesFile"
+              echo "$changelogContent" >> "$releaseNotesFile"
+              echo "" >> "$releaseNotesFile"
             fi
             
             # Add package-specific installation instructions
-            releaseNotes+="\n### 📥 Installation\n\n"
-            releaseNotes+="\`\`\`bash\n"
-            releaseNotes+="npm install ${pkg}\n"
-            releaseNotes+="\`\`\`\n"
+            echo "### 📥 Installation" >> "$releaseNotesFile"
+            echo "" >> "$releaseNotesFile"
+            echo "\`\`\`bash" >> "$releaseNotesFile"
+            echo "npm install ${pkg}" >> "$releaseNotesFile"
+            echo "\`\`\`" >> "$releaseNotesFile"
+            echo "" >> "$releaseNotesFile"
             
             # Add package-specific information
             case "$shortName" in
               "primitives")
-                releaseNotes+="\n### 📚 Documentation\n\n"
-                releaseNotes+="Visit the [primitives documentation](https://github.com/nativeui-org/primitives#readme) for usage examples.\n"
+                echo "### 📚 Documentation" >> "$releaseNotesFile"
+                echo "" >> "$releaseNotesFile"
+                echo "Visit the [primitives documentation](https://github.com/nativeui-org/primitives#readme) for usage examples." >> "$releaseNotesFile"
                 ;;
               "context-menu")
-                releaseNotes+="\n### 📚 Documentation\n\n"
-                releaseNotes+="Visit the [context-menu documentation](https://github.com/nativeui-org/primitives/tree/main/packages/context-menu#readme) for usage examples.\n"
+                echo "### 📚 Documentation" >> "$releaseNotesFile"
+                echo "" >> "$releaseNotesFile"
+                echo "Visit the [context-menu documentation](https://github.com/nativeui-org/primitives/tree/main/packages/context-menu#readme) for usage examples." >> "$releaseNotesFile"
                 ;;
               "sandbox")
-                releaseNotes+="\n### 🌐 Demo\n\n"
-                releaseNotes+="This package contains the demo application. Visit the [live demo](https://primitives.nativeui.org) to see it in action.\n"
+                echo "### 🌐 Demo" >> "$releaseNotesFile"
+                echo "" >> "$releaseNotesFile"
+                echo "This package contains the demo application. Visit the [live demo](https://primitives.nativeui.org) to see it in action." >> "$releaseNotesFile"
                 ;;
             esac
             
             # Create the release
             gh release create "$tag" \
               --title "$releaseTitle" \
-              --notes "$releaseNotes" \
+              --notes-file "$releaseNotesFile" \
               --repo nativeui-org/primitives
+            
+            # Clean up
+            rm "$releaseNotesFile"
           done
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
