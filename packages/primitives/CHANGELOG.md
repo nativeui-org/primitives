@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.11
+
+### Patch Changes
+
+- 832e7f5: releasing context menu for all package
+
 ## 0.2.10
 
 ### Patch Changes

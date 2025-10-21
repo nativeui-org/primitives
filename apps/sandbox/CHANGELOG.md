@@ -1,5 +1,14 @@
 # @native-ui-org/sandbox
 
+## 0.2.11
+
+### Patch Changes
+
+- 832e7f5: releasing context menu for all package
+- Updated dependencies [832e7f5]
+  - @native-ui-org/context-menu@0.2.0
+  - @native-ui-org/primitives@0.2.11
+
 ## 0.2.10
 
 ### Patch Changes
