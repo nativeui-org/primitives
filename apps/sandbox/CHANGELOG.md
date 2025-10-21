@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.4.2
+
+### Patch Changes
+
+- 5994d54: Update sandbox
+
 ## 0.4.1
 
 ### Patch Changes
