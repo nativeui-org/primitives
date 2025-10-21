@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0
+
+### Minor Changes
+
+- e330d63: updating package to same version
+
+### Patch Changes
+
+- eea1770: updating version of each package
+
 ## 0.2.11
 
 ### Patch Changes

@@ -1,5 +1,19 @@
 # @native-ui-org/sandbox
 
+## 0.3.0
+
+### Minor Changes
+
+- e330d63: updating package to same version
+
+### Patch Changes
+
+- eea1770: updating version of each package
+- Updated dependencies [e330d63]
+- Updated dependencies [eea1770]
+  - @native-ui-org/context-menu@0.3.0
+  - @native-ui-org/primitives@0.3.0
+
 ## 0.2.11
 
 ### Patch Changes
