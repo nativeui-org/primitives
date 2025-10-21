@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["NativeUiOrgContextMenuModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.nativeuiorgcontextmenu.NativeUiOrgContextMenuModule"]
+  }
+}

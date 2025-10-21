@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "sandbox",
-    "slug": "sandbox",
+    "name": "context-menu-example",
+    "slug": "context-menu-example",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.uwalk.sandbox"
+      "bundleIdentifier": "expo.modules.nativeuiorgcontextmenu.example"
     },
     "android": {
       "adaptiveIcon": {
@@ -22,13 +22,11 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "expo.modules.nativeuiorgcontextmenu.example"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      "expo-router"
-    ]
+    }
   }
 }

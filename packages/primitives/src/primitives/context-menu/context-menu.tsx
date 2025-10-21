@@ -1,6 +1,14 @@
 import * as React from "react";
-import { Platform, View, Pressable, type ViewProps } from "react-native";
+import { Platform, View, Pressable, Modal, Animated, Dimensions, Text, type ViewProps } from "react-native";
 import { Slot } from "../slot";
+
+type NativeMenuItem = {
+  label: string;
+  onPress?: () => void;
+  destructive?: boolean;
+  disabled?: boolean;
+  icon?: string;
+};
 
 export type ContextMenuProps = ViewProps & {
   /**
@@ -65,6 +73,11 @@ export type ContextMenuItemProps = ViewProps & {
   onPress?: () => void;
 
   /**
+   * Icon for the menu item (native only).
+   */
+  icon?: string;
+
+  /**
    * The content of the menu item.
    */
   children: React.ReactNode;
@@ -77,10 +90,16 @@ export const ContextMenuContext = React.createContext<{
   open: boolean;
   onOpenChange: (open: boolean) => void;
   triggerRef: React.RefObject<any>;
+  nativeItems: NativeMenuItem[];
+  registerNativeItem: (item: NativeMenuItem) => void;
+  clearNativeItems: () => void;
 }>({
   open: false,
   onOpenChange: () => {},
   triggerRef: { current: null },
+  nativeItems: [],
+  registerNativeItem: () => {},
+  clearNativeItems: () => {},
 });
 
 export const useContextMenu = () => React.useContext(ContextMenuContext);
@@ -104,6 +123,7 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
   const { open: openProp, defaultOpen = false, onOpenChange, children, ...rest } = props;
   
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
+  const [nativeItems, setNativeItems] = React.useState<NativeMenuItem[]>([]);
   const triggerRef = React.useRef<any>(null);
   
   const open = openProp ?? internalOpen;
@@ -115,11 +135,22 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
     onOpenChange?.(newOpen);
   }, [openProp, onOpenChange]);
 
+  const registerNativeItem = React.useCallback((item: NativeMenuItem) => {
+    setNativeItems(prev => [...prev, item]);
+  }, []);
+
+  const clearNativeItems = React.useCallback(() => {
+    setNativeItems([]);
+  }, []);
+
   const contextValue = React.useMemo(() => ({
     open,
     onOpenChange: handleOpenChange,
     triggerRef,
-  }), [open, handleOpenChange]);
+    nativeItems,
+    registerNativeItem,
+    clearNativeItems,
+  }), [open, handleOpenChange, nativeItems, registerNativeItem, clearNativeItems]);
 
   return (
     <ContextMenuContext.Provider value={contextValue}>
@@ -149,7 +180,6 @@ export const ContextMenuTrigger = React.forwardRef<any, ContextMenuTriggerProps>
       (window as any).lastContextMenuY = e.clientY;
       (window as any).lastContextMenuKey = contextKey;
       
-      console.log("Context menu triggered!", e.clientX, e.clientY, contextKey); // Debug
       onOpenChange(true);
     }
   }, [disabled, onOpenChange]);
@@ -177,6 +207,7 @@ export const ContextMenuTrigger = React.forwardRef<any, ContextMenuTriggerProps>
         triggerRef.current = node;
       }}
       onLongPress={handleLongPress}
+      delayLongPress={500}
       {...rest}
     >
       {children}
@@ -191,9 +222,11 @@ ContextMenuTrigger.displayName = "ContextMenuTrigger";
  */
 export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>((props, ref) => {
   const { children, forceMount } = props;
-  const { open, onOpenChange, triggerRef } = useContextMenu();
+  const { open, onOpenChange, triggerRef, nativeItems } = useContextMenu();
   const [position, setPosition] = React.useState({ x: 0, y: 0 });
   const contentRef = React.useRef<HTMLDivElement>(null);
+  const slideAnim = React.useRef(new Animated.Value(0)).current;
+  const overlayAnim = React.useRef(new Animated.Value(0)).current;
 
   // Calculate position when opening
   React.useEffect(() => {
@@ -204,6 +237,39 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
       setPosition({ x: mouseX, y: mouseY });
     }
   }, [open]);
+
+  // Animate bottom sheet on native
+  React.useEffect(() => {
+    if (Platform.OS !== "web") {
+      if (open) {
+        Animated.parallel([
+          Animated.timing(slideAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+          Animated.timing(overlayAnim, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+          }),
+        ]).start();
+      } else {
+        Animated.parallel([
+          Animated.timing(slideAnim, {
+            toValue: 0,
+            duration: 250,
+            useNativeDriver: true,
+          }),
+          Animated.timing(overlayAnim, {
+            toValue: 0,
+            duration: 250,
+            useNativeDriver: true,
+          }),
+        ]).start();
+      }
+    }
+  }, [open, slideAnim, overlayAnim]);
 
   // Handle escape key
   React.useEffect(() => {
@@ -294,8 +360,103 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
   }
 
   if (Platform.OS !== "web") {
-    // On native, we'll implement this later with native context menus
-    return null;
+    const screenHeight = Dimensions.get("window").height;
+    const translateY = slideAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [screenHeight, 0],
+    });
+
+    const overlayOpacity = overlayAnim.interpolate({
+      inputRange: [0, 1],
+      outputRange: [0, 0.5],
+    });
+
+    return (
+      <Modal
+        visible={open}
+        transparent
+        animationType="none"
+        onRequestClose={() => onOpenChange(false)}
+      >
+        <Animated.View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            opacity: overlayOpacity,
+          }}
+        >
+          <Pressable
+            style={{ flex: 1 }}
+            onPress={() => onOpenChange(false)}
+          />
+          <Animated.View
+            style={{
+              backgroundColor: "#1a1a1a",
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              paddingTop: 12,
+              paddingBottom: 34, // Safe area bottom
+              transform: [{ translateY }],
+            }}
+          >
+            {/* Handle bar */}
+            <View
+              style={{
+                width: 36,
+                height: 4,
+                backgroundColor: "rgba(255, 255, 255, 0.3)",
+                borderRadius: 2,
+                alignSelf: "center",
+                marginBottom: 20,
+              }}
+            />
+            
+            {/* Menu items */}
+            {nativeItems.map((item, index) => (
+              <Pressable
+                key={index}
+                onPress={() => {
+                  if (!item.disabled) {
+                    item.onPress?.();
+                    onOpenChange(false);
+                  }
+                }}
+                style={({ pressed }) => ({
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: 20,
+                  paddingVertical: 16,
+                  opacity: item.disabled ? 0.5 : pressed ? 0.7 : 1,
+                })}
+              >
+                <View
+                  style={{
+                    width: 24,
+                    height: 24,
+                    marginRight: 16,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text style={{ fontSize: 20 }}>
+                    {item.icon || "•"}
+                  </Text>
+                </View>
+                <Text
+                  style={{
+                    fontSize: 16,
+                    color: item.destructive ? "#ff3b30" : "#ffffff",
+                    fontWeight: "400",
+                  }}
+                >
+                  {item.label}
+                </Text>
+              </Pressable>
+            ))}
+          </Animated.View>
+        </Animated.View>
+      </Modal>
+    );
   }
 
   if (Platform.OS === "web") {
@@ -339,8 +500,31 @@ ContextMenuContent.displayName = "ContextMenuContent";
  * ContextMenuItem component for individual menu items.
  */
 export const ContextMenuItem = React.forwardRef<any, ContextMenuItemProps>((props, ref) => {
-  const { children, disabled = false, destructive = false, onPress, ...rest } = props;
-  const { onOpenChange } = useContextMenu();
+  const { children, disabled = false, destructive = false, onPress, icon, ...rest } = props;
+  const { onOpenChange, registerNativeItem } = useContextMenu();
+
+  // Extract text label from children for native menu
+  const getTextLabel = (children: React.ReactNode): string => {
+    if (typeof children === "string") return children;
+    if (React.isValidElement(children)) {
+      const props = children.props as any;
+      if (props && props.children) {
+        return getTextLabel(props.children);
+      }
+    }
+    if (Array.isArray(children)) {
+      return children.map(getTextLabel).join("");
+    }
+    return "";
+  };
+
+  // Register native item on mount for native platforms
+  React.useEffect(() => {
+    if (Platform.OS !== "web") {
+      const label = getTextLabel(children);
+      registerNativeItem({ label, onPress, destructive, disabled, icon });
+    }
+  }, [children, onPress, destructive, disabled, icon, registerNativeItem]);
 
   const handlePress = React.useCallback(() => {
     if (!disabled) {
@@ -403,19 +587,8 @@ export const ContextMenuItem = React.forwardRef<any, ContextMenuItemProps>((prop
     );
   }
 
-  return (
-    <Slot
-      ref={ref}
-      role="menuitem"
-      onPress={handlePress}
-      disabled={disabled}
-      accessibilityRole="menuitem"
-      accessibilityState={{ disabled }}
-      {...rest}
-    >
-      {children}
-    </Slot>
-  );
+  // On native, render nothing (items are collected via useEffect and shown in native menu)
+  return null;
 });
 
 ContextMenuItem.displayName = "ContextMenuItem";
@@ -442,14 +615,8 @@ export const ContextMenuSeparator = React.forwardRef<any, ContextMenuSeparatorPr
     );
   }
 
-  return (
-    <Slot
-      ref={ref}
-      role="separator"
-      accessibilityRole="separator"
-      {...props}
-    />
-  );
+  // On native, separators are not shown in ActionSheet/Alert
+  return null;
 });
 
 ContextMenuSeparator.displayName = "ContextMenuSeparator";

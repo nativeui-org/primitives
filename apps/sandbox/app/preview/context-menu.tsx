@@ -1,16 +1,32 @@
 import { Stack } from "expo-router";
 import { View, Text } from "@native-ui-org/primitives";
+// Test direct import
+try {
+  const contextMenuModule = require("@native-ui-org/context-menu");
+  console.log('PREVIEW: ContextMenu module loaded:', Object.keys(contextMenuModule));
+} catch (error) {
+  console.error('PREVIEW: Error loading ContextMenu module:', error);
+}
+
 import { 
   ContextMenu, 
   ContextMenuTrigger, 
   ContextMenuContent, 
   ContextMenuItem, 
   ContextMenuSeparator 
-} from "@native-ui-org/primitives";
+} from "@native-ui-org/context-menu";
 import { StyleSheet, Platform, ScrollView, Alert } from "react-native";
 import React from "react";
 
 export default function ContextMenuPreview() {
+  // Debug platform
+  React.useEffect(() => {
+    console.log('PREVIEW: Platform.OS =', Platform.OS);
+    console.log('PREVIEW: typeof window =', typeof window);
+    console.log('PREVIEW: typeof document =', typeof document);
+    console.log('PREVIEW: navigator.userAgent =', typeof navigator !== 'undefined' ? navigator.userAgent : 'no navigator');
+  }, []);
+
   const handleShare = () => {
     console.log("Share clicked!");
     Alert.alert("Share", "Chat shared!");
@@ -79,20 +95,46 @@ export default function ContextMenuPreview() {
               </ContextMenuTrigger>
               
               <ContextMenuContent>
-                <ContextMenuItem onPress={handleShare}>
-                  <Text>Share</Text>
+                <ContextMenuItem 
+                  onPress={handleShare} 
+                  iosIcon="square.and.arrow.up"
+                  androidIcon="share"
+                  icon="📤"
+                >
+                  <Text>Share chat</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleRename}>
+                <ContextMenuItem 
+                  onPress={handleRename} 
+                  iosIcon="pencil"
+                  androidIcon="edit"
+                  icon="✏️"
+                >
                   <Text>Rename</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleArchive}>
+                <ContextMenuItem 
+                  onPress={handleArchive} 
+                  iosIcon="archivebox"
+                  androidIcon="archive"
+                  icon="📦"
+                >
                   <Text>Archive</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleExport}>
+                <ContextMenuItem 
+                  onPress={handleExport} 
+                  iosIcon="square.and.arrow.down"
+                  androidIcon="download"
+                  icon="💾"
+                >
                   <Text>Export</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
-                <ContextMenuItem onPress={handleDelete} destructive>
+                <ContextMenuItem 
+                  onPress={handleDelete} 
+                  destructive 
+                  iosIcon="trash"
+                  androidIcon="delete"
+                  icon="🗑️"
+                >
                   <Text>Delete</Text>
                 </ContextMenuItem>
               </ContextMenuContent>
@@ -112,20 +154,46 @@ export default function ContextMenuPreview() {
               </ContextMenuTrigger>
               
               <ContextMenuContent>
-                <ContextMenuItem onPress={handleShare}>
-                  <Text>Share</Text>
+                <ContextMenuItem 
+                  onPress={handleShare} 
+                  iosIcon="square.and.arrow.up"
+                  androidIcon="share"
+                  icon="📤"
+                >
+                  <Text>Share chat</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleRename}>
+                <ContextMenuItem 
+                  onPress={handleRename} 
+                  iosIcon="pencil"
+                  androidIcon="edit"
+                  icon="✏️"
+                >
                   <Text>Rename</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleArchive}>
+                <ContextMenuItem 
+                  onPress={handleArchive} 
+                  iosIcon="archivebox"
+                  androidIcon="archive"
+                  icon="📦"
+                >
                   <Text>Archive</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleExport}>
+                <ContextMenuItem 
+                  onPress={handleExport} 
+                  iosIcon="square.and.arrow.down"
+                  androidIcon="download"
+                  icon="💾"
+                >
                   <Text>Export</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
-                <ContextMenuItem onPress={handleDelete} destructive>
+                <ContextMenuItem 
+                  onPress={handleDelete} 
+                  destructive 
+                  iosIcon="trash"
+                  androidIcon="delete"
+                  icon="🗑️"
+                >
                   <Text>Delete</Text>
                 </ContextMenuItem>
               </ContextMenuContent>
@@ -145,20 +213,46 @@ export default function ContextMenuPreview() {
               </ContextMenuTrigger>
               
               <ContextMenuContent>
-                <ContextMenuItem onPress={handleShare}>
-                  <Text>Share</Text>
+                <ContextMenuItem 
+                  onPress={handleShare} 
+                  iosIcon="square.and.arrow.up"
+                  androidIcon="share"
+                  icon="📤"
+                >
+                  <Text>Share chat</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleRename}>
+                <ContextMenuItem 
+                  onPress={handleRename} 
+                  iosIcon="pencil"
+                  androidIcon="edit"
+                  icon="✏️"
+                >
                   <Text>Rename</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleArchive}>
+                <ContextMenuItem 
+                  onPress={handleArchive} 
+                  iosIcon="archivebox"
+                  androidIcon="archive"
+                  icon="📦"
+                >
                   <Text>Archive</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={handleExport}>
+                <ContextMenuItem 
+                  onPress={handleExport} 
+                  iosIcon="square.and.arrow.down"
+                  androidIcon="download"
+                  icon="💾"
+                >
                   <Text>Export</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
-                <ContextMenuItem onPress={handleDelete} destructive>
+                <ContextMenuItem 
+                  onPress={handleDelete} 
+                  destructive 
+                  iosIcon="trash"
+                  androidIcon="delete"
+                  icon="🗑️"
+                >
                   <Text>Delete</Text>
                 </ContextMenuItem>
               </ContextMenuContent>
@@ -182,24 +276,55 @@ export default function ContextMenuPreview() {
               </ContextMenuTrigger>
               
               <ContextMenuContent>
-                <ContextMenuItem onPress={() => Alert.alert("Open", "Opening document.pdf")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Open", "Opening document.pdf")} 
+                  iosIcon="doc"
+                  androidIcon="document"
+                  icon="📄"
+                >
                   <Text>Open</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={() => Alert.alert("Download", "Downloading document.pdf")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Download", "Downloading document.pdf")} 
+                  iosIcon="square.and.arrow.down"
+                  androidIcon="download"
+                  icon="⬇️"
+                >
                   <Text>Download</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={() => Alert.alert("Copy", "Copied document.pdf")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Copy", "Copied document.pdf")} 
+                  iosIcon="doc.on.doc"
+                  androidIcon="copy"
+                  icon="📋"
+                >
                   <Text>Copy</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
-                <ContextMenuItem onPress={() => Alert.alert("Rename", "Renaming document.pdf")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Rename", "Renaming document.pdf")} 
+                  iosIcon="pencil"
+                  androidIcon="edit"
+                  icon="✏️"
+                >
                   <Text>Rename</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={() => Alert.alert("Move", "Moving document.pdf")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Move", "Moving document.pdf")} 
+                  iosIcon="arrow.up.arrow.down"
+                  androidIcon="move"
+                  icon="📁"
+                >
                   <Text>Move</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
-                <ContextMenuItem onPress={() => Alert.alert("Delete", "Deleting document.pdf")} destructive>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Delete", "Deleting document.pdf")} 
+                  destructive 
+                  iosIcon="trash"
+                  androidIcon="delete"
+                  icon="🗑️"
+                >
                   <Text>Delete</Text>
                 </ContextMenuItem>
               </ContextMenuContent>
@@ -214,24 +339,55 @@ export default function ContextMenuPreview() {
               </ContextMenuTrigger>
               
               <ContextMenuContent>
-                <ContextMenuItem onPress={() => Alert.alert("Open", "Opening Projects folder")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Open", "Opening Projects folder")} 
+                  iosIcon="folder"
+                  androidIcon="folder"
+                  icon="📁"
+                >
                   <Text>Open</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={() => Alert.alert("New File", "Creating new file in Projects")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("New File", "Creating new file in Projects")} 
+                  iosIcon="doc.badge.plus"
+                  androidIcon="document"
+                  icon="📄"
+                >
                   <Text>New File</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={() => Alert.alert("New Folder", "Creating new folder in Projects")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("New Folder", "Creating new folder in Projects")} 
+                  iosIcon="folder.badge.plus"
+                  androidIcon="folder"
+                  icon="📁"
+                >
                   <Text>New Folder</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
-                <ContextMenuItem onPress={() => Alert.alert("Rename", "Renaming Projects folder")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Rename", "Renaming Projects folder")} 
+                  iosIcon="pencil"
+                  androidIcon="edit"
+                  icon="✏️"
+                >
                   <Text>Rename</Text>
                 </ContextMenuItem>
-                <ContextMenuItem onPress={() => Alert.alert("Move", "Moving Projects folder")}>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Move", "Moving Projects folder")} 
+                  iosIcon="arrow.up.arrow.down"
+                  androidIcon="move"
+                  icon="📁"
+                >
                   <Text>Move</Text>
                 </ContextMenuItem>
                 <ContextMenuSeparator />
-                <ContextMenuItem onPress={() => Alert.alert("Delete", "Deleting Projects folder")} destructive>
+                <ContextMenuItem 
+                  onPress={() => Alert.alert("Delete", "Deleting Projects folder")} 
+                  destructive 
+                  iosIcon="trash"
+                  androidIcon="delete"
+                  icon="🗑️"
+                >
                   <Text>Delete</Text>
                 </ContextMenuItem>
               </ContextMenuContent>
@@ -259,7 +415,12 @@ export default function ContextMenuPreview() {
             </ContextMenuTrigger>
             
             <ContextMenuContent>
-              <ContextMenuItem onPress={handleShare}>
+              <ContextMenuItem 
+                onPress={handleShare} 
+                iosIcon="square.and.arrow.up"
+                androidIcon="share"
+                icon="📤"
+              >
                 <Text>Share</Text>
               </ContextMenuItem>
             </ContextMenuContent>
