@@ -19,6 +19,7 @@ export const ContextMenu = React.forwardRef<any, any>((props, ref) => {
     registerMenuItem,
     mousePosition,
     setMousePosition,
+    closeMenu: () => setOpen(false),
   };
   
   // Extract trigger and content from children
@@ -193,8 +194,8 @@ export const ContextMenuContent = React.forwardRef<any, any>((props, ref) => {
 
 export const ContextMenuItem = React.forwardRef<any, any>((props, ref) => {
   console.log('ContextMenuItem WEB: Component loaded');
-  const { children, disabled = false, destructive = false, onPress, icon } = props;
-  const { registerMenuItem } = React.useContext(ContextMenuContext);
+  const { children, disabled = false, destructive = false, onPress } = props;
+  const { registerMenuItem, closeMenu } = React.useContext(ContextMenuContext);
 
   // Extract text label from children
   const getTextLabel = (children: React.ReactNode): string => {
@@ -216,9 +217,9 @@ export const ContextMenuItem = React.forwardRef<any, any>((props, ref) => {
   // Register menu item on mount
   React.useEffect(() => {
     if (label) {
-      registerMenuItem({ label, onPress, destructive, disabled, icon });
+      registerMenuItem({ label, onPress, destructive, disabled });
     }
-  }, [label, onPress, destructive, disabled, icon, registerMenuItem]);
+  }, [label, onPress, destructive, disabled, registerMenuItem]);
 
   return (
     <div
@@ -226,6 +227,7 @@ export const ContextMenuItem = React.forwardRef<any, any>((props, ref) => {
         e.stopPropagation();
         if (!disabled) {
           onPress?.();
+          closeMenu?.();
         }
       }}
       style={{
@@ -248,7 +250,6 @@ export const ContextMenuItem = React.forwardRef<any, any>((props, ref) => {
         e.currentTarget.style.backgroundColor = 'transparent';
       }}
     >
-      {icon && <span>{icon}</span>}
       {children}
     </div>
   );
@@ -273,12 +274,14 @@ const ContextMenuContext = React.createContext<{
   registerMenuItem: (item: any) => void;
   mousePosition: { x: number; y: number };
   setMousePosition: (pos: { x: number; y: number }) => void;
+  closeMenu: () => void;
 }>({
   open: false,
   onOpenChange: () => {},
   registerMenuItem: () => {},
   mousePosition: { x: 0, y: 0 },
   setMousePosition: () => {},
+  closeMenu: () => {},
 });
 
 // Display names

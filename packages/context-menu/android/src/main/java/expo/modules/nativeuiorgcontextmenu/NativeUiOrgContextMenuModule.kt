@@ -7,7 +7,7 @@ class NativeUiOrgContextMenuModule : Module() {
   override fun definition() = ModuleDefinition {
     Name("NativeUiOrgContextMenu")
 
-    // Define the native view component
+    // Define the native view component (used for iOS)
     View(NativeUiOrgContextMenuView::class) {
       // Props
       Prop("menuItems") { view: NativeUiOrgContextMenuView, items: List<Map<String, Any>> ->

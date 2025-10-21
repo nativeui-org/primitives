@@ -1,12 +1,5 @@
 import { Stack } from "expo-router";
-import { View, Text } from "@native-ui-org/primitives";
-// Test direct import
-try {
-  const contextMenuModule = require("@native-ui-org/context-menu");
-  console.log('PREVIEW: ContextMenu module loaded:', Object.keys(contextMenuModule));
-} catch (error) {
-  console.error('PREVIEW: Error loading ContextMenu module:', error);
-}
+import { View, Text, showAlert } from "@native-ui-org/primitives";
 
 import { 
   ContextMenu, 
@@ -15,8 +8,9 @@ import {
   ContextMenuItem, 
   ContextMenuSeparator 
 } from "@native-ui-org/context-menu";
-import { StyleSheet, Platform, ScrollView, Alert } from "react-native";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React from "react";
+import { Share, Edit, Archive, Download, Trash2 } from "lucide-react-native";
 
 export default function ContextMenuPreview() {
   // Debug platform
@@ -27,29 +21,52 @@ export default function ContextMenuPreview() {
     console.log('PREVIEW: navigator.userAgent =', typeof navigator !== 'undefined' ? navigator.userAgent : 'no navigator');
   }, []);
 
-  const handleShare = () => {
+  const handleShare = async () => {
     console.log("Share clicked!");
-    Alert.alert("Share", "Chat shared!");
+    await showAlert({
+      title: "Share",
+      message: "Chat shared successfully!",
+    });
   };
 
-  const handleRename = () => {
+  const handleRename = async () => {
     console.log("Rename clicked!");
-    Alert.alert("Rename", "Chat renamed!");
+    await showAlert({
+      title: "Rename",
+      message: "Chat renamed successfully!",
+    });
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     console.log("Delete clicked!");
-    Alert.alert("Delete", "Chat deleted!");
+    const result = await showAlert({
+      title: "Delete Chat",
+      message: "Are you sure you want to delete this chat? This action cannot be undone.",
+      buttons: [
+        { text: "Cancel", value: "cancel", style: "cancel" },
+        { text: "Delete", value: "delete", style: "destructive" },
+      ],
+    });
+    
+    if (result === "delete") {
+      console.log("Chat deleted!");
+    }
   };
 
-  const handleArchive = () => {
+  const handleArchive = async () => {
     console.log("Archive clicked!");
-    Alert.alert("Archive", "Chat archived!");
+    await showAlert({
+      title: "Archive",
+      message: "Chat archived successfully!",
+    });
   };
 
-  const handleExport = () => {
+  const handleExport = async () => {
     console.log("Export clicked!");
-    Alert.alert("Export", "Chat exported!");
+    await showAlert({
+      title: "Export",
+      message: "Chat exported successfully!",
+    });
   };
 
   return (
@@ -99,9 +116,15 @@ export default function ContextMenuPreview() {
                   onPress={handleShare} 
                   iosIcon="square.and.arrow.up"
                   androidIcon="share"
-                  icon="📤"
                 >
-                  <Text>Share chat</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Share size={16} color="#666" />
+                      <Text>Share chat</Text>
+                    </>
+                  ) : (
+                    <Text>Share chat</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleRename} 
@@ -109,7 +132,14 @@ export default function ContextMenuPreview() {
                   androidIcon="edit"
                   icon="✏️"
                 >
-                  <Text>Rename</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Edit size={16} color="#666" />
+                      <Text>Rename</Text>
+                    </>
+                  ) : (
+                    <Text>Rename</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleArchive} 
@@ -117,7 +147,14 @@ export default function ContextMenuPreview() {
                   androidIcon="archive"
                   icon="📦"
                 >
-                  <Text>Archive</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Archive size={16} color="#666" />
+                      <Text>Archive</Text>
+                    </>
+                  ) : (
+                    <Text>Archive</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleExport} 
@@ -125,7 +162,14 @@ export default function ContextMenuPreview() {
                   androidIcon="download"
                   icon="💾"
                 >
-                  <Text>Export</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Download size={16} color="#666" />
+                      <Text>Export</Text>
+                    </>
+                  ) : (
+                    <Text>Export</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem 
@@ -135,7 +179,14 @@ export default function ContextMenuPreview() {
                   androidIcon="delete"
                   icon="🗑️"
                 >
-                  <Text>Delete</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Trash2 size={16} color="#ef4444" />
+                      <Text>Delete</Text>
+                    </>
+                  ) : (
+                    <Text>Delete</Text>
+                  )}
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
@@ -160,7 +211,14 @@ export default function ContextMenuPreview() {
                   androidIcon="share"
                   icon="📤"
                 >
-                  <Text>Share chat</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Share size={16} color="#666" />
+                      <Text>Share chat</Text>
+                    </>
+                  ) : (
+                    <Text>Share chat</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleRename} 
@@ -168,7 +226,14 @@ export default function ContextMenuPreview() {
                   androidIcon="edit"
                   icon="✏️"
                 >
-                  <Text>Rename</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Edit size={16} color="#666" />
+                      <Text>Rename</Text>
+                    </>
+                  ) : (
+                    <Text>Rename</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleArchive} 
@@ -176,7 +241,14 @@ export default function ContextMenuPreview() {
                   androidIcon="archive"
                   icon="📦"
                 >
-                  <Text>Archive</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Archive size={16} color="#666" />
+                      <Text>Archive</Text>
+                    </>
+                  ) : (
+                    <Text>Archive</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleExport} 
@@ -184,7 +256,14 @@ export default function ContextMenuPreview() {
                   androidIcon="download"
                   icon="💾"
                 >
-                  <Text>Export</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Download size={16} color="#666" />
+                      <Text>Export</Text>
+                    </>
+                  ) : (
+                    <Text>Export</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem 
@@ -194,7 +273,14 @@ export default function ContextMenuPreview() {
                   androidIcon="delete"
                   icon="🗑️"
                 >
-                  <Text>Delete</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Trash2 size={16} color="#ef4444" />
+                      <Text>Delete</Text>
+                    </>
+                  ) : (
+                    <Text>Delete</Text>
+                  )}
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
@@ -219,7 +305,14 @@ export default function ContextMenuPreview() {
                   androidIcon="share"
                   icon="📤"
                 >
-                  <Text>Share chat</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Share size={16} color="#666" />
+                      <Text>Share chat</Text>
+                    </>
+                  ) : (
+                    <Text>Share chat</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleRename} 
@@ -227,7 +320,14 @@ export default function ContextMenuPreview() {
                   androidIcon="edit"
                   icon="✏️"
                 >
-                  <Text>Rename</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Edit size={16} color="#666" />
+                      <Text>Rename</Text>
+                    </>
+                  ) : (
+                    <Text>Rename</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleArchive} 
@@ -235,7 +335,14 @@ export default function ContextMenuPreview() {
                   androidIcon="archive"
                   icon="📦"
                 >
-                  <Text>Archive</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Archive size={16} color="#666" />
+                      <Text>Archive</Text>
+                    </>
+                  ) : (
+                    <Text>Archive</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
                   onPress={handleExport} 
@@ -243,7 +350,14 @@ export default function ContextMenuPreview() {
                   androidIcon="download"
                   icon="💾"
                 >
-                  <Text>Export</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Download size={16} color="#666" />
+                      <Text>Export</Text>
+                    </>
+                  ) : (
+                    <Text>Export</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem 
@@ -253,7 +367,14 @@ export default function ContextMenuPreview() {
                   androidIcon="delete"
                   icon="🗑️"
                 >
-                  <Text>Delete</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Trash2 size={16} color="#ef4444" />
+                      <Text>Delete</Text>
+                    </>
+                  ) : (
+                    <Text>Delete</Text>
+                  )}
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
@@ -277,7 +398,7 @@ export default function ContextMenuPreview() {
               
               <ContextMenuContent>
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Open", "Opening document.pdf")} 
+                  onPress={() => showAlert({ title: "Open", message: "Opening document.pdf" })} 
                   iosIcon="doc"
                   androidIcon="document"
                   icon="📄"
@@ -285,7 +406,7 @@ export default function ContextMenuPreview() {
                   <Text>Open</Text>
                 </ContextMenuItem>
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Download", "Downloading document.pdf")} 
+                  onPress={() => showAlert({ title: "Download", message: "Downloading document.pdf" })} 
                   iosIcon="square.and.arrow.down"
                   androidIcon="download"
                   icon="⬇️"
@@ -293,7 +414,7 @@ export default function ContextMenuPreview() {
                   <Text>Download</Text>
                 </ContextMenuItem>
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Copy", "Copied document.pdf")} 
+                  onPress={() => showAlert({ title: "Copy", message: "Copied document.pdf" })} 
                   iosIcon="doc.on.doc"
                   androidIcon="copy"
                   icon="📋"
@@ -302,15 +423,22 @@ export default function ContextMenuPreview() {
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Rename", "Renaming document.pdf")} 
+                  onPress={() => showAlert({ title: "Rename", message: "Renaming document.pdf" })} 
                   iosIcon="pencil"
                   androidIcon="edit"
                   icon="✏️"
                 >
-                  <Text>Rename</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Edit size={16} color="#666" />
+                      <Text>Rename</Text>
+                    </>
+                  ) : (
+                    <Text>Rename</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Move", "Moving document.pdf")} 
+                  onPress={() => showAlert({ title: "Move", message: "Moving document.pdf" })} 
                   iosIcon="arrow.up.arrow.down"
                   androidIcon="move"
                   icon="📁"
@@ -319,13 +447,20 @@ export default function ContextMenuPreview() {
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Delete", "Deleting document.pdf")} 
+                  onPress={() => showAlert({ title: "Delete", message: "Deleting document.pdf" })} 
                   destructive 
                   iosIcon="trash"
                   androidIcon="delete"
                   icon="🗑️"
                 >
-                  <Text>Delete</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Trash2 size={16} color="#ef4444" />
+                      <Text>Delete</Text>
+                    </>
+                  ) : (
+                    <Text>Delete</Text>
+                  )}
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>
@@ -340,7 +475,7 @@ export default function ContextMenuPreview() {
               
               <ContextMenuContent>
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Open", "Opening Projects folder")} 
+                  onPress={() => showAlert({ title: "Open", message: "Opening Projects folder" })} 
                   iosIcon="folder"
                   androidIcon="folder"
                   icon="📁"
@@ -348,7 +483,7 @@ export default function ContextMenuPreview() {
                   <Text>Open</Text>
                 </ContextMenuItem>
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("New File", "Creating new file in Projects")} 
+                  onPress={() => showAlert({ title: "New File", message: "Creating new file in Projects" })} 
                   iosIcon="doc.badge.plus"
                   androidIcon="document"
                   icon="📄"
@@ -356,7 +491,7 @@ export default function ContextMenuPreview() {
                   <Text>New File</Text>
                 </ContextMenuItem>
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("New Folder", "Creating new folder in Projects")} 
+                  onPress={() => showAlert({ title: "New Folder", message: "Creating new folder in Projects" })} 
                   iosIcon="folder.badge.plus"
                   androidIcon="folder"
                   icon="📁"
@@ -365,15 +500,22 @@ export default function ContextMenuPreview() {
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Rename", "Renaming Projects folder")} 
+                  onPress={() => showAlert({ title: "Rename", message: "Renaming Projects folder" })} 
                   iosIcon="pencil"
                   androidIcon="edit"
                   icon="✏️"
                 >
-                  <Text>Rename</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Edit size={16} color="#666" />
+                      <Text>Rename</Text>
+                    </>
+                  ) : (
+                    <Text>Rename</Text>
+                  )}
                 </ContextMenuItem>
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Move", "Moving Projects folder")} 
+                  onPress={() => showAlert({ title: "Move", message: "Moving Projects folder" })} 
                   iosIcon="arrow.up.arrow.down"
                   androidIcon="move"
                   icon="📁"
@@ -382,13 +524,20 @@ export default function ContextMenuPreview() {
                 </ContextMenuItem>
                 <ContextMenuSeparator />
                 <ContextMenuItem 
-                  onPress={() => Alert.alert("Delete", "Deleting Projects folder")} 
+                  onPress={() => showAlert({ title: "Delete", message: "Deleting Projects folder" })} 
                   destructive 
                   iosIcon="trash"
                   androidIcon="delete"
                   icon="🗑️"
                 >
-                  <Text>Delete</Text>
+                  {Platform.OS === 'web' ? (
+                    <>
+                      <Trash2 size={16} color="#ef4444" />
+                      <Text>Delete</Text>
+                    </>
+                  ) : (
+                    <Text>Delete</Text>
+                  )}
                 </ContextMenuItem>
               </ContextMenuContent>
             </ContextMenu>

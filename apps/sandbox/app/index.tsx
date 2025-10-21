@@ -1,6 +1,6 @@
 import { Link, Stack } from "expo-router";
 import { View, Text } from "@native-ui-org/primitives";
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 
 const primitives = [
   { name: "View", path: "/preview/view", description: "Layout container with cross‑platform a11y & asChild" },
@@ -18,7 +18,7 @@ const primitives = [
 
 export default function Home() {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Stack.Screen options={{ title: "Primitives" }} />
 
       <View style={styles.header}>
@@ -39,7 +39,7 @@ export default function Home() {
           </View>
         ))}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, View, type ViewProps } from 'react-native';
+import { Platform, View, Pressable, type ViewProps } from 'react-native';
 import NativeContextMenuView from './NativeContextMenuView';
 
 export type ContextMenuProps = ViewProps & {
@@ -62,9 +62,8 @@ export const useContextMenu = () => React.useContext(ContextMenuContext);
  * ContextMenu component with native UIContextMenuInteraction (iOS) and PopupMenu (Android)
  */
 export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) => {
-  console.log('ContextMenu: Component loaded, Platform.OS:', Platform.OS);
+  console.log('ContextMenu NATIVE: Component loaded, Platform.OS:', Platform.OS);
   const { open: openProp, defaultOpen = false, onOpenChange, children, ...rest } = props;
-  console.log('ContextMenu: Children count:', React.Children.count(children));
   
   const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
   const [menuItems, setMenuItems] = React.useState<MenuItem[]>([]);
@@ -100,15 +99,12 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
   }), [open, handleOpenChange, menuItems, registerMenuItem, clearMenuItems]);
 
   // Extract trigger and content from children
-  console.log('ContextMenu: Extracting children...');
   const trigger = React.Children.toArray(children).find(
     child => React.isValidElement(child) && (child.type as any).displayName === 'ContextMenuTrigger'
   );
   const content = React.Children.toArray(children).find(
     child => React.isValidElement(child) && (child.type as any).displayName === 'ContextMenuContent'
   );
-  console.log('ContextMenu: Trigger found:', !!trigger);
-  console.log('ContextMenu: Content found:', !!content);
 
   if (Platform.OS === 'web') {
     return (
@@ -161,12 +157,6 @@ export const ContextMenuTrigger = React.forwardRef<any, ContextMenuTriggerProps 
     _onOpenChange?.(false);
   }, [_onOpenChange]);
 
-  // Debug: Check platform
-  console.log('ContextMenuTrigger Platform.OS:', Platform.OS);
-  console.log('ContextMenuTrigger typeof window:', typeof window);
-  console.log('ContextMenuTrigger navigator:', typeof navigator !== 'undefined' ? navigator.userAgent : 'no navigator');
-  
-  // Force web detection
   // Native - wrap children with native context menu view (but make it transparent)
   const menuItemsData = _menuItems.map(item => ({
     label: item.label,
@@ -177,17 +167,38 @@ export const ContextMenuTrigger = React.forwardRef<any, ContextMenuTriggerProps 
     androidIcon: item.androidIcon || '',
   }));
 
+  // Filter out any non-serializable props (like Symbols) that can't be passed to native
+  const nativeProps = Object.keys(rest).reduce((acc, key) => {
+    const value = (rest as any)[key];
+    // Skip symbols and functions (except style)
+    if (typeof value !== 'symbol' && (typeof value !== 'function' || key === 'style')) {
+      (acc as any)[key] = value;
+    }
+    return acc;
+  }, {} as any);
+
+  // On Android, use JS-based long press and render a Modal with menu items
+  if (Platform.OS === 'android') {
+    return (
+      <Pressable
+        {...nativeProps}
+        style={rest.style}
+        onLongPress={handleMenuOpen}
+      >
+        {children}
+      </Pressable>
+    );
+  }
+
+  // iOS uses UIContextMenuInteraction which works fine
   return (
     <NativeContextMenuView
       menuItems={menuItemsData}
       onItemPress={handleItemPress}
       onMenuOpen={handleMenuOpen}
       onMenuClose={handleMenuClose}
-      {...rest}
-      style={[
-        { backgroundColor: 'transparent' },
-        rest.style
-      ]}
+      {...nativeProps}
+      style={rest.style}
     >
       {children}
     </NativeContextMenuView>
@@ -198,17 +209,110 @@ ContextMenuTrigger.displayName = 'ContextMenuTrigger';
 
 /**
  * ContextMenuContent - container for menu items
- * On native: renders children invisibly to collect menu items via context
+ * On iOS: renders children invisibly to collect menu items
+ * On Android: renders a Modal bottom sheet with the items
  */
 export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>((props, ref) => {
   const { children } = props;
+  const { open, onOpenChange, menuItems } = useContextMenu();
   
-  // On native, just render children invisibly to collect menu items
+  // On Android, show a modal bottom sheet
+  if (Platform.OS === 'android') {
+    const Modal = require('react-native').Modal;
+    const Pressable = require('react-native').Pressable;
+    const Text = require('react-native').Text;
+    
+    return (
+      <>
+        {/* Render children invisibly to collect items */}
+        <View ref={ref} style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}>
+          {children}
+        </View>
+        
+        {/* Show modal when open */}
+        <Modal
+          visible={open}
+          transparent
+          animationType="fade"
+          onRequestClose={() => onOpenChange(false)}
+        >
+          <Pressable 
+            style={styles.overlay} 
+            onPress={() => onOpenChange(false)}
+          >
+            <View style={styles.bottomSheet}>
+              {menuItems.map((item, index) => (
+                <Pressable
+                  key={index}
+                  style={[
+                    styles.menuItem,
+                    item.disabled && styles.menuItemDisabled
+                  ]}
+                  onPress={() => {
+                    if (!item.disabled) {
+                      item.onPress?.();
+                      onOpenChange(false);
+                    }
+                  }}
+                  disabled={item.disabled}
+                >
+                  <View style={styles.menuItemContent}>
+                    <Text style={[
+                      styles.menuItemText,
+                      item.destructive && styles.menuItemDestructive
+                    ]}>
+                      {item.label}
+                    </Text>
+                  </View>
+                </Pressable>
+              ))}
+            </View>
+          </Pressable>
+        </Modal>
+      </>
+    );
+  }
+  
+  // On iOS, just render children invisibly to collect menu items
   return (
     <View ref={ref} style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}>
       {children}
     </View>
   );
+});
+
+const styles = require('react-native').StyleSheet.create({
+  overlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  bottomSheet: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    paddingVertical: 8,
+    paddingBottom: 24,
+  },
+  menuItem: {
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+  },
+  menuItemDisabled: {
+    opacity: 0.5,
+  },
+  menuItemContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  menuItemText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  menuItemDestructive: {
+    color: '#ef4444',
+  },
 });
 
 ContextMenuContent.displayName = 'ContextMenuContent';
