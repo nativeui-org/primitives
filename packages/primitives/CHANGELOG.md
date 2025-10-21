@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.12
+
+### Patch Changes
+
+- eea1770: updating version of each package
+
 ## 0.2.11
 
 ### Patch Changes

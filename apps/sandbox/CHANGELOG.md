@@ -1,5 +1,14 @@
 # @native-ui-org/sandbox
 
+## 0.2.12
+
+### Patch Changes
+
+- eea1770: updating version of each package
+- Updated dependencies [eea1770]
+  - @native-ui-org/context-menu@0.2.1
+  - @native-ui-org/primitives@0.2.12
+
 ## 0.2.11
 
 ### Patch Changes
