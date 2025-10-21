@@ -1,0 +1,83 @@
+name: Release Sandbox
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/sandbox/CHANGELOG.md'
+      - 'apps/sandbox/package.json'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if version changed
+        id: version_check
+        run: |
+          # Get current version from package.json
+          version=$(jq -r '.version' apps/sandbox/package.json)
+          
+          # Check if tag already exists
+          if git rev-parse "sandbox@${version}" >/dev/null 2>&1; then
+            echo "Tag sandbox@${version} already exists, skipping release"
+            echo "should_release=false" >> $GITHUB_OUTPUT
+          else
+            echo "Creating new release for sandbox@${version}"
+            echo "should_release=true" >> $GITHUB_OUTPUT
+            echo "version=${version}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create GitHub Release
+        if: steps.version_check.outputs.should_release == 'true'
+        run: |
+          version="${{ steps.version_check.outputs.version }}"
+          tag="sandbox@${version}"
+          
+          # Create git tag
+          git tag "$tag"
+          git push origin "$tag"
+          
+          # Extract changelog content
+          changelogFile="apps/sandbox/CHANGELOG.md"
+          changelogContent=""
+          if [ -f "$changelogFile" ]; then
+            changelogContent=$(awk "/^## \[${version}\]/,/^## \[/" "$changelogFile" | head -n -1)
+          fi
+          
+          # Create a temporary file for release notes
+          releaseNotesFile=$(mktemp)
+          
+          echo "## 🚀 Release ${version}" >> "$releaseNotesFile"
+          echo "" >> "$releaseNotesFile"
+          
+          # Add changelog if available
+          if [ -n "$changelogContent" ]; then
+            echo "### 📝 Changelog" >> "$releaseNotesFile"
+            echo "" >> "$releaseNotesFile"
+            echo "$changelogContent" >> "$releaseNotesFile"
+            echo "" >> "$releaseNotesFile"
+          fi
+          
+          echo "### 🌐 Demo" >> "$releaseNotesFile"
+          echo "" >> "$releaseNotesFile"
+          echo "This is the demo application showcasing all primitives components." >> "$releaseNotesFile"
+          echo "" >> "$releaseNotesFile"
+          echo "Visit the [live demo](https://primitives.nativeui.org) to see it in action." >> "$releaseNotesFile"
+          
+          # Create the release
+          gh release create "$tag" \
+            --title "sandbox@${version}" \
+            --notes-file "$releaseNotesFile" \
+            --repo nativeui-org/primitives
+          
+          # Clean up
+          rm "$releaseNotesFile"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
