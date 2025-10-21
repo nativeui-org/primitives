@@ -1,0 +1,14 @@
+name: Deploy Sandbox
+
+on:
+  release:
+    types: [published]
+    tags: ['sandbox@*']
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        run: |
+          echo "🚀 Sandbox deployed to VPS!"

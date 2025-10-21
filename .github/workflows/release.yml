@@ -55,44 +55,61 @@ jobs:
       - name: Create custom GitHub Releases
         if: steps.changesets.outputs.published == 'true'
         run: |
-          # Collect all published packages
-          packages=()
-          versions=()
           for package in $(echo '${{ steps.changesets.outputs.publishedPackages }}' | jq -r '.[] | @base64'); do
             pkg=$(echo "$package" | base64 --decode | jq -r '.name')
             version=$(echo "$package" | base64 --decode | jq -r '.version')
-            packages+=("$pkg")
-            versions+=("$version")
-            
-            # Create git tags for each package
             shortName=$(echo "$pkg" | sed 's/@native-ui-org\///')
+            
+            # Create git tag
             tag="${shortName}@${version}"
             git tag "$tag" || true
             git push origin "$tag" || true
-          done
-          
-          # Create a single release with all packages
-          if [ ${#packages[@]} -gt 0 ]; then
-            # Use the first package version as the main release version
-            mainVersion=${versions[0]}
-            releaseTitle="primitives@${mainVersion}"
             
-            # Build release notes
-            releaseNotes="Release primitives version ${mainVersion}\n\n"
-            releaseNotes+="## Published Packages\n\n"
+            # Extract changelog content for this specific package
+            changelogContent=""
+            changelogFile="packages/${shortName}/CHANGELOG.md"
+            if [ -f "$changelogFile" ]; then
+              # Extract the changelog section for this version
+              changelogContent=$(awk "/^## \[${version}\]/,/^## \[/" "$changelogFile" | head -n -1)
+            fi
             
-            for i in "${!packages[@]}"; do
-              pkg="${packages[$i]}"
-              version="${versions[$i]}"
-              shortName=$(echo "$pkg" | sed 's/@native-ui-org\///')
-              releaseNotes+="- **${shortName}**: ${version}\n"
-            done
+            # Build release notes based on package type
+            releaseTitle="${shortName}@${version}"
+            releaseNotes="## 🚀 Release ${version}\n\n"
+            
+            # Add changelog if available
+            if [ -n "$changelogContent" ]; then
+              releaseNotes+="### 📝 Changelog\n\n"
+              releaseNotes+="$changelogContent\n"
+            fi
+            
+            # Add package-specific installation instructions
+            releaseNotes+="\n### 📥 Installation\n\n"
+            releaseNotes+="\`\`\`bash\n"
+            releaseNotes+="npm install ${pkg}\n"
+            releaseNotes+="\`\`\`\n"
+            
+            # Add package-specific information
+            case "$shortName" in
+              "primitives")
+                releaseNotes+="\n### 📚 Documentation\n\n"
+                releaseNotes+="Visit the [primitives documentation](https://github.com/nativeui-org/primitives#readme) for usage examples.\n"
+                ;;
+              "context-menu")
+                releaseNotes+="\n### 📚 Documentation\n\n"
+                releaseNotes+="Visit the [context-menu documentation](https://github.com/nativeui-org/primitives/tree/main/packages/context-menu#readme) for usage examples.\n"
+                ;;
+              "sandbox")
+                releaseNotes+="\n### 🌐 Demo\n\n"
+                releaseNotes+="This package contains the demo application. Visit the [live demo](https://primitives.nativeui.org) to see it in action.\n"
+                ;;
+            esac
             
             # Create the release
-            gh release create "v${mainVersion}" \
+            gh release create "$tag" \
               --title "$releaseTitle" \
               --notes "$releaseNotes" \
               --repo nativeui-org/primitives
-          fi
+          done
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
