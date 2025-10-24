@@ -1,5 +1,16 @@
 # @native-ui-org/sandbox
 
+## 0.6.0
+
+### Minor Changes
+
+- f238f51: release toggle & toggle group components
+
+### Patch Changes
+
+- Updated dependencies [f238f51]
+  - @native-ui-org/primitives@0.5.0
+
 ## 0.5.0
 
 ### Minor Changes
