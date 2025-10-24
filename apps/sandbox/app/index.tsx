@@ -16,6 +16,8 @@ const primitives = [
   { name: "Context Menu", path: "/preview/context-menu", description: "Cross-platform context menu: right-click on web, long press on native" },
   { name: "Switch", path: "/preview/switch", description: "Switch between on/off states with customizable styling" },
   { name: "SwitchGroup", path: "/preview/switch-group", description: "Manage multiple switches with coordinated state" },
+  { name: "Toggle", path: "/preview/toggle", description: "Button-like toggles for formatting and actions" },
+  { name: "ToggleGroup", path: "/preview/toggle-group", description: "Manage multiple toggles with coordinated state" },
 ];
 
 export default function Home() {
