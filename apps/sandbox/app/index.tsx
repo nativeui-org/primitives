@@ -14,6 +14,8 @@ const primitives = [
   { name: "Checkbox", path: "/preview/checkbox", description: "Individual checkbox with clickable labels" },
   { name: "CheckboxGroup", path: "/preview/checkbox-group", description: "Manage multiple checkboxes with coordinated state" },
   { name: "Context Menu", path: "/preview/context-menu", description: "Cross-platform context menu: right-click on web, long press on native" },
+  { name: "Switch", path: "/preview/switch", description: "Switch between on/off states with customizable styling" },
+  { name: "SwitchGroup", path: "/preview/switch-group", description: "Manage multiple switches with coordinated state" },
 ];
 
 export default function Home() {

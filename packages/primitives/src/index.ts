@@ -10,3 +10,5 @@ export * from "./primitives/avatar";
 export * from "./primitives/checkbox";
 export * from "./primitives/checkbox-group";
 export * from "./primitives/context-menu";
+export * from "./primitives/switch";
+export * from "./primitives/switch-group";
