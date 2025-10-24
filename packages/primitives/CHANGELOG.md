@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Minor Changes
+
+- d5e9590: release switch & switch group components
+
 ## 0.3.1
 
 ### Patch Changes
