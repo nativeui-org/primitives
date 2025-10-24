@@ -1,5 +1,16 @@
 # @native-ui-org/sandbox
 
+## 0.5.0
+
+### Minor Changes
+
+- d5e9590: release switch & switch group components
+
+### Patch Changes
+
+- Updated dependencies [d5e9590]
+  - @native-ui-org/primitives@0.4.0
+
 ## 0.4.2
 
 ### Patch Changes
