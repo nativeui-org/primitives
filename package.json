@@ -50,6 +50,7 @@
     ]
   },
   "dependencies": {
-    "@changesets/changelog-github": "^0.5.1"
+    "@changesets/changelog-github": "^0.5.1",
+    "@radix-ui/react-slot": "^1.2.3"
   }
 }
