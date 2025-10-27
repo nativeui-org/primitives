@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.0
+
+### Minor Changes
+
+- f238f51: release toggle & toggle group components
+
 ## 0.4.0
 
 ### Minor Changes
