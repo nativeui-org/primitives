@@ -72,3 +72,84 @@ body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
 }
+
+/* Prose styles for markdown */
+.prose {
+  @apply text-foreground;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  @apply font-semibold text-foreground mt-8 mb-4;
+}
+
+.prose h1 {
+  @apply text-2xl;
+}
+
+.prose h2 {
+  @apply text-xl;
+}
+
+.prose h3 {
+  @apply text-lg;
+}
+
+.prose code {
+  @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.prose pre {
+  @apply bg-muted p-4 rounded-lg overflow-x-auto my-4;
+}
+
+.prose pre code {
+  @apply bg-transparent p-0;
+}
+
+.prose ul, .prose ol {
+  @apply my-4 ml-6;
+}
+
+.prose ul {
+  @apply list-disc;
+}
+
+.prose ol {
+  @apply list-decimal;
+}
+
+.prose li {
+  @apply my-1.5;
+}
+
+.prose table {
+  @apply my-6 w-full;
+}
+
+.prose th, .prose td {
+  @apply border border-border px-4 py-2 text-left;
+}
+
+.prose th {
+  @apply bg-muted font-semibold;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-primary pl-4 italic my-4;
+}
+
+.prose hr {
+  @apply border-t border-border my-8;
+}
+
+.prose strong {
+  @apply font-semibold;
+}
+
+.prose a {
+  @apply text-primary hover:underline;
+}
+
+.prose p {
+  @apply my-4;
+}
