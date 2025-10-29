@@ -1,0 +1,173 @@
+---
+title: "AspectRatio Primitive"
+description: "A component that maintains a specific aspect ratio for its content."
+---
+
+A component that maintains a specific aspect ratio for its content.
+
+---
+
+## What is AspectRatio?
+
+AspectRatio ensures that a container maintains a specific width-to-height ratio, regardless of its content or screen size. This is essential for responsive images, videos, cards, and other UI elements that need consistent proportions.
+
+**Platform behavior:**
+- **Web**: Uses CSS `aspect-ratio` property
+- **Native**: Uses padding-bottom trick for aspect ratio simulation
+
+---
+
+## When should you use it?
+
+✅ Use AspectRatio if:
+- You need **responsive images** that maintain proportions
+- You're building **video players** or media containers
+- You want **consistent card layouts** across screen sizes
+- You need **square thumbnails** or **16:9 banners**
+- You're creating **responsive grids** with uniform cells
+
+⚠️ Consider alternatives if:
+- You need fixed dimensions (use `width` and `height`)
+- You're building simple layouts (use flexbox)
+
+---
+
+## API
+
+### AspectRatio
+
+| Prop     | Type                | Default | Description                                    |
+|----------|---------------------|---------|------------------------------------------------|
+| `ratio`  | `number \| string`  | -       | Aspect ratio (e.g., `16/9`, `"16:9"`, `"1:1"`) |
+| `asChild`| `boolean`           | `false` | Use Slot pattern                               |
+
+**Ratio formats:**
+- `number`: `16/9`, `1`, `0.75`
+- `string`: `"16:9"`, `"1:1"`, `"4:3"`, `"16/9"`
+
+---
+
+## Examples
+
+### Basic usage
+
+```tsx
+import { AspectRatio } from "@native-ui-org/primitives";
+import { Image } from "react-native";
+
+<AspectRatio ratio={16/9}>
+  <Image 
+    source={{ uri: 'https://example.com/image.jpg' }}
+    style={{ width: '100%', height: '100%' }}
+    resizeMode="cover"
+  />
+</AspectRatio>
+```
+
+### Square container
+
+```tsx
+<AspectRatio ratio="1:1">
+  <View style={{ backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center' }}>
+    <Text>Square</Text>
+  </View>
+</AspectRatio>
+```
+
+### Video player
+
+```tsx
+<AspectRatio ratio="16:9">
+  <VideoPlayer
+    source={{ uri: 'video.mp4' }}
+    style={{ width: '100%', height: '100%' }}
+  />
+</AspectRatio>
+```
+
+### Card with asChild
+
+```tsx
+<AspectRatio ratio="4:3" asChild>
+  <Pressable style={styles.card}>
+    <Text>Clickable card</Text>
+  </Pressable>
+</AspectRatio>
+```
+
+### Responsive grid
+
+```tsx
+<View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+  {items.map((item, index) => (
+    <View key={index} style={{ width: '50%', padding: 8 }}>
+      <AspectRatio ratio="1:1">
+        <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%' }} />
+      </AspectRatio>
+    </View>
+  ))}
+</View>
+```
+
+### Different ratios
+
+```tsx
+// Common aspect ratios
+<AspectRatio ratio="16:9">   {/* Widescreen */}
+<AspectRatio ratio="4:3">    {/* Standard */}
+<AspectRatio ratio="1:1">    {/* Square */}
+<AspectRatio ratio="3:2">    {/* Photo */}
+<AspectRatio ratio="21:9">   {/* Ultrawide */}
+<AspectRatio ratio="9:16">   {/* Portrait/Stories */}
+```
+
+---
+
+## Platform Differences
+
+### Web
+- Uses CSS `aspect-ratio` property
+- Content fills the container naturally
+- Better performance and simpler implementation
+
+### Native (iOS/Android)
+- Uses padding-bottom trick: `paddingBottom: ${(1/ratio) * 100}%`
+- Content positioned absolutely to fill the container
+- Compatible with all React Native versions
+
+---
+
+## Implementation Details
+
+### Ratio Parsing
+```tsx
+// Supported formats
+"16:9"  → 16/9 = 1.777...
+"1:1"   → 1/1 = 1
+"4/3"   → 4/3 = 1.333...
+16/9    → 1.777... (number)
+```
+
+### Native Fallback
+```tsx
+// Native implementation
+const aspectRatioStyle = {
+  height: 0,
+  paddingBottom: `${(1 / aspectRatio) * 100}%`,
+  position: "relative",
+};
+
+const contentStyle = {
+  position: "absolute",
+  top: 0, left: 0, right: 0, bottom: 0,
+};
+```
+
+---
+
+## Changelog
+
+| Version | Changes                                    |
+|---------|--------------------------------------------|
+| `0.1.0` | Initial release. Basic aspect ratio functionality. |
+

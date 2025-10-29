@@ -1,0 +1,217 @@
+---
+title: "Slot Primitive"
+description: "A tiny utility component that enables **polymorphism** by letting a parent component \"become\" its child, without introducing an extra wrapper node."
+---
+
+A tiny utility component that enables **polymorphism** by letting a parent component "become" its child, without introducing an extra wrapper node.
+
+This primitive is the **foundation** for the `asChild` pattern used across all primitives in this library.
+
+---
+
+## What is Slot?
+
+`Slot` is inspired by [Radix UI's Slot component](https://www.radix-ui.com/primitives/docs/utilities/slot). Instead of rendering its own DOM node or React Native component, it:
+
+1. **Clones its single child** element
+2. **Merges props** from the parent into the child
+3. **Composes event handlers** (child runs first, then parent)
+4. **Composes refs** (both parent and child refs are called)
+
+This allows you to create flexible, composable components without extra wrapper nodes that might interfere with styling or layout.
+
+---
+
+## When should you use it?
+
+✅ Use `Slot` if:
+- You are building **primitive components** that support the `asChild` pattern
+- You want to **avoid wrapper elements** for better control over the DOM/component tree
+- You need to **inject props** into a child component while preserving its original props
+- You want **polymorphic components** (e.g., a Button that can render as `<a>`, `<button>`, or custom components)
+
+⚠️ You probably don't need `Slot` directly if:
+- You're using primitives that already support `asChild` (like `View`, `Text`)
+- You're building application-level components (not library primitives)
+- You can achieve your goal with simple component composition
+
+---
+
+## Philosophy & Behavior
+
+### 1. **RN-first, no styling**
+- We do NOT touch `className` or `style`
+- Works seamlessly on iOS, Android, and Web
+
+### 2. **Child props always win**
+- Injected props never overwrite the child's existing props
+- This prevents surprising behavior and maintains predictability
+
+### 3. **Event handlers are composed**
+- When both parent and child have the same event handler (e.g., `onPress`)
+- **Child handler runs first**, then parent handler
+- Both handlers receive the same arguments
+
+### 4. **Refs are composed**
+- Both the forwarded ref (from parent) and child's ref are called
+- Supports both callback refs and object refs (`React.RefObject`)
+
+---
+
+## API
+
+The component accepts any props you want to inject into the child, plus:
+
+| Prop       | Type                  | Required | Description                                                                 |
+|------------|-----------------------|----------|-----------------------------------------------------------------------------|
+| `children` | `React.ReactNode`     | Yes      | Must be a **single valid React element**. Multiple children or invalid elements will be ignored. |
+| `ref`      | `React.Ref<any>`      | No       | Ref to forward to the child element (composed with child's ref).           |
+| `...props` | `Record<string, any>` | No       | Any additional props to inject into the child.                              |
+
+---
+
+## Examples
+
+### Basic Usage
+```tsx
+import { Slot } from "@native-ui-org/primitives";
+import { View, Text, Pressable } from "react-native";
+
+// Without Slot - creates an extra View wrapper
+<View style={{ padding: 16 }}>
+  <Pressable onPress={() => console.log('pressed')}>
+    <Text>Click me</Text>
+  </Pressable>
+</View>
+
+// With Slot - no wrapper, Pressable receives the padding directly
+<Slot style={{ padding: 16 }}>
+  <Pressable onPress={() => console.log('pressed')}>
+    <Text>Click me</Text>
+  </Pressable>
+</Slot>
+```
+
+### Event Handler Composition
+```tsx
+<Slot onPress={() => console.log('Parent handler')}>
+  <Pressable onPress={() => console.log('Child handler')}>
+    <Text>Press me</Text>
+  </Pressable>
+</Slot>
+
+// When pressed, logs:
+// "Child handler"
+// "Parent handler"
+```
+
+### Ref Composition
+```tsx
+import { useRef } from 'react';
+
+const MyComponent = () => {
+  const parentRef = useRef(null);
+  const childRef = useRef(null);
+  
+  return (
+    <Slot ref={parentRef}>
+      <View ref={childRef} />
+    </Slot>
+  );
+  
+  // Both parentRef and childRef will point to the same View instance
+};
+```
+
+### Building a Polymorphic Button
+```tsx
+import { Slot } from "@native-ui-org/primitives";
+import { Pressable, Text, PressableProps } from "react-native";
+
+interface ButtonProps extends PressableProps {
+  asChild?: boolean;
+  children: React.ReactNode;
+}
+
+function Button({ asChild, children, ...props }: ButtonProps) {
+  const Comp = asChild ? Slot : Pressable;
+  
+  return (
+    <Comp {...props} style={{ padding: 12, backgroundColor: 'blue' }}>
+      {asChild ? children : <Text style={{ color: 'white' }}>{children}</Text>}
+    </Comp>
+  );
+}
+
+// Usage 1: Regular button
+<Button onPress={() => alert('clicked')}>
+  Click me
+</Button>
+
+// Usage 2: Polymorphic - render as custom component
+<Button asChild onPress={() => alert('clicked')}>
+  <CustomAnimatedPressable>
+    <Text>Animated Button</Text>
+  </CustomAnimatedPressable>
+</Button>
+```
+
+### Web-specific: Rendering semantic HTML
+```tsx
+// On web, render a semantic <section> with View's props
+<Slot style={{ padding: 16 }} role="region" aria-label="Main content">
+  <section>
+    <h1>Page Title</h1>
+  </section>
+</Slot>
+```
+
+---
+
+## Edge Cases & Limitations
+
+### Single child only
+`Slot` requires exactly **one valid React element** as a child:
+
+```tsx
+// ✅ Valid
+<Slot><View /></Slot>
+
+// ❌ Invalid - multiple children
+<Slot>
+  <View />
+  <View />
+</Slot>
+
+// ❌ Invalid - text node
+<Slot>Hello</Slot>
+
+// ❌ Invalid - null/undefined
+<Slot>{null}</Slot>
+```
+
+### Fragments are supported but refs won't work
+```tsx
+<Slot ref={myRef}>
+  <React.Fragment>content</React.Fragment>
+</Slot>
+// The ref won't be attached because Fragments don't support refs
+```
+
+### Child props always take precedence
+```tsx
+<Slot testID="parent-id">
+  <View testID="child-id" />
+</Slot>
+// Result: <View testID="child-id" /> - parent's testID is ignored
+```
+
+---
+
+## Changelog
+
+| Version | Changes                                                                 |
+|---------|-------------------------------------------------------------------------|
+| `0.1.0` | Initial release. Supports prop merging, event handler composition, and ref composition. |
+
+

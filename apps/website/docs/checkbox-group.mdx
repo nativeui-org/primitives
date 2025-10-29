@@ -1,0 +1,105 @@
+---
+title: "CheckboxGroup Primitive"
+description: "A component for managing multiple checkboxes with coordinated state."
+---
+
+A component for managing multiple checkboxes with coordinated state.
+
+---
+
+## What is CheckboxGroup?
+
+CheckboxGroup provides a way to manage multiple related checkboxes as a group. It handles state management, allowing multiple selections and coordinating the checked state of child Checkbox components.
+
+**Platform behavior:**
+- **Web & Native**: Consistent rendering with proper accessibility
+- **Accessibility**: Group semantics with proper ARIA attributes
+- **State Management**: Controlled and uncontrolled modes
+- **Coordination**: Automatic value management for child checkboxes
+
+---
+
+## API
+
+### CheckboxGroup
+
+| Prop            | Type                        | Default | Description                                    |
+|-----------------|-----------------------------|---------|------------------------------------------------|
+| `value`         | `string[]`                  | -       | Array of checked values                        |
+| `defaultValue`  | `string[]`                  | `[]`    | Default checked values                         |
+| `disabled`      | `boolean`                   | `false` | Whether the group is disabled                  |
+| `required`      | `boolean`                   | `false` | Whether the group is required                  |
+| `onValueChange` | `(value: string[]) => void` | -       | Callback when group value changes              |
+| `asChild`       | `boolean`                   | `false` | Use Slot pattern                               |
+
+---
+
+## Examples
+
+### Basic usage
+
+```tsx
+import { CheckboxGroup } from "@native-ui-org/primitives";
+import { Checkbox } from "@native-ui-org/primitives";
+
+const [selectedValues, setSelectedValues] = useState(["option1"]);
+
+<CheckboxGroup 
+  value={selectedValues} 
+  onValueChange={setSelectedValues}
+>
+  <Checkbox value="option1" />
+  <Checkbox value="option2" />
+  <Checkbox value="option3" />
+</CheckboxGroup>
+```
+
+### Settings panel
+
+```tsx
+<CheckboxGroup value={settings} onValueChange={setSettings}>
+  <View style={{ gap: 16 }}>
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+      <Checkbox value="notifications" />
+      <Text>Push notifications</Text>
+    </View>
+    
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+      <Checkbox value="email" />
+      <Text>Email updates</Text>
+    </View>
+    
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+      <Checkbox value="analytics" />
+      <Text>Analytics tracking</Text>
+    </View>
+  </View>
+</CheckboxGroup>
+```
+
+### Filter controls
+
+```tsx
+<CheckboxGroup value={activeFilters} onValueChange={setActiveFilters}>
+  <Text style={styles.filterTitle}>Filter by category:</Text>
+  <View style={{ gap: 8 }}>
+    <Checkbox value="electronics" />
+    <Text>Electronics</Text>
+    
+    <Checkbox value="clothing" />
+    <Text>Clothing</Text>
+    
+    <Checkbox value="books" />
+    <Text>Books</Text>
+  </View>
+</CheckboxGroup>
+```
+
+---
+
+## Changelog
+
+| Version | Changes                                    |
+|---------|--------------------------------------------|
+| `0.1.0` | Initial release. Group management for checkboxes. |
+
