@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.11.0
+
+### Minor Changes
+
+- 6fbf6d5: deploy test
+
 ## 0.10.0
 
 ### Minor Changes
