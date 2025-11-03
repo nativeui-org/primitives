@@ -3,6 +3,8 @@ name: Release (Changesets)
 on:
   push:
     branches: [main]
+    tags-ignore:
+      - '**'
 
 jobs:
   release:
@@ -139,9 +141,11 @@ jobs:
             else
               echo "✅ Creating release for ${tag}"
               
-              # Create tag (or reuse if exists)
-              git tag "$tag" 2>/dev/null || echo "Tag already exists, reusing"
-              git push origin "$tag" 2>/dev/null || echo "Tag already pushed"
+              # Create tag if doesn't exist
+              if ! git rev-parse "$tag" >/dev/null 2>&1; then
+                git tag "$tag"
+                git push origin "$tag"
+              fi
               
               # Create GitHub Release
               releaseNotesFile=$(mktemp)
@@ -176,9 +180,11 @@ jobs:
             else
               echo "✅ Creating release for ${tag}"
               
-              # Create tag (or reuse if exists)
-              git tag "$tag" 2>/dev/null || echo "Tag already exists, reusing"
-              git push origin "$tag" 2>/dev/null || echo "Tag already pushed"
+              # Create tag if doesn't exist
+              if ! git rev-parse "$tag" >/dev/null 2>&1; then
+                git tag "$tag"
+                git push origin "$tag"
+              fi
               
               # Create GitHub Release
               releaseNotesFile=$(mktemp)
