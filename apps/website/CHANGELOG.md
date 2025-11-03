@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.3.3
+
+### Patch Changes
+
+- 2812b23: update deployments
+
 ## 0.3.2
 
 ### Patch Changes
