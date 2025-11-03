@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.12.5
+
+### Patch Changes
+
+- a79a9f5: deploy failed
+
 ## 0.12.4
 
 ### Patch Changes
