@@ -1,9 +1,9 @@
-name: Deploy Sandbox
+name: Deploy Website
 
 on:
   push:
     tags:
-      - 'sandbox@*'
+      - 'website@*'
 
 jobs:
   deploy:
@@ -16,6 +16,6 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
-          vercel-project-id: ${{ secrets.VERCEL_SANDBOX_PROJECT_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
           vercel-args: '--prod'
-          working-directory: ./apps/sandbox
+          working-directory: ./apps/website
