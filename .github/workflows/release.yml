@@ -119,6 +119,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
 
       - name: Release Apps (Sandbox & Website)
+        if: always()
         run: |
           # Check sandbox - release if version changed in this commit
           if git diff HEAD^ HEAD --name-only | grep -q "apps/sandbox/package.json"; then

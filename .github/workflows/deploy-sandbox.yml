@@ -4,10 +4,13 @@ on:
   push:
     tags:
       - 'sandbox@*'
+  release:
+    types: [published]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/sandbox@') || (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'sandbox@'))
     steps:
       - uses: actions/checkout@v4
 
