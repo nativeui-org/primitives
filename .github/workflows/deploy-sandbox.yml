@@ -11,25 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with: { version: 10 }
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install and Build
-        run: |
-          pnpm install --filter @native-ui-org/sandbox... --ignore-scripts
-          pnpm --filter @native-ui-org/primitives build
-          pnpm --filter @native-ui-org/context-menu build
-          pnpm --filter @native-ui-org/sandbox build
-
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v25
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_SANDBOX_PROJECT_ID }}
-          vercel-args: '--prod --prebuilt'
+          vercel-args: '--prod'
           working-directory: ./apps/sandbox

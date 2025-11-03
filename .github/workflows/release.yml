@@ -63,8 +63,15 @@ jobs:
             shortName=$(echo "$pkg" | sed 's/@native-ui-org\///')
             
             tag="${shortName}@${version}"
-            git tag "$tag" || true
-            git push origin "$tag" || true
+            
+            # Skip if tag already exists
+            if git rev-parse "$tag" >/dev/null 2>&1; then
+              echo "ℹ️ Tag ${tag} already exists, skipping this package"
+              continue
+            fi
+            
+            git tag "$tag"
+            git push origin "$tag"
             
             changelogContent=""
             if [ "$shortName" = "sandbox" ]; then
