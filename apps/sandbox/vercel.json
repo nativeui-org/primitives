@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd ../.. && pnpm install --filter @native-ui-org/sandbox... && pnpm --filter @native-ui-org/primitives build && pnpm --filter @native-ui-org/sandbox build",
+  "buildCommand": "cd ../.. && pnpm install --filter @native-ui-org/sandbox... --ignore-scripts && pnpm --filter @native-ui-org/primitives build && pnpm --filter @native-ui-org/sandbox build",
   "outputDirectory": "dist",
-  "installCommand": "cd ../.. && pnpm install --filter @native-ui-org/sandbox...",
+  "installCommand": "cd ../.. && pnpm install --filter @native-ui-org/sandbox... --ignore-scripts",
   "framework": null,
   "rewrites": [
     {
