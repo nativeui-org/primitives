@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.7.0
+
+### Minor Changes
+
+- 374e6f4: updating deployments to Vercel
+
 ## 0.6.0
 
 ### Minor Changes
