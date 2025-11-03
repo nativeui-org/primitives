@@ -1,16 +1,13 @@
 name: Deploy Website
 
 on:
-  push:
-    tags:
-      - 'website@*'
   release:
     types: [published]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/website@') || (github.event_name == 'release' && startsWith(github.event.release.tag_name, 'website@'))
+    if: startsWith(github.event.release.tag_name, 'website@')
     steps:
       - uses: actions/checkout@v4
 
