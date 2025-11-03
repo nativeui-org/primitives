@@ -121,16 +121,26 @@ jobs:
       - name: Release Apps (Sandbox & Website)
         if: always()
         run: |
-          # Check sandbox - release if version changed in this commit
+          echo "🔍 Checking for app version changes in this commit..."
+          
+          # Check sandbox
           if git diff HEAD^ HEAD --name-only | grep -q "apps/sandbox/package.json"; then
             sandboxVersion=$(jq -r '.version' apps/sandbox/package.json)
             tag="sandbox@${sandboxVersion}"
             
-            if ! git rev-parse "$tag" >/dev/null 2>&1; then
-              echo "✅ Releasing sandbox@${sandboxVersion}"
-              git tag "$tag"
-              git push origin "$tag"
+            echo "📦 Sandbox version changed to ${sandboxVersion}"
+            
+            # Check if release already exists
+            if gh release view "$tag" --repo nativeui-org/primitives >/dev/null 2>&1; then
+              echo "ℹ️ Release ${tag} already exists, skipping"
+            else
+              echo "✅ Creating release for ${tag}"
               
+              # Create tag (or reuse if exists)
+              git tag "$tag" 2>/dev/null || echo "Tag already exists, reusing"
+              git push origin "$tag" 2>/dev/null || echo "Tag already pushed"
+              
+              # Create GitHub Release
               releaseNotesFile=$(mktemp)
               echo "## 🚀 Sandbox ${sandboxVersion}" >> "$releaseNotesFile"
               echo "" >> "$releaseNotesFile"
@@ -144,22 +154,30 @@ jobs:
                 --repo nativeui-org/primitives
               
               rm "$releaseNotesFile"
-              echo "✅ Sandbox release created - deployment will start via tag"
-            else
-              echo "ℹ️ Tag sandbox@${sandboxVersion} already exists, skipping"
+              echo "✅ Sandbox release created → Vercel deployment will start"
             fi
+          else
+            echo "ℹ️ No sandbox version change detected"
           fi
           
-          # Check website - release if version changed in this commit
+          # Check website
           if git diff HEAD^ HEAD --name-only | grep -q "apps/website/package.json"; then
             websiteVersion=$(jq -r '.version' apps/website/package.json)
             tag="website@${websiteVersion}"
             
-            if ! git rev-parse "$tag" >/dev/null 2>&1; then
-              echo "✅ Releasing website@${websiteVersion}"
-              git tag "$tag"
-              git push origin "$tag"
+            echo "📦 Website version changed to ${websiteVersion}"
+            
+            # Check if release already exists
+            if gh release view "$tag" --repo nativeui-org/primitives >/dev/null 2>&1; then
+              echo "ℹ️ Release ${tag} already exists, skipping"
+            else
+              echo "✅ Creating release for ${tag}"
               
+              # Create tag (or reuse if exists)
+              git tag "$tag" 2>/dev/null || echo "Tag already exists, reusing"
+              git push origin "$tag" 2>/dev/null || echo "Tag already pushed"
+              
+              # Create GitHub Release
               releaseNotesFile=$(mktemp)
               echo "## 🚀 Website ${websiteVersion}" >> "$releaseNotesFile"
               echo "" >> "$releaseNotesFile"
@@ -173,10 +191,10 @@ jobs:
                 --repo nativeui-org/primitives
               
               rm "$releaseNotesFile"
-              echo "✅ Website release created - deployment will start via tag"
-            else
-              echo "ℹ️ Tag website@${websiteVersion} already exists, skipping"
+              echo "✅ Website release created → Vercel deployment will start"
             fi
+          else
+            echo "ℹ️ No website version change detected"
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
