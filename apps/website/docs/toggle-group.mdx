@@ -1,6 +1,6 @@
 ---
-title: "ToggleGroup Primitive"
-description: "A component for managing multiple toggles with coordinated state."
+title: "Toggle Group"
+description: "Coordinate multiple toggles with single or multiple selection modes, perfect for toolbars and button groups."
 ---
 
 ---
@@ -17,124 +17,188 @@ description: "A component for managing multiple toggles with coordinated state."
 
 ---
 
-## What is ToggleGroup?
+## Overview
 
-ToggleGroup provides a way to manage multiple related toggles as a group. It handles state management, allowing multiple selections and coordinating the pressed state of child Toggle components. Perfect for toolbar buttons, formatting controls, or any set of related toggle actions.
+ToggleGroup manages multiple toggle buttons as a coordinated group with flexible selection modes.
 
-**Platform behavior:**
-- **Web & Native**: Consistent rendering with proper accessibility
-- **Accessibility**: Group semantics with proper ARIA attributes
-- **State Management**: Controlled and uncontrolled modes
-- **Coordination**: Automatic value management for child toggles
+| Feature         | Description                           | Platforms         |
+| --------------- | ------------------------------------- | ----------------- |
+| **ToggleGroup** | Root container managing toggle states | iOS, Android, Web |
 
 ---
 
-## API
+## Setup & Usage Guide
+
+ToggleGroup provides coordinated state for multiple toggle buttons.
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
+
+```tsx
+import { 
+  ToggleGroup, 
+  Toggle 
+} from "@native-ui-org/primitives";
+```
+
+---
+
+### 2. Single Selection Mode
+
+Only one toggle can be pressed at a time:
+
+```tsx
+<ToggleGroup type="single" defaultValue="left">
+  <Toggle value="left">
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="align-left" />
+      </View>
+    )}
+  </Toggle>
+  
+  <Toggle value="center">
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="align-center" />
+      </View>
+    )}
+  </Toggle>
+  
+  <Toggle value="right">
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="align-right" />
+      </View>
+    )}
+  </Toggle>
+</ToggleGroup>
+```
+
+---
+
+### 3. Multiple Selection Mode
+
+Allow multiple toggles to be pressed simultaneously:
+
+```tsx
+<ToggleGroup type="multiple" defaultValue={["bold", "italic"]}>
+  <Toggle value="bold">
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="bold" />
+      </View>
+    )}
+  </Toggle>
+  
+  <Toggle value="italic">
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="italic" />
+      </View>
+    )}
+  </Toggle>
+  
+  <Toggle value="underline">
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="underline" />
+      </View>
+    )}
+  </Toggle>
+</ToggleGroup>
+```
+
+---
+
+### 4. Controlled State
+
+```tsx
+const [alignment, setAlignment] = useState("left");
+
+<ToggleGroup type="single" value={alignment} onValueChange={setAlignment}>
+  <Toggle value="left">{({ pressed }) => /* ... */}</Toggle>
+  <Toggle value="center">{({ pressed }) => /* ... */}</Toggle>
+  <Toggle value="right">{({ pressed }) => /* ... */}</Toggle>
+</ToggleGroup>
+```
+
+---
+
+### 5. Disabled Group
+
+```tsx
+<ToggleGroup disabled type="single">
+  <Toggle value="option1">{({ pressed }) => /* ... */}</Toggle>
+  <Toggle value="option2">{({ pressed }) => /* ... */}</Toggle>
+</ToggleGroup>
+```
+
+---
+
+## API Reference
 
 ### ToggleGroup
 
-| Prop            | Type                        | Default | Description                                    |
-|-----------------|-----------------------------|---------|------------------------------------------------|
-| `value`         | `string[]`                  | -       | Array of pressed values                         |
-| `defaultValue`  | `string[]`                  | `[]`    | Default pressed values                          |
-| `disabled`      | `boolean`                   | `false` | Whether the group is disabled                   |
-| `onValueChange` | `(value: string[]) => void` | -       | Callback when group value changes              |
-| `asChild`       | `boolean`                   | `false` | Use Slot pattern                               |
+Container coordinating multiple toggles.
+
+| Prop            | Type                                  | Default | Description                                   |
+| --------------- | ------------------------------------- | ------- | --------------------------------------------- |
+| `type`          | `"single" \| "multiple"`              | —       | **Required.** Selection mode                  |
+| `value`         | `string \| string[]`                  | —       | Controlled value(s)                           |
+| `defaultValue`  | `string \| string[]`                  | —       | Initial value(s) (uncontrolled)               |
+| `onValueChange` | `(value: string \| string[]) => void` | —       | Callback when selection changes               |
+| `disabled`      | boolean                               | `false` | Disable all toggles                           |
+| `rovingFocus`   | boolean                               | `true`  | Enable keyboard navigation (web)              |
+
+**Note:** Individual toggles use their `value` prop to identify themselves.
 
 ---
 
-## Examples
+## Platform Behavior
 
-### Basic usage
-
-```tsx
-import { ToggleGroup, Toggle } from "@native-ui-org/primitives";
-
-const [selectedValues, setSelectedValues] = useState(["bold"]);
-
-<ToggleGroup 
-  value={selectedValues} 
-  onValueChange={setSelectedValues}
->
-  <Toggle value="bold">Bold</Toggle>
-  <Toggle value="italic">Italic</Toggle>
-  <Toggle value="underline">Underline</Toggle>
-</ToggleGroup>
-```
-
-### Text formatting toolbar
-
-```tsx
-<ToggleGroup value={formatting} onValueChange={setFormatting}>
-  <View style={{ flexDirection: "row", gap: 8 }}>
-    <Toggle value="bold">
-      <Text style={{ fontWeight: 'bold' }}>B</Text>
-    </Toggle>
-    
-    <Toggle value="italic">
-      <Text style={{ fontStyle: 'italic' }}>I</Text>
-    </Toggle>
-    
-    <Toggle value="underline">
-      <Text style={{ textDecorationLine: 'underline' }}>U</Text>
-    </Toggle>
-    
-    <Toggle value="strikethrough">
-      <Text style={{ textDecorationLine: 'line-through' }}>S</Text>
-    </Toggle>
-  </View>
-</ToggleGroup>
-```
-
-### Alignment controls
-
-```tsx
-<ToggleGroup value={alignment} onValueChange={setAlignment}>
-  <View style={{ flexDirection: "row", gap: 8 }}>
-    <Toggle value="left">
-      <Text>Left</Text>
-    </Toggle>
-    
-    <Toggle value="center">
-      <Text>Center</Text>
-    </Toggle>
-    
-    <Toggle value="right">
-      <Text>Right</Text>
-    </Toggle>
-    
-    <Toggle value="justify">
-      <Text>Justify</Text>
-    </Toggle>
-  </View>
-</ToggleGroup>
-```
-
-### Theme selection
-
-```tsx
-<ToggleGroup value={themes} onValueChange={setThemes}>
-  <View style={{ gap: 8 }}>
-    <Toggle value="light">
-      <Text>Light Theme</Text>
-    </Toggle>
-    
-    <Toggle value="dark">
-      <Text>Dark Theme</Text>
-    </Toggle>
-    
-    <Toggle value="auto">
-      <Text>Auto Theme</Text>
-    </Toggle>
-  </View>
-</ToggleGroup>
-```
+| Platform              | Implementation                     | Characteristics               |
+| --------------------- | ---------------------------------- | ----------------------------- |
+| **iOS / Android**     | Context-based state coordination   | Native touch feedback         |
+| **Web**               | Button group with ARIA roles       | Keyboard navigation support   |
+| **All Platforms**     | Consistent API                     | Same props, same behavior     |
 
 ---
 
-## Changelog
+## Accessibility
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| `0.1.0` | Initial release. Group management for toggles. |
+**Web:**
+
+* `role="group"` on container
+* `aria-pressed` on each toggle
+* Keyboard navigation (arrows, Space/Enter)
+* Focus management
+
+**Mobile:**
+
+* Group announced by screen readers
+* Individual toggle states accessible
+
+---
+
+## Version History
+
+| Version | Notes                                                                               |
+| ------- | ----------------------------------------------------------------------------------- |
+| `0.1.0` | Initial release — toggle group with single/multiple modes and state management. |
+
+---
+
+**Summary:**
+ToggleGroup coordinates multiple toggle buttons with flexible selection modes.
+Use single mode for mutually exclusive options (alignment, size, etc.).
+Use multiple mode for independent formatting options (bold, italic, underline).
+Perfect for toolbars, button groups, and formatting controls.
 

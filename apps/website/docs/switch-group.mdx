@@ -1,6 +1,6 @@
 ---
-title: "SwitchGroup Primitive"
-description: "A component for managing multiple switches with coordinated state."
+title: "Switch Group"
+description: "Coordinate multiple switches with shared state management and layout utilities."
 ---
 
 ---
@@ -17,97 +17,163 @@ description: "A component for managing multiple switches with coordinated state.
 
 ---
 
-## What is SwitchGroup?
+## Overview
 
-SwitchGroup provides a way to manage multiple related switches as a group. It handles state management, allowing multiple selections and coordinating the pressed state of child Switch components.
+SwitchGroup manages multiple switches as a coordinated group with record-based state.
 
-**Platform behavior:**
-- **Web & Native**: Consistent rendering with proper accessibility
-- **Accessibility**: Group semantics with proper ARIA attributes
-- **State Management**: Controlled and uncontrolled modes
-- **Coordination**: Automatic value management for child switches
+| Feature         | Description                       | Platforms         |
+| --------------- | --------------------------------- | ----------------- |
+| **SwitchGroup** | Root container coordinating switches | iOS, Android, Web |
 
 ---
 
-## API
+## Setup & Usage Guide
+
+SwitchGroup simplifies managing multiple toggle switches together.
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
+
+```tsx
+import { 
+  SwitchGroup, 
+  Switch 
+} from "@native-ui-org/primitives";
+```
+
+---
+
+### 2. Basic Usage
+
+Manage multiple switches as a group:
+
+```tsx
+<SwitchGroup defaultValue={{ notifications: true, darkMode: false }}>
+  <View style={styles.row}>
+    <Text>Notifications</Text>
+    <Switch name="notifications">
+      {({ checked }) => (
+        <View style={checked ? styles.on : styles.off}>
+          <View style={styles.thumb} />
+        </View>
+      )}
+    </Switch>
+  </View>
+  
+  <View style={styles.row}>
+    <Text>Dark Mode</Text>
+    <Switch name="darkMode">
+      {({ checked }) => (
+        <View style={checked ? styles.on : styles.off}>
+          <View style={styles.thumb} />
+        </View>
+      )}
+    </Switch>
+  </View>
+</SwitchGroup>
+```
+
+---
+
+### 3. Controlled State
+
+Manage group state externally:
+
+```tsx
+const [settings, setSettings] = useState({
+  notifications: true,
+  darkMode: false,
+  autoSave: true,
+});
+
+<SwitchGroup value={settings} onValueChange={setSettings}>
+  <Switch name="notifications">
+    {({ checked }) => /* ... */}
+  </Switch>
+  <Switch name="darkMode">
+    {({ checked }) => /* ... */}
+  </Switch>
+  <Switch name="autoSave">
+    {({ checked }) => /* ... */}
+  </Switch>
+</SwitchGroup>
+```
+
+---
+
+### 4. Disabled Group
+
+Disable all switches at once:
+
+```tsx
+<SwitchGroup disabled>
+  <Switch name="option1">{({ checked }) => /* ... */}</Switch>
+  <Switch name="option2">{({ checked }) => /* ... */}</Switch>
+</SwitchGroup>
+```
+
+---
+
+## API Reference
 
 ### SwitchGroup
 
-| Prop            | Type                        | Default | Description                                    |
-|-----------------|-----------------------------|---------|------------------------------------------------|
-| `value`         | `string[]`                  | -       | Array of pressed values                         |
-| `defaultValue`  | `string[]`                  | `[]`    | Default pressed values                          |
-| `disabled`      | `boolean`                   | `false` | Whether the group is disabled                   |
-| `onValueChange` | `(value: string[]) => void` | -       | Callback when group value changes              |
-| `asChild`       | `boolean`                   | `false` | Use Slot pattern                               |
+Container coordinating multiple switches.
+
+| Prop            | Type                                      | Default | Description                             |
+| --------------- | ----------------------------------------- | ------- | --------------------------------------- |
+| `value`         | `Record<string, boolean>`                 | —       | Controlled state values                 |
+| `defaultValue`  | `Record<string, boolean>`                 | `{}`    | Initial state (uncontrolled)            |
+| `onValueChange` | `(value: Record<string, boolean>) => void` | —      | Callback when any switch changes        |
+| `disabled`      | boolean                                   | `false` | Disable all switches                    |
+| `asChild`       | boolean                                   | `false` | Use Slot pattern                        |
+
+**Note:** Individual switches use their `name` prop to identify themselves in the group state.
 
 ---
 
-## Examples
+## Platform Behavior
 
-### Basic usage
-
-```tsx
-import { SwitchGroup, Switch } from "@native-ui-org/primitives";
-
-const [selectedValues, setSelectedValues] = useState(["option1"]);
-
-<SwitchGroup 
-  value={selectedValues} 
-  onValueChange={setSelectedValues}
->
-  <Switch value="option1" />
-  <Switch value="option2" />
-  <Switch value="option3" />
-</SwitchGroup>
-```
-
-### Settings panel
-
-```tsx
-<SwitchGroup value={settings} onValueChange={setSettings}>
-  <View style={{ gap: 16 }}>
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <Switch value="notifications" />
-      <Text>Push notifications</Text>
-    </View>
-    
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <Switch value="email" />
-      <Text>Email updates</Text>
-    </View>
-    
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <Switch value="analytics" />
-      <Text>Analytics tracking</Text>
-    </View>
-  </View>
-</SwitchGroup>
-```
-
-### Filter controls
-
-```tsx
-<SwitchGroup value={activeFilters} onValueChange={setActiveFilters}>
-  <Text style={styles.filterTitle}>Filter by category:</Text>
-  <View style={{ gap: 8 }}>
-    <Switch value="electronics" />
-    <Text>Electronics</Text>
-    
-    <Switch value="clothing" />
-    <Text>Clothing</Text>
-    
-    <Switch value="books" />
-    <Text>Books</Text>
-  </View>
-</SwitchGroup>
-```
+| Platform              | Implementation                     | Characteristics               |
+| --------------------- | ---------------------------------- | ----------------------------- |
+| **iOS / Android**     | Context-based state coordination   | Native performance            |
+| **Web**               | Fieldset with switches             | Form compatible               |
+| **All Platforms**     | Consistent API                     | Same props, same behavior     |
 
 ---
 
-## Changelog
+## Accessibility
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| `0.1.0` | Initial release. Group management for switches. |
+**Web:**
+
+* Semantic grouping with fieldset
+* Individual switches properly labeled
+* Keyboard navigation
+
+**Mobile:**
+
+* Group announced by screen readers
+* Individual switch states accessible
+
+---
+
+## Version History
+
+| Version | Notes                                                                     |
+| ------- | ------------------------------------------------------------------------- |
+| `0.1.0` | Initial release — switch group with record-based state management. |
+
+---
+
+**Summary:**
+SwitchGroup simplifies managing multiple toggle switches.
+Use it for settings panels, feature flags, or grouped boolean controls.
+Provides coordinated state management with record-based values.
 

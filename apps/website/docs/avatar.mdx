@@ -1,6 +1,6 @@
 ---
-title: "Avatar Primitive"
-description: "A component for displaying user profile images with fallback text support."
+title: "Avatar"
+description: "Display user profile images with intelligent fallbacks including initials and placeholder content."
 ---
 
 ---
@@ -17,216 +17,180 @@ description: "A component for displaying user profile images with fallback text 
 
 ---
 
-## What is Avatar?
+## Overview
 
-Avatar displays user profile images with intelligent fallbacks. When an image fails to load or isn't provided, it shows fallback text (usually initials). It supports multiple sizes, shapes, and integrates seamlessly with the `asChild` pattern.
+Avatar is a compound component for showing user profile pictures with automatic fallback handling.
 
-**Platform behavior:**
-- **Web & Native**: Consistent rendering with proper image handling
-- **Fallback**: Graceful degradation to text when image unavailable
-- **Responsive**: Multiple size options from extra-small to extra-large
-
----
-
-## When should you use it?
-
-✅ Use Avatar if:
-- You need **user profile pictures** in your app
-- You're building **comment systems** or **chat interfaces**
-- You want **team member displays** or **user lists**
-- You need **consistent user representation** across your app
-- You're creating **navigation headers** with user info
-
-⚠️ Consider alternatives if:
-- You need complex image galleries (use `Image` directly)
-- You're building media-heavy interfaces (use `AspectRatio`)
+| Feature           | Description                          | Platforms         |
+| ----------------- | ------------------------------------ | ----------------- |
+| **Avatar**        | Container managing loading states    | iOS, Android, Web |
+| **AvatarImage**   | Profile image with error handling    | iOS, Android, Web |
+| **AvatarFallback** | Fallback content (initials, icon)   | iOS, Android, Web |
 
 ---
 
-## API
+## Setup & Usage Guide
 
-### Avatar
+Avatar handles image loading states and provides fallback content automatically.
 
-| Prop       | Type                              | Default | Description                                    |
-|------------|-----------------------------------|---------|------------------------------------------------|
-| `src`      | `string`                          | -       | Image source URL                               |
-| `fallback` | `string`                          | -       | Fallback text (usually initials)               |
-| `size`     | `number \| "xs" \| "sm" \| "md" \| "lg" \| "xl"` | `"md"` | Avatar size                                    |
-| `shape`    | `"circle" \| "square"`           | `"circle"` | Avatar shape                               |
-| `asChild`  | `boolean`                         | `false` | Use Slot pattern                              |
+### 1. Install and Import
 
-**Size mapping:**
-- `xs`: 24px
-- `sm`: 32px  
-- `md`: 40px (default)
-- `lg`: 48px
-- `xl`: 64px
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
+
+```tsx
+import { 
+  Avatar, 
+  AvatarImage, 
+  AvatarFallback 
+} from "@native-ui-org/primitives";
+```
 
 ---
 
-## Examples
+### 2. Basic Usage
 
-### Basic usage
-
-```tsx
-import { Avatar } from "@native-ui-org/primitives";
-
-// With image
-<Avatar 
-  src="https://example.com/user.jpg" 
-  fallback="JD" 
-/>
-
-// Fallback only
-<Avatar fallback="AB" />
-```
-
-### Different sizes
+Show image with fallback initials:
 
 ```tsx
-<Avatar src="..." size="xs" fallback="XS" />
-<Avatar src="..." size="sm" fallback="SM" />
-<Avatar src="..." size="md" fallback="MD" />
-<Avatar src="..." size="lg" fallback="LG" />
-<Avatar src="..." size="xl" fallback="XL" />
-
-// Custom size
-<Avatar src="..." size={80} fallback="80" />
-```
-
-### Different shapes
-
-```tsx
-<Avatar src="..." shape="circle" fallback="C" />
-<Avatar src="..." shape="square" fallback="S" />
-```
-
-### In a user list
-
-```tsx
-<View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-  <Avatar src={user.avatar} fallback={user.initials} size="sm" />
-  <View>
-    <Text>{user.name}</Text>
-    <Text style={{ color: "#666" }}>{user.email}</Text>
-  </View>
-</View>
-```
-
-### In a comment
-
-```tsx
-<View style={{ flexDirection: "row", gap: 12 }}>
-  <Avatar src={comment.author.avatar} fallback={comment.author.initials} />
-  <View style={{ flex: 1 }}>
-    <Text style={{ fontWeight: "600" }}>{comment.author.name}</Text>
-    <Text>{comment.content}</Text>
-  </View>
-</View>
-```
-
-### With asChild
-
-```tsx
-<Avatar asChild size="lg">
-  <Pressable onPress={() => openProfile()}>
-    <Image source={{ uri: user.avatar }} />
-  </Pressable>
+<Avatar>
+  <AvatarImage source={{ uri: 'https://example.com/avatar.jpg' }} />
+  <AvatarFallback>
+    <Text>JD</Text>
+  </AvatarFallback>
 </Avatar>
 ```
 
-### Team display
+---
+
+### 3. Fallback with Icon
+
+Use an icon when image fails to load:
 
 ```tsx
-<View style={{ flexDirection: "row", gap: -8 }}>
-  {team.map((member, index) => (
-    <Avatar 
-      key={member.id}
-      src={member.avatar} 
-      fallback={member.initials}
-      size="sm"
-      style={{ 
-        marginLeft: index > 0 ? -8 : 0,
-        borderWidth: 2,
-        borderColor: "#fff"
-      }}
-    />
-  ))}
-</View>
+<Avatar>
+  <AvatarImage source={{ uri: userAvatar }} />
+  <AvatarFallback>
+    <Icon name="user" size={24} />
+  </AvatarFallback>
+</Avatar>
 ```
 
 ---
 
-## Platform Differences
+### 4. Styled Avatars
 
-### Web
-- Uses standard `Image` component with proper error handling
-- Fallback text renders with web-optimized fonts
-- Supports all CSS properties for styling
+Add custom styling:
 
-### Native (iOS/Android)
-- Uses React Native `Image` component
-- Fallback text uses system fonts
-- Optimized for touch interactions
-
----
-
-## Implementation Details
-
-### Size Calculation
 ```tsx
-const sizeMap = {
-  xs: 24,  // Extra small
-  sm: 32,  // Small
-  md: 40,  // Medium (default)
-  lg: 48,  // Large
-  xl: 64,  // Extra large
-};
-```
+<Avatar style={styles.avatar}>
+  <AvatarImage 
+    source={{ uri: user.avatarUrl }}
+    style={styles.image}
+  />
+  <AvatarFallback style={styles.fallback}>
+    <Text style={styles.initials}>
+      {user.initials}
+    </Text>
+  </AvatarFallback>
+</Avatar>
 
-### Fallback Text Sizing
-```tsx
-const textStyle = {
-  fontSize: Math.max(sizeValue * 0.4, 12), // Responsive font size
-  fontWeight: "600",
-  color: "#666",
-};
-```
-
-### Shape Handling
-```tsx
-const borderRadius = shape === "circle" 
-  ? sizeValue / 2  // Perfect circle
-  : 8;             // Rounded square
+const styles = StyleSheet.create({
+  avatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    overflow: 'hidden',
+  },
+  fallback: {
+    backgroundColor: '#ccc',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  initials: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
 ```
 
 ---
 
-## Best Practices
+## API Reference
 
-### Fallback Text
-- Use **initials** (e.g., "JD" for John Doe)
-- Keep it **short** (1-2 characters max)
-- Use **uppercase** for better readability
-- Consider **user's preferred name** or **first letter**
+### Avatar
 
-### Image Sources
-- Use **HTTPS** URLs for security
-- Provide **fallback** for every avatar
-- Consider **image optimization** for performance
-- Handle **loading states** gracefully
+Root container managing loading state.
 
-### Accessibility
-- Always provide **meaningful fallback text**
-- Use **alt text** equivalent in fallback
-- Ensure **sufficient contrast** for text
-- Consider **reduced motion** preferences
+| Prop       | Type    | Default | Description           |
+| ---------- | ------- | ------- | --------------------- |
+| `asChild`  | boolean | `false` | Use Slot pattern      |
+| `...props` | any     | —       | Standard View props   |
+
+### AvatarImage
+
+Profile image with load handling.
+
+| Prop       | Type         | Default | Description                    |
+| ---------- | ------------ | ------- | ------------------------------ |
+| `source`   | ImageSource  | —       | **Required.** Image source     |
+| `onLoad`   | `function`   | —       | Called when image loads        |
+| `onError`  | `function`   | —       | Called when image fails        |
+| `...props` | any          | —       | Standard Image props           |
+
+### AvatarFallback
+
+Fallback content shown when image unavailable.
+
+| Prop          | Type    | Default | Description              |
+| ------------- | ------- | ------- | ------------------------ |
+| `delayMs`     | number  | `0`     | Delay before showing     |
+| `asChild`     | boolean | `false` | Use Slot pattern         |
+| `...props`    | any     | —       | Standard View props      |
 
 ---
 
-## Changelog
+## Platform Behavior
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| `0.1.0` | Initial release. Basic avatar functionality with image and fallback support. |
+| Platform              | Implementation                     | Characteristics               |
+| --------------------- | ---------------------------------- | ----------------------------- |
+| **iOS / Android**     | React Native Image component       | Native image caching          |
+| **Web**               | HTML img with loading states       | Browser image optimization    |
+| **All Platforms**     | Consistent API                     | Same props, same behavior     |
+
+---
+
+## Accessibility
+
+**All Platforms:**
+
+* Images include `alt` text support (web)
+* Proper accessibility labels
+* Works with screen readers
+
+**Best practices:**
+
+* Provide meaningful fallback content
+* Use appropriate `accessibilityLabel`
+* Consider color contrast for initials
+
+---
+
+## Version History
+
+| Version | Notes                                                                  |
+| ------- | ---------------------------------------------------------------------- |
+| `0.1.0` | Initial release — avatar with image and fallback support. |
+
+---
+
+**Summary:**
+Avatar displays user profile pictures with automatic fallback handling.
+Use it for user profiles, comment sections, or any user-identifying UI.
+Provides graceful degradation when images fail to load.
 

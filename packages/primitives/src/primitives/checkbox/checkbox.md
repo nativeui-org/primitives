@@ -1,103 +1,182 @@
-# Checkbox Primitive
+# Checkbox
 
-A component for selecting one or more options individually.
-
----
-
-## What is Checkbox?
-
-Checkbox provides a way to select options. It can be used standalone or within a CheckboxGroup for coordinated state management. The component is highly customizable and supports the `asChild` pattern for complete control over rendering.
-
-**Platform behavior:**
-- **Web & Native**: Consistent rendering with proper accessibility
-- **Accessibility**: Full ARIA support and screen reader compatibility
-- **State Management**: Controlled and uncontrolled modes
-- **Customizable**: Complete control via asChild pattern
+Create **accessible checkboxes** with **custom styling** and full keyboard support across all platforms.
 
 ---
 
-## API
+## Overview
 
-### Checkbox
+Checkbox is a compound component for building checkboxes with labels and custom indicators.
 
-| Prop              | Type                      | Default | Description                                    |
-|-------------------|---------------------------|---------|------------------------------------------------|
-| `checked`         | `boolean`                 | -       | Whether the checkbox is checked                |
-| `indeterminate`   | `boolean`                 | `false` | Whether the checkbox is in indeterminate state |
-| `disabled`        | `boolean`                 | `false` | Whether the checkbox is disabled               |
-| `required`        | `boolean`                 | `false` | Whether the checkbox is required               |
-| `value`           | `string`                  | -       | The value (used in groups)                     |
-| `onCheckedChange` | `(checked: boolean) => void` | -    | Callback when checked state changes            |
-| `asChild`         | `boolean`                 | `false` | Use Slot pattern                               |
+| Feature              | Description                        | Platforms         |
+| -------------------- | ---------------------------------- | ----------------- |
+| **Checkbox**         | Root container managing state      | iOS, Android, Web |
+| **CheckboxIndicator** | Visual checkbox state indicator   | iOS, Android, Web |
+| **CheckboxLabel**    | Clickable label text               | iOS, Android, Web |
 
 ---
 
-## Examples
+## Setup & Usage Guide
 
-### Basic usage
+Checkbox provides the structure for accessible checkbox inputs with full control over styling.
 
-```tsx
-import { Checkbox } from "@native-ui-org/primitives";
+### 1. Install and Import
 
-const [checked, setChecked] = useState(false);
+Install from npm:
 
-<Checkbox 
-  checked={checked} 
-  onCheckedChange={setChecked} 
-/>
+```bash
+npm install @native-ui-org/primitives
 ```
 
-### Indeterminate state
+Then import from the package:
 
 ```tsx
-<Checkbox 
-  checked={false}
-  indeterminate={true}
-  onCheckedChange={setChecked} 
-/>
+import { 
+  Checkbox, 
+  CheckboxIndicator,
+  CheckboxLabel 
+} from "@native-ui-org/primitives";
 ```
 
-### Disabled state
+---
+
+### 2. Basic Usage
+
+Simple checkbox with label:
 
 ```tsx
-<Checkbox 
-  checked={true}
-  disabled={true}
-/>
-```
-
-### With label
-
-```tsx
-<View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-  <Checkbox 
-    checked={agreeToTerms} 
-    onCheckedChange={setAgreeToTerms}
-    required
-  />
-  <Text>I agree to the terms and conditions</Text>
-</View>
-```
-
-### Custom styling with asChild
-
-```tsx
-<Checkbox asChild checked={isChecked}>
-  <Pressable style={styles.customCheckbox}>
-    <View style={[
-      styles.checkbox,
-      isChecked && styles.checked
-    ]}>
-      {isChecked && <Text style={styles.checkmark}>✓</Text>}
-    </View>
-  </Pressable>
+<Checkbox defaultChecked={false}>
+  <CheckboxIndicator>
+    {({ checked }) => (
+      <View style={checked ? styles.checked : styles.unchecked}>
+        {checked && <Icon name="check" />}
+      </View>
+    )}
+  </CheckboxIndicator>
+  <CheckboxLabel>
+    <Text>Accept terms and conditions</Text>
+  </CheckboxLabel>
 </Checkbox>
 ```
 
 ---
 
-## Changelog
+### 3. Controlled State
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| `0.1.0` | Initial release. Basic checkbox functionality. |
+Manage checkbox state externally:
+
+```tsx
+const [checked, setChecked] = useState(false);
+
+<Checkbox checked={checked} onCheckedChange={setChecked}>
+  <CheckboxIndicator>
+    {({ checked }) => (
+      <View style={styles.indicator}>
+        {checked && <Text>✓</Text>}
+      </View>
+    )}
+  </CheckboxIndicator>
+  <CheckboxLabel>
+    <Text>Subscribe to newsletter</Text>
+  </CheckboxLabel>
+</Checkbox>
+```
+
+---
+
+### 4. Disabled State
+
+```tsx
+<Checkbox disabled checked={true}>
+  <CheckboxIndicator>
+    {({ checked }) => (
+      <View style={styles.indicatorDisabled}>
+        {checked && <Icon name="check" color="#ccc" />}
+      </View>
+    )}
+  </CheckboxIndicator>
+  <CheckboxLabel>
+    <Text style={styles.labelDisabled}>Disabled option</Text>
+  </CheckboxLabel>
+</Checkbox>
+```
+
+---
+
+## API Reference
+
+### Checkbox
+
+Root container managing checkbox state.
+
+| Prop              | Type                      | Default | Description                       |
+| ----------------- | ------------------------- | ------- | --------------------------------- |
+| `checked`         | boolean                   | —       | Controlled checked state          |
+| `defaultChecked`  | boolean                   | `false` | Initial state (uncontrolled)      |
+| `onCheckedChange` | `(checked: boolean) => void` | —    | Callback when state changes       |
+| `disabled`        | boolean                   | `false` | Disable interactions              |
+| `required`        | boolean                   | `false` | Mark as required (forms)          |
+| `name`            | string                    | —       | Form field name                   |
+| `value`           | string                    | `"on"`  | Form value when checked           |
+| `asChild`         | boolean                   | `false` | Use Slot pattern                  |
+
+### CheckboxIndicator
+
+Visual indicator for checkbox state.
+
+| Prop          | Type                                  | Default | Description                 |
+| ------------- | ------------------------------------- | ------- | --------------------------- |
+| `children`    | `function \| React.ReactNode`        | —       | Render function or content  |
+| `forceMount`  | boolean                               | `false` | Keep mounted when unchecked |
+| `asChild`     | boolean                               | `false` | Use Slot pattern            |
+
+### CheckboxLabel
+
+Clickable label text.
+
+| Prop       | Type    | Default | Description        |
+| ---------- | ------- | ------- | ------------------ |
+| `asChild`  | boolean | `false` | Use Slot pattern   |
+| `...props` | any     | —       | Standard Text props |
+
+---
+
+## Platform Behavior
+
+| Platform              | Implementation                 | Characteristics                   |
+| --------------------- | ------------------------------ | --------------------------------- |
+| **iOS / Android**     | Pressable with state           | Native touch feedback             |
+| **Web**               | Input checkbox (hidden) + visual | Keyboard accessible, form compatible |
+| **All Platforms**     | Consistent API                 | Same props, same behavior         |
+
+---
+
+## Accessibility
+
+**Web:**
+
+* Hidden `<input type="checkbox">` for form compatibility
+* Proper `label` association
+* Keyboard support (Space to toggle)
+* Focus management
+
+**Mobile:**
+
+* Accessibility role "checkbox"
+* State announced to screen readers
+* Works with VoiceOver and TalkBack
+
+---
+
+## Version History
+
+| Version | Notes                                                                        |
+| ------- | ---------------------------------------------------------------------------- |
+| `0.1.0` | Initial release — checkbox with label and indicator, controlled/uncontrolled states. |
+
+---
+
+**Summary:**
+Checkbox provides accessible checkbox inputs with full styling control.
+Use it for forms, settings, multi-select lists, or any boolean input.
+Supports both controlled and uncontrolled modes with proper accessibility.

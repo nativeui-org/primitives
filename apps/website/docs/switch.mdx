@@ -1,6 +1,6 @@
 ---
-title: "Switch Primitive"
-description: "A component for switching between on/off states."
+title: "Switch"
+description: "Create accessible toggle switches for on/off states with smooth animations across all platforms."
 ---
 
 ---
@@ -17,101 +17,157 @@ description: "A component for switching between on/off states."
 
 ---
 
-## What is Switch?
+## Overview
 
-Switch provides a way to switch between two states (on/off). It can be used standalone or within a SwitchGroup for coordinated state management. The component is highly customizable and supports the `asChild` pattern for complete control over rendering.
+Switch is a toggle component for binary on/off states with native-feeling animations.
 
-**Platform behavior:**
-- **Web & Native**: Consistent rendering with proper accessibility
-- **Accessibility**: Full ARIA support and screen reader compatibility
-- **State Management**: Controlled and uncontrolled modes
-- **Customizable**: Complete control via asChild pattern
+| Feature    | Description                      | Platforms         |
+| ---------- | -------------------------------- | ----------------- |
+| **Switch** | Animated toggle for boolean state | iOS, Android, Web |
 
 ---
 
-## API
+## Setup & Usage Guide
 
-### Switch
+Switch provides the foundation for toggle controls with full styling control.
 
-| Prop              | Type                      | Default | Description                                    |
-|-------------------|---------------------------|---------|------------------------------------------------|
-| `pressed`        | `boolean`                 | -       | Whether the switch is pressed/on               |
-| `defaultPressed` | `boolean`                 | `false` | Default pressed state (uncontrolled)           |
-| `disabled`       | `boolean`                 | `false` | Whether the switch is disabled                 |
-| `value`          | `string`                  | -       | The value (used in groups)                     |
-| `onPressedChange`| `(pressed: boolean) => void` | -    | Callback when pressed state changes            |
-| `asChild`        | `boolean`                 | `false` | Use Slot pattern                               |
+### 1. Install and Import
 
----
+Install from npm:
 
-## Examples
+```bash
+npm install @native-ui-org/primitives
+```
 
-### Basic usage
+Then import from the package:
 
 ```tsx
 import { Switch } from "@native-ui-org/primitives";
-
-const [pressed, setPressed] = useState(false);
-
-<Switch 
-  pressed={pressed} 
-  onPressedChange={setPressed} 
-/>
 ```
 
-### Default pressed state
+---
+
+### 2. Basic Usage (Uncontrolled)
+
+Let the component manage its own state:
 
 ```tsx
-<Switch 
-  defaultPressed={true}
-  onPressedChange={setPressed} 
-/>
-```
-
-### Disabled state
-
-```tsx
-<Switch 
-  pressed={true}
-  disabled={true}
-/>
-```
-
-### With label
-
-```tsx
-<View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-  <Switch 
-    pressed={notificationsEnabled} 
-    onPressedChange={setNotificationsEnabled}
-  />
-  <Text>Enable notifications</Text>
-</View>
-```
-
-### Custom styling with asChild
-
-```tsx
-<Switch asChild pressed={isOn}>
-  <Pressable style={styles.customSwitch}>
-    <View style={[
-      styles.switch,
-      isOn && styles.switchOn
-    ]}>
-      <View style={[
-        styles.thumb,
-        isOn && styles.thumbOn
-      ]} />
+<Switch defaultChecked={false}>
+  {({ checked }) => (
+    <View style={checked ? styles.switchOn : styles.switchOff}>
+      <View style={[styles.thumb, checked && styles.thumbOn]} />
     </View>
-  </Pressable>
+  )}
 </Switch>
 ```
 
 ---
 
-## Changelog
+### 3. Controlled State
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| `0.1.0` | Initial release. Basic switch functionality. |
+Manage switch state externally:
+
+```tsx
+const [enabled, setEnabled] = useState(false);
+
+<Switch checked={enabled} onCheckedChange={setEnabled}>
+  {({ checked }) => (
+    <View style={checked ? styles.on : styles.off}>
+      <View style={styles.thumb} />
+    </View>
+  )}
+</Switch>
+```
+
+---
+
+### 4. With Label
+
+```tsx
+<View style={styles.row}>
+  <Text>Enable notifications</Text>
+  <Switch checked={notifications} onCheckedChange={setNotifications}>
+    {({ checked }) => (
+      <View style={checked ? styles.on : styles.off}>
+        <View style={styles.thumb} />
+      </View>
+    )}
+  </Switch>
+</View>
+```
+
+---
+
+### 5. Disabled State
+
+```tsx
+<Switch disabled checked={true}>
+  {({ checked }) => (
+    <View style={styles.disabled}>
+      <View style={styles.thumb} />
+    </View>
+  )}
+</Switch>
+```
+
+---
+
+## API Reference
+
+### Switch
+
+Toggle component for boolean states.
+
+| Prop              | Type                          | Default | Description                      |
+| ----------------- | ----------------------------- | ------- | -------------------------------- |
+| `checked`         | boolean                       | —       | Controlled checked state         |
+| `defaultChecked`  | boolean                       | `false` | Initial state (uncontrolled)     |
+| `onCheckedChange` | `(checked: boolean) => void`  | —       | Callback when state changes      |
+| `disabled`        | boolean                       | `false` | Disable interactions             |
+| `required`        | boolean                       | `false` | Mark as required (forms)         |
+| `name`            | string                        | —       | Form field name                  |
+| `value`           | string                        | `"on"`  | Form value when checked          |
+| `children`        | `function \| React.ReactNode` | —       | Render function or static content |
+
+---
+
+## Platform Behavior
+
+| Platform              | Implementation                 | Characteristics                   |
+| --------------------- | ------------------------------ | --------------------------------- |
+| **iOS / Android**     | Animated View components       | Native 60fps animations           |
+| **Web**               | Button with animated state     | Keyboard accessible               |
+| **All Platforms**     | Consistent API                 | Same props, same behavior         |
+
+---
+
+## Accessibility
+
+**Web:**
+
+* `role="switch"`
+* `aria-checked` reflects state
+* Keyboard support (Space to toggle)
+* Focus management
+
+**Mobile:**
+
+* Accessibility role "switch"
+* State announced to screen readers
+* Works with VoiceOver and TalkBack
+
+---
+
+## Version History
+
+| Version | Notes                                                                       |
+| ------- | --------------------------------------------------------------------------- |
+| `0.1.0` | Initial release — switch with controlled/uncontrolled states and animations. |
+
+---
+
+**Summary:**
+Switch provides accessible toggle controls for boolean states.
+Use it for settings, feature toggles, or any on/off control.
+Supports both controlled and uncontrolled modes with proper accessibility.
 

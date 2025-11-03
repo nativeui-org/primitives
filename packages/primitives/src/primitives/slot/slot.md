@@ -1,87 +1,46 @@
-# Slot Primitive
+# Slot
 
-A tiny utility component that enables **polymorphism** by letting a parent component "become" its child, without introducing an extra wrapper node.
-
-This primitive is the **foundation** for the `asChild` pattern used across all primitives in this library.
+Enable **polymorphism** by merging parent props into child components **without extra wrappers**.
 
 ---
 
-## What is Slot?
+## Overview
 
-`Slot` is inspired by [Radix UI's Slot component](https://www.radix-ui.com/primitives/docs/utilities/slot). Instead of rendering its own DOM node or React Native component, it:
+Slot is the foundation for the `asChild` pattern used across all primitives. It merges props, composes event handlers, and forwards refs without adding DOM nodes.
 
-1. **Clones its single child** element
-2. **Merges props** from the parent into the child
-3. **Composes event handlers** (child runs first, then parent)
-4. **Composes refs** (both parent and child refs are called)
-
-This allows you to create flexible, composable components without extra wrapper nodes that might interfere with styling or layout.
-
----
-
-## When should you use it?
-
-✅ Use `Slot` if:
-- You are building **primitive components** that support the `asChild` pattern
-- You want to **avoid wrapper elements** for better control over the DOM/component tree
-- You need to **inject props** into a child component while preserving its original props
-- You want **polymorphic components** (e.g., a Button that can render as `<a>`, `<button>`, or custom components)
-
-⚠️ You probably don't need `Slot` directly if:
-- You're using primitives that already support `asChild` (like `View`, `Text`)
-- You're building application-level components (not library primitives)
-- You can achieve your goal with simple component composition
+| Feature        | Description                               | Platforms         |
+| -------------- | ----------------------------------------- | ----------------- |
+| **Merging**    | Injects parent props into child           | iOS, Android, Web |
+| **Composition** | Composes event handlers and refs          | iOS, Android, Web |
+| **Polymorphism** | Enables flexible component APIs          | iOS, Android, Web |
 
 ---
 
-## Philosophy & Behavior
+## Setup & Usage Guide
 
-### 1. **RN-first, no styling**
-- We do NOT touch `className` or `style`
-- Works seamlessly on iOS, Android, and Web
+Slot is a low-level utility used internally by primitives. You typically don't use it directly unless building your own primitive components.
 
-### 2. **Child props always win**
-- Injected props never overwrite the child's existing props
-- This prevents surprising behavior and maintains predictability
+### 1. Install and Import
 
-### 3. **Event handlers are composed**
-- When both parent and child have the same event handler (e.g., `onPress`)
-- **Child handler runs first**, then parent handler
-- Both handlers receive the same arguments
+Install from npm:
 
-### 4. **Refs are composed**
-- Both the forwarded ref (from parent) and child's ref are called
-- Supports both callback refs and object refs (`React.RefObject`)
+```bash
+npm install @native-ui-org/primitives
+```
 
----
+Then import from the package:
 
-## API
-
-The component accepts any props you want to inject into the child, plus:
-
-| Prop       | Type                  | Required | Description                                                                 |
-|------------|-----------------------|----------|-----------------------------------------------------------------------------|
-| `children` | `React.ReactNode`     | Yes      | Must be a **single valid React element**. Multiple children or invalid elements will be ignored. |
-| `ref`      | `React.Ref<any>`      | No       | Ref to forward to the child element (composed with child's ref).           |
-| `...props` | `Record<string, any>` | No       | Any additional props to inject into the child.                              |
-
----
-
-## Examples
-
-### Basic Usage
 ```tsx
 import { Slot } from "@native-ui-org/primitives";
-import { View, Text, Pressable } from "react-native";
+```
 
-// Without Slot - creates an extra View wrapper
-<View style={{ padding: 16 }}>
-  <Pressable onPress={() => console.log('pressed')}>
-    <Text>Click me</Text>
-  </Pressable>
-</View>
+---
 
-// With Slot - no wrapper, Pressable receives the padding directly
+### 2. Basic Usage
+
+Slot merges props from parent into its child:
+
+```tsx
 <Slot style={{ padding: 16 }}>
   <Pressable onPress={() => console.log('pressed')}>
     <Text>Click me</Text>
@@ -89,43 +48,14 @@ import { View, Text, Pressable } from "react-native";
 </Slot>
 ```
 
-### Event Handler Composition
+---
+
+### 3. Building Polymorphic Components
+
+Use Slot to create components that support `asChild`:
+
 ```tsx
-<Slot onPress={() => console.log('Parent handler')}>
-  <Pressable onPress={() => console.log('Child handler')}>
-    <Text>Press me</Text>
-  </Pressable>
-</Slot>
-
-// When pressed, logs:
-// "Child handler"
-// "Parent handler"
-```
-
-### Ref Composition
-```tsx
-import { useRef } from 'react';
-
-const MyComponent = () => {
-  const parentRef = useRef(null);
-  const childRef = useRef(null);
-  
-  return (
-    <Slot ref={parentRef}>
-      <View ref={childRef} />
-    </Slot>
-  );
-  
-  // Both parentRef and childRef will point to the same View instance
-};
-```
-
-### Building a Polymorphic Button
-```tsx
-import { Slot } from "@native-ui-org/primitives";
-import { Pressable, Text, PressableProps } from "react-native";
-
-interface ButtonProps extends PressableProps {
+interface ButtonProps {
   asChild?: boolean;
   children: React.ReactNode;
 }
@@ -139,75 +69,71 @@ function Button({ asChild, children, ...props }: ButtonProps) {
     </Comp>
   );
 }
-
-// Usage 1: Regular button
-<Button onPress={() => alert('clicked')}>
-  Click me
-</Button>
-
-// Usage 2: Polymorphic - render as custom component
-<Button asChild onPress={() => alert('clicked')}>
-  <CustomAnimatedPressable>
-    <Text>Animated Button</Text>
-  </CustomAnimatedPressable>
-</Button>
-```
-
-### Web-specific: Rendering semantic HTML
-```tsx
-// On web, render a semantic <section> with View's props
-<Slot style={{ padding: 16 }} role="region" aria-label="Main content">
-  <section>
-    <h1>Page Title</h1>
-  </section>
-</Slot>
 ```
 
 ---
 
-## Edge Cases & Limitations
+### 4. Event Handler Composition
 
-### Single child only
-`Slot` requires exactly **one valid React element** as a child:
+Child handlers run first, then parent handlers:
 
 ```tsx
-// ✅ Valid
-<Slot><View /></Slot>
-
-// ❌ Invalid - multiple children
-<Slot>
-  <View />
-  <View />
+<Slot onPress={() => console.log('Parent')}>
+  <Pressable onPress={() => console.log('Child')}>
+    <Text>Press me</Text>
+  </Pressable>
 </Slot>
 
-// ❌ Invalid - text node
-<Slot>Hello</Slot>
-
-// ❌ Invalid - null/undefined
-<Slot>{null}</Slot>
-```
-
-### Fragments are supported but refs won't work
-```tsx
-<Slot ref={myRef}>
-  <React.Fragment>content</React.Fragment>
-</Slot>
-// The ref won't be attached because Fragments don't support refs
-```
-
-### Child props always take precedence
-```tsx
-<Slot testID="parent-id">
-  <View testID="child-id" />
-</Slot>
-// Result: <View testID="child-id" /> - parent's testID is ignored
+// Logs: "Child", then "Parent"
 ```
 
 ---
 
-## Changelog
+## API Reference
 
-| Version | Changes                                                                 |
-|---------|-------------------------------------------------------------------------|
-| `0.1.0` | Initial release. Supports prop merging, event handler composition, and ref composition. |
+### Slot
 
+Polymorphic component that merges props into its child.
+
+| Prop       | Type                  | Required | Description                                         |
+| ---------- | --------------------- | -------- | --------------------------------------------------- |
+| `children` | `React.ReactElement`  | Yes      | Must be a **single** valid React element           |
+| `ref`      | `React.Ref<any>`      | No       | Ref forwarded to child (composed with child's ref) |
+| `...props` | any                   | No       | Props to inject into child                          |
+
+**Key behaviors:**
+
+* Child props always win over parent props
+* Event handlers are composed (child first, then parent)
+* Refs are composed (both parent and child refs called)
+* No style or className merging (keeps RN compatibility)
+
+---
+
+## Platform Behavior
+
+| Platform          | Implementation                     | Characteristics           |
+| ----------------- | ---------------------------------- | ------------------------- |
+| **All Platforms** | React element cloning with merging | Zero runtime overhead     |
+| **All Platforms** | No wrapper nodes                   | Clean component hierarchy |
+
+---
+
+## Accessibility
+
+Slot is transparent and doesn't affect accessibility. All ARIA props are passed through to the child element.
+
+---
+
+## Version History
+
+| Version | Notes                                                                                   |
+| ------- | --------------------------------------------------------------------------------------- |
+| `0.1.0` | Initial release — prop merging, event handler composition, and ref composition support. |
+
+---
+
+**Summary:**
+Slot is a low-level utility for building polymorphic components.
+Most developers will use primitives with `asChild` support rather than Slot directly.
+Use it when building your own primitive components with flexible APIs.

@@ -1,0 +1,199 @@
+# Accordion
+
+Manage **multiple collapsible sections** with **single or multiple expansion** modes and full accessibility.
+
+---
+
+## Overview
+
+Accordion is a compound component that groups multiple collapsible sections with automatic state management.
+
+| Feature           | Description                            | Platforms         |
+| ----------------- | -------------------------------------- | ----------------- |
+| **Accordion**     | Root container managing group state    | iOS, Android, Web |
+| **AccordionItem** | Individual collapsible section         | iOS, Android, Web |
+| **Trigger**       | Button to toggle section state         | iOS, Android, Web |
+| **Content**       | Animated content area                  | iOS, Android, Web |
+
+---
+
+## Setup & Usage Guide
+
+Accordion provides coordinated state management for multiple collapsible sections.
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
+
+```tsx
+import { 
+  Accordion, 
+  AccordionItem,
+  AccordionTrigger, 
+  AccordionContent 
+} from "@native-ui-org/primitives";
+```
+
+---
+
+### 2. Basic Usage (Single Mode)
+
+Only one section can be open at a time:
+
+```tsx
+<Accordion type="single" defaultValue="item-1">
+  <AccordionItem value="item-1">
+    <AccordionTrigger>
+      <Text>Section 1</Text>
+    </AccordionTrigger>
+    <AccordionContent>
+      <Text>Content for section 1</Text>
+    </AccordionContent>
+  </AccordionItem>
+  
+  <AccordionItem value="item-2">
+    <AccordionTrigger>
+      <Text>Section 2</Text>
+    </AccordionTrigger>
+    <AccordionContent>
+      <Text>Content for section 2</Text>
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+---
+
+### 3. Multiple Expansion Mode
+
+Allow multiple sections to be open simultaneously:
+
+```tsx
+<Accordion type="multiple" defaultValue={["item-1", "item-3"]}>
+  <AccordionItem value="item-1">
+    <AccordionTrigger><Text>Section 1</Text></AccordionTrigger>
+    <AccordionContent><Text>Content 1</Text></AccordionContent>
+  </AccordionItem>
+  
+  <AccordionItem value="item-2">
+    <AccordionTrigger><Text>Section 2</Text></AccordionTrigger>
+    <AccordionContent><Text>Content 2</Text></AccordionContent>
+  </AccordionItem>
+  
+  <AccordionItem value="item-3">
+    <AccordionTrigger><Text>Section 3</Text></AccordionTrigger>
+    <AccordionContent><Text>Content 3</Text></AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+---
+
+### 4. Controlled State
+
+Manage accordion state externally:
+
+```tsx
+const [value, setValue] = useState("item-1");
+
+<Accordion type="single" value={value} onValueChange={setValue}>
+  <AccordionItem value="item-1">
+    <AccordionTrigger><Text>FAQ 1</Text></AccordionTrigger>
+    <AccordionContent><Text>Answer 1</Text></AccordionContent>
+  </AccordionItem>
+</Accordion>
+```
+
+---
+
+## API Reference
+
+### Accordion
+
+Root container for accordion group.
+
+| Prop            | Type                                      | Default | Description                                      |
+| --------------- | ----------------------------------------- | ------- | ------------------------------------------------ |
+| `type`          | `"single" \| "multiple"`                  | —       | **Required.** Expansion mode                     |
+| `value`         | `string \| string[]`                      | —       | Controlled value(s)                              |
+| `defaultValue`  | `string \| string[]`                      | —       | Initial value(s) (uncontrolled)                  |
+| `onValueChange` | `(value: string \| string[]) => void`     | —       | Callback when value changes                      |
+| `collapsible`   | boolean                                   | `true`  | Allow closing all items (single mode only)       |
+| `disabled`      | boolean                                   | `false` | Disable all interactions                         |
+
+### AccordionItem
+
+Individual accordion section.
+
+| Prop       | Type    | Default | Description              |
+| ---------- | ------- | ------- | ------------------------ |
+| `value`    | string  | —       | **Required.** Unique ID  |
+| `disabled` | boolean | `false` | Disable this item        |
+| `asChild`  | boolean | `false` | Use Slot pattern         |
+
+### AccordionTrigger
+
+Button to toggle item state.
+
+| Prop       | Type       | Default | Description              |
+| ---------- | ---------- | ------- | ------------------------ |
+| `asChild`  | boolean    | `false` | Use Slot pattern         |
+| `...props` | any        | —       | Standard Pressable props |
+
+### AccordionContent
+
+Container for accordion content.
+
+| Prop         | Type    | Default | Description                  |
+| ------------ | ------- | ------- | ---------------------------- |
+| `forceMount` | boolean | `false` | Keep mounted when closed     |
+| `asChild`    | boolean | `false` | Use Slot pattern             |
+
+---
+
+## Platform Behavior
+
+| Platform              | Implementation                 | Characteristics                   |
+| --------------------- | ------------------------------ | --------------------------------- |
+| **iOS / Android**     | React Native Animated API      | Native 60fps animations           |
+| **Web**               | CSS transitions with JS control | Hardware accelerated             |
+| **All Platforms**     | Consistent API                 | Same props, same behavior         |
+
+---
+
+## Accessibility
+
+**Web:**
+
+* `role="region"` on accordion items
+* `aria-expanded` on triggers
+* `aria-controls` links triggers to content
+* Keyboard navigation support
+
+**Mobile:**
+
+* Proper accessibility roles
+* Screen reader support
+* Works with VoiceOver and TalkBack
+
+---
+
+## Version History
+
+| Version | Notes                                                                         |
+| ------- | ----------------------------------------------------------------------------- |
+| `0.1.0` | Initial release — accordion with single/multiple modes and state management. |
+
+---
+
+**Summary:**
+Accordion coordinates multiple collapsible sections with automatic state management.
+Use it for FAQs, settings panels, or any grouped expandable content.
+Choose single mode for exclusive expansion or multiple mode for independent sections.
+

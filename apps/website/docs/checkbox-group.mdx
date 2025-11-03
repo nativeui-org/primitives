@@ -1,6 +1,6 @@
 ---
-title: "CheckboxGroup Primitive"
-description: "A component for managing multiple checkboxes with coordinated state."
+title: "Checkbox Group"
+description: "Coordinate multiple checkboxes with shared state management and validation."
 ---
 
 ---
@@ -17,99 +17,164 @@ description: "A component for managing multiple checkboxes with coordinated stat
 
 ---
 
-## What is CheckboxGroup?
+## Overview
 
-CheckboxGroup provides a way to manage multiple related checkboxes as a group. It handles state management, allowing multiple selections and coordinating the checked state of child Checkbox components.
+CheckboxGroup manages multiple checkboxes as a coordinated group with array-based value state.
 
-**Platform behavior:**
-- **Web & Native**: Consistent rendering with proper accessibility
-- **Accessibility**: Group semantics with proper ARIA attributes
-- **State Management**: Controlled and uncontrolled modes
-- **Coordination**: Automatic value management for child checkboxes
+| Feature            | Description                            | Platforms         |
+| ------------------ | -------------------------------------- | ----------------- |
+| **CheckboxGroup**  | Root container coordinating checkboxes | iOS, Android, Web |
 
 ---
 
-## API
+## Setup & Usage Guide
+
+CheckboxGroup simplifies managing multiple checkbox selections.
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
+
+```tsx
+import { 
+  CheckboxGroup, 
+  Checkbox, 
+  CheckboxIndicator,
+  CheckboxLabel 
+} from "@native-ui-org/primitives";
+```
+
+---
+
+### 2. Basic Usage
+
+Manage multiple checkboxes as a group:
+
+```tsx
+<CheckboxGroup defaultValue={['option1']}>
+  <Checkbox value="option1">
+    <CheckboxIndicator>
+      {({ checked }) => <View style={checked ? styles.checked : styles.unchecked} />}
+    </CheckboxIndicator>
+    <CheckboxLabel><Text>Option 1</Text></CheckboxLabel>
+  </Checkbox>
+  
+  <Checkbox value="option2">
+    <CheckboxIndicator>
+      {({ checked }) => <View style={checked ? styles.checked : styles.unchecked} />}
+    </CheckboxIndicator>
+    <CheckboxLabel><Text>Option 2</Text></CheckboxLabel>
+  </Checkbox>
+  
+  <Checkbox value="option3">
+    <CheckboxIndicator>
+      {({ checked }) => <View style={checked ? styles.checked : styles.unchecked} />}
+    </CheckboxIndicator>
+    <CheckboxLabel><Text>Option 3</Text></CheckboxLabel>
+  </Checkbox>
+</CheckboxGroup>
+```
+
+---
+
+### 3. Controlled State
+
+Manage group state externally:
+
+```tsx
+const [selected, setSelected] = useState(['option1', 'option3']);
+
+<CheckboxGroup value={selected} onValueChange={setSelected}>
+  <Checkbox value="option1">
+    <CheckboxIndicator>{({ checked }) => /* ... */}</CheckboxIndicator>
+    <CheckboxLabel><Text>Option 1</Text></CheckboxLabel>
+  </Checkbox>
+  
+  <Checkbox value="option2">
+    <CheckboxIndicator>{({ checked }) => /* ... */}</CheckboxIndicator>
+    <CheckboxLabel><Text>Option 2</Text></CheckboxLabel>
+  </Checkbox>
+</CheckboxGroup>
+```
+
+---
+
+### 4. Disabled Group
+
+Disable all checkboxes at once:
+
+```tsx
+<CheckboxGroup disabled>
+  <Checkbox value="option1">
+    <CheckboxIndicator>{({ checked }) => /* ... */}</CheckboxIndicator>
+    <CheckboxLabel><Text>Option 1</Text></CheckboxLabel>
+  </Checkbox>
+</CheckboxGroup>
+```
+
+---
+
+## API Reference
 
 ### CheckboxGroup
 
-| Prop            | Type                        | Default | Description                                    |
-|-----------------|-----------------------------|---------|------------------------------------------------|
-| `value`         | `string[]`                  | -       | Array of checked values                        |
-| `defaultValue`  | `string[]`                  | `[]`    | Default checked values                         |
-| `disabled`      | `boolean`                   | `false` | Whether the group is disabled                  |
-| `required`      | `boolean`                   | `false` | Whether the group is required                  |
-| `onValueChange` | `(value: string[]) => void` | -       | Callback when group value changes              |
-| `asChild`       | `boolean`                   | `false` | Use Slot pattern                               |
+Container coordinating multiple checkboxes.
+
+| Prop              | Type                            | Default | Description                              |
+| ----------------- | ------------------------------- | ------- | ---------------------------------------- |
+| `value`           | `string[]`                      | —       | Controlled selected values               |
+| `defaultValue`    | `string[]`                      | `[]`    | Initial selected values (uncontrolled)   |
+| `onValueChange`   | `(value: string[]) => void`     | —       | Callback when selection changes          |
+| `disabled`        | boolean                         | `false` | Disable all checkboxes                   |
+| `required`        | boolean                         | `false` | At least one must be selected            |
+| `name`            | string                          | —       | Form field name                          |
+| `asChild`         | boolean                         | `false` | Use Slot pattern                         |
+
+**Note:** Individual checkboxes inside the group use their `value` prop to identify themselves.
 
 ---
 
-## Examples
+## Platform Behavior
 
-### Basic usage
-
-```tsx
-import { CheckboxGroup } from "@native-ui-org/primitives";
-import { Checkbox } from "@native-ui-org/primitives";
-
-const [selectedValues, setSelectedValues] = useState(["option1"]);
-
-<CheckboxGroup 
-  value={selectedValues} 
-  onValueChange={setSelectedValues}
->
-  <Checkbox value="option1" />
-  <Checkbox value="option2" />
-  <Checkbox value="option3" />
-</CheckboxGroup>
-```
-
-### Settings panel
-
-```tsx
-<CheckboxGroup value={settings} onValueChange={setSettings}>
-  <View style={{ gap: 16 }}>
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <Checkbox value="notifications" />
-      <Text>Push notifications</Text>
-    </View>
-    
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <Checkbox value="email" />
-      <Text>Email updates</Text>
-    </View>
-    
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-      <Checkbox value="analytics" />
-      <Text>Analytics tracking</Text>
-    </View>
-  </View>
-</CheckboxGroup>
-```
-
-### Filter controls
-
-```tsx
-<CheckboxGroup value={activeFilters} onValueChange={setActiveFilters}>
-  <Text style={styles.filterTitle}>Filter by category:</Text>
-  <View style={{ gap: 8 }}>
-    <Checkbox value="electronics" />
-    <Text>Electronics</Text>
-    
-    <Checkbox value="clothing" />
-    <Text>Clothing</Text>
-    
-    <Checkbox value="books" />
-    <Text>Books</Text>
-  </View>
-</CheckboxGroup>
-```
+| Platform              | Implementation                     | Characteristics               |
+| --------------------- | ---------------------------------- | ----------------------------- |
+| **iOS / Android**     | Context-based state coordination   | Native performance            |
+| **Web**               | Fieldset with checkboxes           | Form compatible               |
+| **All Platforms**     | Consistent API                     | Same props, same behavior     |
 
 ---
 
-## Changelog
+## Accessibility
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| `0.1.0` | Initial release. Group management for checkboxes. |
+**Web:**
+
+* Wraps in `<fieldset>` for semantic grouping
+* Proper keyboard navigation
+* Form validation support
+
+**Mobile:**
+
+* Group label announced by screen readers
+* Individual checkbox states accessible
+
+---
+
+## Version History
+
+| Version | Notes                                                                   |
+| ------- | ----------------------------------------------------------------------- |
+| `0.1.0` | Initial release — checkbox group with array-based state management. |
+
+---
+
+**Summary:**
+CheckboxGroup simplifies managing multiple checkbox selections.
+Use it for multi-select forms, filter options, or settings panels.
+Provides coordinated state management with array-based values.
 

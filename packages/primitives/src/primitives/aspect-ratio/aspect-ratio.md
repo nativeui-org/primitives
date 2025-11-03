@@ -1,169 +1,133 @@
-# AspectRatio Primitive
+# Aspect Ratio
 
-A component that maintains a specific aspect ratio for its content.
-
----
-
-## What is AspectRatio?
-
-AspectRatio ensures that a container maintains a specific width-to-height ratio, regardless of its content or screen size. This is essential for responsive images, videos, cards, and other UI elements that need consistent proportions.
-
-**Platform behavior:**
-- **Web**: Uses CSS `aspect-ratio` property
-- **Native**: Uses padding-bottom trick for aspect ratio simulation
+Maintain **consistent width-to-height ratios** for responsive images, videos, and containers across all screen sizes.
 
 ---
 
-## When should you use it?
+## Overview
 
-✅ Use AspectRatio if:
-- You need **responsive images** that maintain proportions
-- You're building **video players** or media containers
-- You want **consistent card layouts** across screen sizes
-- You need **square thumbnails** or **16:9 banners**
-- You're creating **responsive grids** with uniform cells
+Aspect Ratio ensures elements maintain their proportions regardless of container size, perfect for media content.
 
-⚠️ Consider alternatives if:
-- You need fixed dimensions (use `width` and `height`)
-- You're building simple layouts (use flexbox)
+| Feature          | Description                          | Platforms         |
+| ---------------- | ------------------------------------ | ----------------- |
+| **AspectRatio**  | Container with fixed aspect ratio    | iOS, Android, Web |
 
 ---
 
-## API
+## Setup & Usage Guide
 
-### AspectRatio
+AspectRatio provides a simple wrapper that maintains proportions automatically.
 
-| Prop     | Type                | Default | Description                                    |
-|----------|---------------------|---------|------------------------------------------------|
-| `ratio`  | `number \| string`  | -       | Aspect ratio (e.g., `16/9`, `"16:9"`, `"1:1"`) |
-| `asChild`| `boolean`           | `false` | Use Slot pattern                               |
+### 1. Install and Import
 
-**Ratio formats:**
-- `number`: `16/9`, `1`, `0.75`
-- `string`: `"16:9"`, `"1:1"`, `"4:3"`, `"16/9"`
+Install from npm:
 
----
+```bash
+npm install @native-ui-org/primitives
+```
 
-## Examples
-
-### Basic usage
+Then import from the package:
 
 ```tsx
 import { AspectRatio } from "@native-ui-org/primitives";
-import { Image } from "react-native";
+```
 
-<AspectRatio ratio={16/9}>
-  <Image 
-    source={{ uri: 'https://example.com/image.jpg' }}
-    style={{ width: '100%', height: '100%' }}
-    resizeMode="cover"
-  />
+---
+
+### 2. Basic Usage
+
+Create a 16:9 container:
+
+```tsx
+<AspectRatio ratio={16 / 9}>
+  <Image source={{ uri: 'photo.jpg' }} style={{ width: '100%', height: '100%' }} />
 </AspectRatio>
 ```
 
-### Square container
+---
+
+### 3. Common Ratios
 
 ```tsx
-<AspectRatio ratio="1:1">
-  <View style={{ backgroundColor: '#f0f0f0', justifyContent: 'center', alignItems: 'center' }}>
-    <Text>Square</Text>
-  </View>
+// 16:9 (widescreen video)
+<AspectRatio ratio={16 / 9}>
+  <Video source={videoUrl} />
+</AspectRatio>
+
+// 1:1 (square, perfect for avatars)
+<AspectRatio ratio={1}>
+  <Image source={avatar} />
+</AspectRatio>
+
+// 4:3 (standard photo)
+<AspectRatio ratio={4 / 3}>
+  <Image source={photo} />
+</AspectRatio>
+
+// 21:9 (ultra-wide)
+<AspectRatio ratio={21 / 9}>
+  <View style={styles.banner} />
 </AspectRatio>
 ```
 
-### Video player
+---
+
+### 4. Responsive Images
 
 ```tsx
-<AspectRatio ratio="16:9">
-  <VideoPlayer
-    source={{ uri: 'video.mp4' }}
-    style={{ width: '100%', height: '100%' }}
-  />
-</AspectRatio>
-```
-
-### Card with asChild
-
-```tsx
-<AspectRatio ratio="4:3" asChild>
-  <Pressable style={styles.card}>
-    <Text>Clickable card</Text>
-  </Pressable>
-</AspectRatio>
-```
-
-### Responsive grid
-
-```tsx
-<View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-  {items.map((item, index) => (
-    <View key={index} style={{ width: '50%', padding: 8 }}>
-      <AspectRatio ratio="1:1">
-        <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%' }} />
-      </AspectRatio>
-    </View>
-  ))}
+<View style={{ width: '100%', maxWidth: 600 }}>
+  <AspectRatio ratio={16 / 9}>
+    <Image
+      source={{ uri: 'https://example.com/image.jpg' }}
+      style={{ width: '100%', height: '100%' }}
+      resizeMode="cover"
+    />
+  </AspectRatio>
 </View>
 ```
 
-### Different ratios
+---
 
-```tsx
-// Common aspect ratios
-<AspectRatio ratio="16:9">   {/* Widescreen */}
-<AspectRatio ratio="4:3">    {/* Standard */}
-<AspectRatio ratio="1:1">    {/* Square */}
-<AspectRatio ratio="3:2">    {/* Photo */}
-<AspectRatio ratio="21:9">   {/* Ultrawide */}
-<AspectRatio ratio="9:16">   {/* Portrait/Stories */}
-```
+## API Reference
+
+### AspectRatio
+
+Container that maintains aspect ratio.
+
+| Prop       | Type     | Default | Description                                 |
+| ---------- | -------- | ------- | ------------------------------------------- |
+| `ratio`    | number   | —       | **Required.** Width / height (e.g., 16/9)  |
+| `style`    | object   | —       | Additional styles                           |
+| `asChild`  | boolean  | `false` | Use Slot pattern                            |
+| `...props` | any      | —       | Standard View props                         |
 
 ---
 
-## Platform Differences
+## Platform Behavior
 
-### Web
-- Uses CSS `aspect-ratio` property
-- Content fills the container naturally
-- Better performance and simpler implementation
-
-### Native (iOS/Android)
-- Uses padding-bottom trick: `paddingBottom: ${(1/ratio) * 100}%`
-- Content positioned absolutely to fill the container
-- Compatible with all React Native versions
+| Platform              | Implementation                   | Characteristics                   |
+| --------------------- | -------------------------------- | --------------------------------- |
+| **iOS / Android**     | Calculated height based on width | Native layout performance         |
+| **Web**               | CSS aspect-ratio or padding trick | Responsive and fluid              |
+| **All Platforms**     | Consistent API                   | Same props, same behavior         |
 
 ---
 
-## Implementation Details
+## Accessibility
 
-### Ratio Parsing
-```tsx
-// Supported formats
-"16:9"  → 16/9 = 1.777...
-"1:1"   → 1/1 = 1
-"4/3"   → 4/3 = 1.333...
-16/9    → 1.777... (number)
-```
-
-### Native Fallback
-```tsx
-// Native implementation
-const aspectRatioStyle = {
-  height: 0,
-  paddingBottom: `${(1 / aspectRatio) * 100}%`,
-  position: "relative",
-};
-
-const contentStyle = {
-  position: "absolute",
-  top: 0, left: 0, right: 0, bottom: 0,
-};
-```
+AspectRatio is a layout utility and transparent to accessibility. All accessibility props are passed through to children.
 
 ---
 
-## Changelog
+## Version History
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| `0.1.0` | Initial release. Basic aspect ratio functionality. |
+| Version | Notes                                                    |
+| ------- | -------------------------------------------------------- |
+| `0.1.0` | Initial release — aspect ratio container for all platforms. |
+
+---
+
+**Summary:**
+AspectRatio maintains consistent proportions for media and containers.
+Use it for images, videos, cards, or any content that needs fixed aspect ratios.
+Works automatically across all screen sizes and platforms.

@@ -1,118 +1,171 @@
-# Toggle Primitive
+# Toggle
 
-A component for button-like toggles (like formatting buttons).
-
----
-
-## What is Toggle?
-
-Toggle provides a way to create button-like toggles that can be pressed/unpressed. Unlike switches, toggles are typically used for actions like formatting (bold, italic, underline) or mode selection. The component stays "pressed" when active and returns to normal when inactive.
-
-**Platform behavior:**
-- **Web & Native**: Consistent rendering with proper accessibility
-- **Accessibility**: Full ARIA support and screen reader compatibility
-- **State Management**: Controlled and uncontrolled modes
-- **Customizable**: Complete control via asChild pattern
+Create **button-style toggles** for pressed/unpressed states, perfect for toolbars and formatting controls.
 
 ---
 
-## API
+## Overview
 
-### Toggle
+Toggle is a button that maintains pressed state, commonly used in toolbars and formatting controls.
 
-| Prop              | Type                      | Default | Description                                    |
-|-------------------|---------------------------|---------|------------------------------------------------|
-| `pressed`        | `boolean`                 | -       | Whether the toggle is pressed/active           |
-| `defaultPressed` | `boolean`                 | `false` | Default pressed state (uncontrolled)           |
-| `disabled`       | `boolean`                 | `false` | Whether the toggle is disabled                 |
-| `value`          | `string`                  | -       | The value (used in groups)                     |
-| `onPressedChange`| `(pressed: boolean) => void` | -    | Callback when pressed state changes            |
-| `asChild`        | `boolean`                 | `false` | Use Slot pattern                               |
+| Feature    | Description                          | Platforms         |
+| ---------- | ------------------------------------ | ----------------- |
+| **Toggle** | Button with persistent pressed state | iOS, Android, Web |
 
 ---
 
-## Examples
+## Setup & Usage Guide
 
-### Basic usage
+Toggle provides button-style controls that stay pressed when activated.
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
 
 ```tsx
 import { Toggle } from "@native-ui-org/primitives";
+```
 
-const [pressed, setPressed] = useState(false);
+---
 
-<Toggle 
-  pressed={pressed} 
-  onPressedChange={setPressed} 
->
-  <Text>Toggle me</Text>
+### 2. Basic Usage (Uncontrolled)
+
+Let the component manage its own state:
+
+```tsx
+<Toggle defaultPressed={false}>
+  {({ pressed }) => (
+    <View style={pressed ? styles.pressed : styles.unpressed}>
+      <Icon name="bold" color={pressed ? 'blue' : 'black'} />
+    </View>
+  )}
 </Toggle>
 ```
 
-### Formatting buttons
+---
+
+### 3. Controlled State
+
+Manage toggle state externally:
 
 ```tsx
 const [isBold, setIsBold] = useState(false);
-const [isItalic, setIsItalic] = useState(false);
 
-<View style={{ flexDirection: "row", gap: 8 }}>
-  <Toggle pressed={isBold} onPressedChange={setIsBold}>
-    <Text style={{ fontWeight: 'bold' }}>B</Text>
+<Toggle pressed={isBold} onPressedChange={setIsBold}>
+  {({ pressed }) => (
+    <View style={pressed ? styles.active : styles.inactive}>
+      <Icon name="bold" />
+    </View>
+  )}
+</Toggle>
+```
+
+---
+
+### 4. Formatting Toolbar
+
+```tsx
+<View style={styles.toolbar}>
+  <Toggle pressed={bold} onPressedChange={setBold}>
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="bold" />
+      </View>
+    )}
   </Toggle>
   
-  <Toggle pressed={isItalic} onPressedChange={setIsItalic}>
-    <Text style={{ fontStyle: 'italic' }}>I</Text>
+  <Toggle pressed={italic} onPressedChange={setItalic}>
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="italic" />
+      </View>
+    )}
   </Toggle>
   
-  <Toggle pressed={isUnderline} onPressedChange={setIsUnderline}>
-    <Text style={{ textDecorationLine: 'underline' }}>U</Text>
+  <Toggle pressed={underline} onPressedChange={setUnderline}>
+    {({ pressed }) => (
+      <View style={pressed && styles.active}>
+        <Icon name="underline" />
+      </View>
+    )}
   </Toggle>
 </View>
 ```
 
-### Default pressed state
+---
+
+### 5. Disabled State
 
 ```tsx
-<Toggle 
-  defaultPressed={true}
-  onPressedChange={setPressed} 
->
-  <Text>Default active</Text>
-</Toggle>
-```
-
-### Disabled state
-
-```tsx
-<Toggle 
-  pressed={true}
-  disabled={true}
->
-  <Text>Disabled toggle</Text>
-</Toggle>
-```
-
-### Custom styling with asChild
-
-```tsx
-<Toggle asChild pressed={isActive}>
-  <Pressable style={[
-    styles.toggleButton,
-    isActive && styles.toggleButtonActive
-  ]}>
-    <Text style={[
-      styles.toggleText,
-      isActive && styles.toggleTextActive
-    ]}>
-      Format
-    </Text>
-  </Pressable>
+<Toggle disabled pressed={true}>
+  {({ pressed }) => (
+    <View style={styles.disabled}>
+      <Icon name="star" />
+    </View>
+  )}
 </Toggle>
 ```
 
 ---
 
-## Changelog
+## API Reference
 
-| Version | Changes                                    |
-|---------|--------------------------------------------|
-| `0.1.0` | Initial release. Basic toggle functionality. |
+### Toggle
+
+Button with persistent pressed state.
+
+| Prop               | Type                          | Default | Description                         |
+| ------------------ | ----------------------------- | ------- | ----------------------------------- |
+| `pressed`          | boolean                       | —       | Controlled pressed state            |
+| `defaultPressed`   | boolean                       | `false` | Initial state (uncontrolled)        |
+| `onPressedChange`  | `(pressed: boolean) => void`  | —       | Callback when state changes         |
+| `disabled`         | boolean                       | `false` | Disable interactions                |
+| `children`         | `function \| React.ReactNode` | —       | Render function or static content   |
+
+---
+
+## Platform Behavior
+
+| Platform              | Implementation              | Characteristics                   |
+| --------------------- | --------------------------- | --------------------------------- |
+| **iOS / Android**     | Pressable with state        | Native touch feedback             |
+| **Web**               | Button with toggle state    | Keyboard accessible               |
+| **All Platforms**     | Consistent API              | Same props, same behavior         |
+
+---
+
+## Accessibility
+
+**Web:**
+
+* `role="button"`
+* `aria-pressed` reflects state
+* Keyboard support (Space/Enter to toggle)
+* Focus management
+
+**Mobile:**
+
+* Accessibility role "togglebutton"
+* State announced to screen readers
+* Works with VoiceOver and TalkBack
+
+---
+
+## Version History
+
+| Version | Notes                                                                          |
+| ------- | ------------------------------------------------------------------------------ |
+| `0.1.0` | Initial release — toggle button with controlled/uncontrolled states. |
+
+---
+
+**Summary:**
+Toggle provides button-style controls with persistent pressed state.
+Use it for toolbars, formatting controls, or any button that stays active.
+Different from Switch — Toggle is for actions, Switch is for settings.
