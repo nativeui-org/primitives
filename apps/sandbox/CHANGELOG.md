@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.8.1
+
+### Patch Changes
+
+- a1f51f6: update deployments
+
 ## 0.8.0
 
 ### Minor Changes
