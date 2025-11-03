@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.7.4
+
+### Patch Changes
+
+- 440a7e6: update deploy (final normally without npm publish)
+
 ## 0.7.3
 
 ### Patch Changes
