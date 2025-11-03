@@ -118,55 +118,61 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
 
-      - name: Check and Release Apps
-        if: steps.changesets.outputs.published == 'true' || steps.changesets.outputs.hasChangesets == 'false'
+      - name: Release Apps (Sandbox & Website)
+        if: steps.changesets.outputs.published == 'true'
         run: |
-          # Check if sandbox version changed
-          sandboxVersion=$(jq -r '.version' apps/sandbox/package.json)
-          if ! git rev-parse "sandbox@${sandboxVersion}" >/dev/null 2>&1; then
-            echo "Creating release for sandbox@${sandboxVersion}"
-            
+          # Only release if version was changed in THIS commit (merge from Changesets PR)
+          
+          # Check sandbox
+          if git diff HEAD^ HEAD --name-only | grep -q "apps/sandbox/package.json"; then
+            sandboxVersion=$(jq -r '.version' apps/sandbox/package.json)
             tag="sandbox@${sandboxVersion}"
-            git tag "$tag"
-            git push origin "$tag"
             
-            releaseNotesFile=$(mktemp)
-            echo "## 🚀 Sandbox ${sandboxVersion}" >> "$releaseNotesFile"
-            echo "" >> "$releaseNotesFile"
-            echo "### 🌐 Live Demo" >> "$releaseNotesFile"
-            echo "" >> "$releaseNotesFile"
-            echo "Visit [sandbox-primitives.nativeui.io](https://sandbox-primitives.nativeui.io) to try the interactive demos." >> "$releaseNotesFile"
-            
-            gh release create "$tag" \
-              --title "$tag" \
-              --notes-file "$releaseNotesFile" \
-              --repo nativeui-org/primitives
-            
-            rm "$releaseNotesFile"
+            if ! git rev-parse "$tag" >/dev/null 2>&1; then
+              echo "✅ Releasing sandbox@${sandboxVersion}"
+              git tag "$tag"
+              git push origin "$tag"
+              
+              releaseNotesFile=$(mktemp)
+              echo "## 🚀 Sandbox ${sandboxVersion}" >> "$releaseNotesFile"
+              echo "" >> "$releaseNotesFile"
+              echo "### 🌐 Live Demo" >> "$releaseNotesFile"
+              echo "" >> "$releaseNotesFile"
+              echo "Visit [sandbox-primitives.nativeui.io](https://sandbox-primitives.nativeui.io)" >> "$releaseNotesFile"
+              
+              gh release create "$tag" \
+                --title "$tag" \
+                --notes-file "$releaseNotesFile" \
+                --repo nativeui-org/primitives
+              
+              rm "$releaseNotesFile"
+            fi
           fi
           
-          # Check if website version changed
-          websiteVersion=$(jq -r '.version' apps/website/package.json)
-          if ! git rev-parse "website@${websiteVersion}" >/dev/null 2>&1; then
-            echo "Creating release for website@${websiteVersion}"
-            
+          # Check website
+          if git diff HEAD^ HEAD --name-only | grep -q "apps/website/package.json"; then
+            websiteVersion=$(jq -r '.version' apps/website/package.json)
             tag="website@${websiteVersion}"
-            git tag "$tag"
-            git push origin "$tag"
             
-            releaseNotesFile=$(mktemp)
-            echo "## 🚀 Website ${websiteVersion}" >> "$releaseNotesFile"
-            echo "" >> "$releaseNotesFile"
-            echo "### 📚 Documentation" >> "$releaseNotesFile"
-            echo "" >> "$releaseNotesFile"
-            echo "Visit [primitives.nativeui.io](https://primitives.nativeui.io) for the latest documentation." >> "$releaseNotesFile"
-            
-            gh release create "$tag" \
-              --title "$tag" \
-              --notes-file "$releaseNotesFile" \
-              --repo nativeui-org/primitives
-            
-            rm "$releaseNotesFile"
+            if ! git rev-parse "$tag" >/dev/null 2>&1; then
+              echo "✅ Releasing website@${websiteVersion}"
+              git tag "$tag"
+              git push origin "$tag"
+              
+              releaseNotesFile=$(mktemp)
+              echo "## 🚀 Website ${websiteVersion}" >> "$releaseNotesFile"
+              echo "" >> "$releaseNotesFile"
+              echo "### 📚 Documentation" >> "$releaseNotesFile"
+              echo "" >> "$releaseNotesFile"
+              echo "Visit [primitives.nativeui.io](https://primitives.nativeui.io)" >> "$releaseNotesFile"
+              
+              gh release create "$tag" \
+                --title "$tag" \
+                --notes-file "$releaseNotesFile" \
+                --repo nativeui-org/primitives
+              
+              rm "$releaseNotesFile"
+            fi
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
