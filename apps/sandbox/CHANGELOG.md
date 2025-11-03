@@ -1,5 +1,12 @@
 # @native-ui-org/sandbox
 
+## 0.10.0
+
+### Minor Changes
+
+- ece3c68: update deploy
+- 57bece8: updating
+
 ## 0.9.0
 
 ### Minor Changes
