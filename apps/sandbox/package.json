@@ -6,7 +6,9 @@
     "dev": "expo start",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "build": "expo export -p web",
+    "build:web": "expo export -p web"
   },
   "dependencies": {
     "@native-ui-org/context-menu": "workspace:*",
@@ -16,7 +18,9 @@
     "expo-status-bar": "~3.0.8",
     "lucide-react-native": "^0.546.0",
     "react": "19.1.0",
+    "react-dom": "19.1.0",
     "react-native": "0.81.4",
+    "react-native-web": "~0.19.13",
     "react-native-safe-area-context": "^5.6.1",
     "react-native-screens": "^4.16.0"
   },

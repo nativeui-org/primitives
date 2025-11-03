@@ -5,8 +5,10 @@ interface PreviewProps {
   title?: string;
 }
 
+const SANDBOX_URL = process.env.NEXT_PUBLIC_SANDBOX_URL || 'https://nativeui-sandbox.vercel.app';
+
 export function Preview({ component, title }: PreviewProps) {
-  const previewUrl = `https://sandbox-primitives.nativeui.com/preview/${component}`;
+  const previewUrl = `${SANDBOX_URL}/preview/${component}`;
 
   return (
     <div className="my-6 border border-neutral-200 dark:border-neutral-800 rounded-lg overflow-hidden">

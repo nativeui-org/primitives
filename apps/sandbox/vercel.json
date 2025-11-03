@@ -1,0 +1,13 @@
+{
+  "buildCommand": "cd ../.. && pnpm install --filter @native-ui-org/sandbox... && pnpm --filter @native-ui-org/primitives build && pnpm --filter @native-ui-org/sandbox build",
+  "outputDirectory": "dist",
+  "installCommand": "cd ../.. && pnpm install --filter @native-ui-org/sandbox...",
+  "framework": null,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
