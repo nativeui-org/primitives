@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.7.0
+
+### Minor Changes
+
+- bce43fd: update deploy
+
 ## 0.6.0
 
 ### Minor Changes
