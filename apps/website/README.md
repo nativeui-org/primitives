@@ -1,45 +1,205 @@
-# website
+# NativeUI Website
 
-This is a Next.js application generated with
-[Create Fumadocs](https://github.com/fuma-nama/fumadocs).
+Documentation website for NativeUI Primitives, powered by [Fumadocs](https://fumadocs.dev) and [Next.js](https://nextjs.org).
 
-Run development server:
+## 🚀 Quick Start
 
 ```bash
-npm run dev
-# or
+# Install dependencies
+pnpm install
+
+# Sync documentation from primitives
+pnpm sync-docs
+
+# Start development server
 pnpm dev
-# or
-yarn dev
 ```
 
-Open http://localhost:3000 with your browser to see the result.
+Visit http://localhost:3000
 
-## Explore
+## 📚 Documentation System
 
-In the project, you can see:
+### Automatic Documentation Generation
 
-- `lib/source.ts`: Code for content source adapter, [`loader()`](https://fumadocs.dev/docs/headless/source-api) provides the interface to access your content.
-- `lib/layout.shared.tsx`: Shared options for layouts, optional but preferred to keep.
+This website features an automated documentation system that converts markdown files from the primitives package into rich, interactive MDX documentation.
 
-| Route                     | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `app/(home)`              | The route group for your landing page and other pages. |
-| `app/docs`                | The documentation layout and pages.                    |
-| `app/api/search/route.ts` | The Route Handler for search.                          |
+**Key Features:**
+- 📦 **Installation tabs** (npm/pnpm/yarn/bun)
+- 🎮 **Interactive previews** (embedded sandbox)
+- 📝 **Auto-generated** from source markdown
+- 🎨 **Modern UI** with dark mode
+- 🔍 **Full-text search**
 
-### Fumadocs MDX
+### Commands
 
-A `source.config.ts` config file has been included, you can customise different options like frontmatter schema.
+```bash
+# Sync documentation from packages/primitives
+pnpm sync-docs
 
-Read the [Introduction](https://fumadocs.dev/docs/mdx) for further details.
+# Development server
+pnpm dev
 
-## Learn More
+# Build for production
+pnpm build
 
-To learn more about Next.js and Fumadocs, take a look at the following
-resources:
+# Start production server
+pnpm start
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-- [Fumadocs](https://fumadocs.dev) - learn about Fumadocs
+# Lint code
+pnpm lint
+
+# Format code
+pnpm format
+```
+
+## 📖 Documentation Workflow
+
+### 1. Write Documentation
+
+Edit markdown files in `packages/primitives/src/primitives/{component}/{component}.md`
+
+```md
+# Component Name
+
+Brief description here.
+
+## When should you use it?
+
+...
+
+## API
+
+...
+
+## Examples
+
+...
+```
+
+### 2. Sync to Website
+
+```bash
+pnpm sync-docs
+```
+
+This automatically:
+- Extracts frontmatter (title, description)
+- Adds `<Preview />` component first (if preview exists)
+- Adds `<InstallTabs />` component after preview
+- Converts to MDX format
+- Outputs to `docs/` directory
+
+### 3. Preview
+
+```bash
+pnpm dev
+```
+
+Visit http://localhost:3000/docs/{component}
+
+## 🎨 Custom MDX Components
+
+### `<InstallTabs />`
+
+Interactive package manager tabs.
+
+```mdx
+<InstallTabs />
+<InstallTabs package="@native-ui-org/context-menu" />
+```
+
+### `<Preview component="name" />`
+
+Embedded sandbox preview.
+
+```mdx
+<Preview component="alert" title="Interactive Demo" />
+```
+
+## 📁 Project Structure
+
+```
+apps/website/
+├── src/
+│   ├── app/              # Next.js App Router
+│   ├── components/mdx/   # Custom MDX components
+│   ├── lib/              # Utilities
+│   └── mdx-components.tsx
+├── docs/                 # Documentation files (generated)
+├── scripts/              # Build scripts
+│   ├── sync-docs.ts      # Documentation sync script
+│   ├── README.md         # Script documentation
+│   └── EXAMPLE.md        # Before/after example
+├── public/               # Static assets
+└── DOCUMENTATION_SYSTEM.md  # System overview
+```
+
+## 🔧 Configuration
+
+### Fumadocs
+
+Configuration in `source.config.ts`:
+
+```ts
+export const docs = defineDocs({
+  dir: 'docs',
+  docs: {
+    schema: frontmatterSchema,
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
+  },
+});
+```
+
+### Next.js
+
+Standard Next.js configuration in `next.config.mjs`.
+
+### MDX
+
+Custom components are registered in `src/mdx-components.tsx`.
+
+## 📚 Additional Resources
+
+- **[DOCUMENTATION_SYSTEM.md](./DOCUMENTATION_SYSTEM.md)** - Complete system overview
+- **[scripts/README.md](./scripts/README.md)** - Script documentation
+- **[scripts/EXAMPLE.md](./scripts/EXAMPLE.md)** - Before/after examples
+- **[../packages/primitives/DOCUMENTATION_GUIDE.md](../../packages/primitives/DOCUMENTATION_GUIDE.md)** - Writing guide
+
+## 🛠️ Development
+
+### Adding New Components
+
+1. Create markdown: `packages/primitives/src/primitives/{name}/{name}.md`
+2. (Optional) Create preview: `apps/sandbox/app/preview/{name}.tsx`
+3. Sync docs: `pnpm sync-docs`
+4. Preview: `pnpm dev`
+
+### Modifying MDX Components
+
+Edit files in `src/components/mdx/`:
+- `InstallTabs.tsx` - Installation tabs component
+- `Preview.tsx` - Preview iframe component
+
+### Changing Documentation Layout
+
+Edit `src/app/docs/layout.tsx` and related files.
+
+## 🐛 Troubleshooting
+
+**Documentation not updating?**
+- Run `pnpm sync-docs` again
+- Restart dev server (`pnpm dev`)
+
+**Preview not showing?**
+- Verify sandbox URL is accessible
+- Check preview file exists in `apps/sandbox/app/preview/`
+
+**Build errors?**
+- Run `pnpm install`
+- Check TypeScript errors: `tsc --noEmit`
+
+## 📝 License
+
+MIT

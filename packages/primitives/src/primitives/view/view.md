@@ -1,4 +1,4 @@
-# View Primitive
+# View
 
 A cross-platform primitive based on React Native’s `View`.  
 

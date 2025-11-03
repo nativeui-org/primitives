@@ -1,13 +1,60 @@
 ---
-title: Hello World
-description: Your first document
+title: Getting Started
+description: Welcome to NativeUI Primitives documentation
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+## Introduction
 
-## What is Next?
+NativeUI Primitives is a collection of **low-level UI primitives** for building cross-platform design systems that work seamlessly across **iOS**, **Android**, and **Web** with a unified API.
 
-<Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
-</Cards>
+## Installation
+
+<InstallTabs />
+
+---
+
+## Philosophy
+
+- **Unstyled by default** - Full control over styling
+- **Accessible** - ARIA support and semantic HTML on web
+- **Cross-platform** - Write once, run everywhere
+- **Type-safe** - Full TypeScript support
+- **Minimal** - Small bundle size, zero dependencies
+
+## Available Primitives
+
+Browse the sidebar to explore all available primitives.
+
+## Quick Example
+
+```tsx
+import { View, Text, showAlert } from '@native-ui-org/primitives';
+
+function MyComponent() {
+  const handlePress = async () => {
+    const result = await showAlert({
+      title: 'Confirm',
+      message: 'Are you sure?',
+      buttons: [
+        { text: 'Cancel', value: 'cancel', style: 'cancel' },
+        { text: 'OK', value: 'ok' }
+      ]
+    });
+    
+    console.log('Result:', result);
+  };
+
+  return (
+    <View>
+      <Text as="h1">Hello World</Text>
+      <button onPress={handlePress}>Show Alert</button>
+    </View>
+  );
+}
+```
+
+## Next Steps
+
+- Explore the [View](/docs/view) primitive
+- Learn about [Text](/docs/text) rendering
+- Try the interactive [Preview](/docs/alert#preview) demos
