@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.12.1
+
+### Patch Changes
+
+- 3867ed1: update deploy (final please)
+
 ## 0.12.0
 
 ### Minor Changes
