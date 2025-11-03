@@ -1,11 +1,5 @@
 # @native-ui-org/website
 
-## 0.3.4
-
-### Patch Changes
-
-- 7e78a99: update deployments
-
 ## 0.3.3
 
 ### Patch Changes

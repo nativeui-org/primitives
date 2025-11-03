@@ -40,11 +40,11 @@ import { Portal } from "@native-ui-org/primitives";
 Render content at document root (web only):
 
 ```tsx
-<Portal>
+    <Portal>
   <View style={styles.overlay}>
     <Text>This renders at document.body on web</Text>
   </View>
-</Portal>
+    </Portal>
 ```
 
 ---
@@ -54,13 +54,13 @@ Render content at document root (web only):
 Specify a custom DOM container:
 
 ```tsx
-const modalRoot = document.getElementById('modal-root');
-
-<Portal container={modalRoot}>
+  const modalRoot = document.getElementById('modal-root');
+  
+    <Portal container={modalRoot}>
   <View style={styles.modal}>
     <Text>Modal content</Text>
   </View>
-</Portal>
+    </Portal>
 ```
 
 ---
@@ -77,10 +77,10 @@ function Modal({ open, children }) {
     <Portal>
       <View style={styles.overlay}>
         <View style={styles.modalContent}>
-          {children}
+        {children}
         </View>
       </View>
-    </Portal>
+        </Portal>
   );
 }
 ```

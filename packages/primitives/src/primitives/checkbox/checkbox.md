@@ -73,7 +73,7 @@ const [checked, setChecked] = useState(false);
     {({ checked }) => (
       <View style={styles.indicator}>
         {checked && <Text>✓</Text>}
-      </View>
+</View>
     )}
   </CheckboxIndicator>
   <CheckboxLabel>
@@ -92,7 +92,7 @@ const [checked, setChecked] = useState(false);
     {({ checked }) => (
       <View style={styles.indicatorDisabled}>
         {checked && <Icon name="check" color="#ccc" />}
-      </View>
+    </View>
     )}
   </CheckboxIndicator>
   <CheckboxLabel>

@@ -57,7 +57,7 @@ Manage toggle state externally:
 ```tsx
 const [isBold, setIsBold] = useState(false);
 
-<Toggle pressed={isBold} onPressedChange={setIsBold}>
+  <Toggle pressed={isBold} onPressedChange={setIsBold}>
   {({ pressed }) => (
     <View style={pressed ? styles.active : styles.inactive}>
       <Icon name="bold" />

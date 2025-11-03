@@ -45,15 +45,15 @@ import {
 Let the component manage its own state:
 
 ```tsx
-<Collapsible defaultOpen={false}>
+    <Collapsible defaultOpen={false}>
   <CollapsibleTrigger>
     <Text>Toggle Content</Text>
-  </CollapsibleTrigger>
-  
+      </CollapsibleTrigger>
+      
   <CollapsibleContent>
     <Text>Hidden content that appears when opened</Text>
-  </CollapsibleContent>
-</Collapsible>
+      </CollapsibleContent>
+    </Collapsible>
 ```
 
 ---
@@ -66,14 +66,14 @@ Manage the open/closed state yourself:
 const [isOpen, setIsOpen] = useState(false);
 
 <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-  <CollapsibleTrigger>
+        <CollapsibleTrigger>
     <Text>{isOpen ? 'Close' : 'Open'}</Text>
-  </CollapsibleTrigger>
-  
-  <CollapsibleContent>
-    <Text>Controlled content</Text>
-  </CollapsibleContent>
-</Collapsible>
+        </CollapsibleTrigger>
+        
+        <CollapsibleContent>
+          <Text>Controlled content</Text>
+        </CollapsibleContent>
+      </Collapsible>
 ```
 
 ---
@@ -83,16 +83,16 @@ const [isOpen, setIsOpen] = useState(false);
 Add styles and icons:
 
 ```tsx
-<Collapsible>
+      <Collapsible>
   <CollapsibleTrigger style={styles.trigger}>
     <Text>FAQ Question</Text>
     <Icon name={isOpen ? "chevron-up" : "chevron-down"} />
-  </CollapsibleTrigger>
-  
+      </CollapsibleTrigger>
+      
   <CollapsibleContent style={styles.content}>
     <Text>Answer to the question...</Text>
-  </CollapsibleContent>
-</Collapsible>
+      </CollapsibleContent>
+    </Collapsible>
 ```
 
 ---
