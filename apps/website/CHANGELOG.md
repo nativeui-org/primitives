@@ -1,5 +1,12 @@
 # @native-ui-org/website
 
+## 0.5.0
+
+### Minor Changes
+
+- ece3c68: update deploy
+- 57bece8: updating
+
 ## 0.4.0
 
 ### Minor Changes
