@@ -122,6 +122,9 @@ jobs:
         if: always()
         run: |
           echo "🔍 Checking for app version changes in this commit..."
+          echo "Files changed:"
+          git diff HEAD^ HEAD --name-only
+          echo ""
           
           # Check sandbox
           if git diff HEAD^ HEAD --name-only | grep -q "apps/sandbox/package.json"; then
