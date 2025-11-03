@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd ../.. && pnpm install --filter @native-ui-org/website... && pnpm --filter @native-ui-org/website sync-docs && pnpm --filter @native-ui-org/website build",
+  "installCommand": "pnpm install --filter @native-ui-org/website...",
+  "framework": "nextjs"
+}
+
