@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.6.0
+
+### Minor Changes
+
+- 6fbf6d5: deploy test
+
 ## 0.5.0
 
 ### Minor Changes
