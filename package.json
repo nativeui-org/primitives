@@ -8,9 +8,12 @@
   ],
   "scripts": {
     "dev": "pnpm -r --parallel --filter \"./apps/**\" run dev",
-    "build": "pnpm -r --filter \"./packages/**\" run build && pnpm -r --filter \"./apps/**\" run build",
+    "dev:website": "pnpm --filter @native-ui-org/website dev",
+    "dev:sandbox": "pnpm --filter @native-ui-org/sandbox dev",
+    "build": "pnpm -r --filter \"./packages/**\" run build && pnpm --filter @native-ui-org/website build",
     "build:packages": "pnpm -r --filter \"./packages/**\" run build",
-    "build:apps": "pnpm -r --filter \"./apps/**\" run build",
+    "build:website": "pnpm --filter @native-ui-org/website build",
+    "sync-docs": "pnpm --filter @native-ui-org/website sync-docs",
     "lint": "pnpm -r lint || true",
     "release": "pnpm changeset",
     "test": "pnpm -r --filter @native-ui-org/primitives run test"
