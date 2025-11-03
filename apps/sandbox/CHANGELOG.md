@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.12.4
+
+### Patch Changes
+
+- 440a7e6: update deploy (final normally without npm publish)
+
 ## 0.12.3
 
 ### Patch Changes
