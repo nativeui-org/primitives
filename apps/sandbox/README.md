@@ -95,8 +95,8 @@ apps/sandbox/
 ## 🌐 URLs
 
 **Production:**
-- Sandbox: https://sandbox-primitives.nativeui.com
-- Website: https://primitives.nativeui.com (embeds sandbox previews)
+- Sandbox: https://sandbox-primitives.nativeui.io
+- Website: https://primitives.nativeui.io (embeds sandbox previews)
 
 **Preview URLs in Documentation:**
 
@@ -107,7 +107,7 @@ The website documentation embeds sandbox previews using:
 
 Which renders an iframe to:
 ```
-https://sandbox-primitives.nativeui.com/preview/alert
+https://sandbox-primitives.nativeui.io/preview/alert
 ```
 
 ## 🔧 Adding New Previews

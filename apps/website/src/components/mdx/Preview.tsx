@@ -5,7 +5,7 @@ interface PreviewProps {
   title?: string;
 }
 
-const SANDBOX_URL = process.env.NEXT_PUBLIC_SANDBOX_URL || 'https://nativeui-sandbox.vercel.app';
+const SANDBOX_URL = process.env.NEXT_PUBLIC_SANDBOX_URL || 'https://sandbox-primitives.nativeui.io';
 
 export function Preview({ component, title }: PreviewProps) {
   const previewUrl = `${SANDBOX_URL}/preview/${component}`;
