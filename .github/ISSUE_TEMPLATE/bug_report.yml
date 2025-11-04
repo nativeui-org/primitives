@@ -1,0 +1,105 @@
+name: "Bug report"
+description: Report an issue
+title: '[bug]: '
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### Thanks for taking the time to create a bug report. Please search open/closed issues before submitting, as the issue may have already been reported/addressed.
+ 
+  - type: markdown
+    attributes:
+      value: |
+        #### If you aren't sure this is a bug or not, please open a discussion instead:
+        - [Discussions](https://github.com/nativeui-org/primitives/discussions/new?category=general)
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is. If you intend to submit a PR for this issue, tell us how in the description. Thanks!
+      placeholder: Bug description
+    validations:
+      required: true
+
+  - type: input
+    id: components-affected
+    attributes:
+      label: Affected component/components
+      description: Which NativeUI primitive components are affected?
+      placeholder: ex. Accordion, Checkbox, Switch...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      description: On which platform(s) does this bug occur?
+      multiple: true
+      options:
+        - iOS
+        - Android
+        - Web
+        - All platforms
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: How to reproduce
+      description:  A step-by-step description of how to reproduce the bug.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '....'
+        3. See error
+    validations:
+      required: true
+
+  - type: input
+    id: reproduction-link
+    attributes:
+      label: Reproduction link
+      description: | 
+        A link to a GitHub repository, Snack, CodeSandbox, or StackBlitz that includes a minimal reproduction of the problem. This greatly helps us investigate and fix the issue faster. If a report is vague and does not have a reproduction, it will be closed without warning. 
+
+        > [!CAUTION]
+        > If you skip this step, this issue might be **labeled** with `please add a reproduction` and **closed**.
+      placeholder: https://github.com/username/repo or https://snack.expo.dev/@username/project
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: "Please include console logs, error messages, or native logs around the time this bug occurred. Optional if provided reproduction. Please try not to insert an image but copy paste the log text."
+      render: bash
+
+  - type: textarea
+    id: system-info
+    attributes:
+      label: System Info
+      description: Information about your environment (OS, React Native version, Expo version, device/simulator, etc.)
+      render: bash
+      placeholder: |
+        OS: iOS 17 / Android 14 / macOS
+        Device: iPhone 15 Pro / Pixel 8 / Simulator
+        React Native: 0.74.0
+        Expo: 51.0.0
+        Package version: @nativeui/primitives@1.0.0
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before submitting
+      description: By submitting this issue, you agree to follow our [Contributing Guidelines](https://github.com/nativeui-org/primitives/blob/main/CONTRIBUTING.md).
+      options:
+        - label: I've made research efforts and searched the documentation
+          required: true
+        - label: I've searched for existing issues
+          required: true
