@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.8.0
+
+### Minor Changes
+
+- 5124b88: final deployment configuration
+
 ## 0.7.24
 
 ### Patch Changes
