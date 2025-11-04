@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.7.5
+
+### Patch Changes
+
+- a79a9f5: deploy failed
+
 ## 0.7.4
 
 ### Patch Changes
