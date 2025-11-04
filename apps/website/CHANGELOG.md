@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.7.12
+
+### Patch Changes
+
+- 6f07a14: update
+
 ## 0.7.11
 
 ### Patch Changes
