@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.8.1
+
+### Patch Changes
+
+- 68c1937: update deployments
+
 ## 0.8.0
 
 ### Minor Changes
