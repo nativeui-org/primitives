@@ -1,7 +1,4 @@
 {
-  "buildCommand": "cd ../.. && pnpm install --frozen-lockfile --filter @native-ui-org/website... --ignore-scripts && pnpm --filter @native-ui-org/website sync-docs && pnpm --filter @native-ui-org/website build",
-  "installCommand": "echo 'Skipping install, will be done in buildCommand'",
-  "framework": "nextjs",
-  "outputDirectory": ".next"
+  "buildCommand": "pnpm sync-docs && pnpm build"
 }
 
