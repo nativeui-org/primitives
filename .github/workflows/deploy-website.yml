@@ -18,13 +18,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Build
-        run: |
-          pnpm install --frozen-lockfile --filter @native-ui-org/website... --ignore-scripts
-          pnpm --filter @native-ui-org/primitives build
-          pnpm --filter @native-ui-org/website sync-docs
-          NEXT_PRIVATE_STANDALONE=true pnpm --filter @native-ui-org/website build
-
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
