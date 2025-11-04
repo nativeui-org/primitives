@@ -1,4 +1,4 @@
 {
-  "buildCommand": "pnpm sync-docs && pnpm build"
+  "buildCommand": "pnpm build"
 }
 
