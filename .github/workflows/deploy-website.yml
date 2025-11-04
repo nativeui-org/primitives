@@ -18,6 +18,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Prepare
+        run: |
+          pnpm install --frozen-lockfile --filter @native-ui-org/website... --ignore-scripts
+          pnpm --filter @native-ui-org/website sync-docs
+
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
