@@ -6,9 +6,6 @@ const withMDX = createMDX();
 const config = {
   reactStrictMode: true,
   transpilePackages: ['@native-ui-org/primitives'],
-  turbopack: {
-    root: process.cwd(),
-  },
 };
 
 export default withMDX(config);
