@@ -21,6 +21,8 @@ jobs:
       - name: Build
         run: |
           pnpm install --frozen-lockfile --filter @native-ui-org/sandbox... --ignore-scripts
+          pnpm --filter @native-ui-org/primitives build
+          pnpm --filter @native-ui-org/context-menu build
           pnpm --filter @native-ui-org/sandbox build
 
       - name: Deploy to Vercel
