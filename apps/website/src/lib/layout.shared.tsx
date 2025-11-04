@@ -11,6 +11,10 @@ export function baseOptions(): BaseLayoutProps {
         url: '/docs',
       },
       {
+        text: 'Roadmap',
+        url: '/roadmap',
+      },
+      {
         text: 'GitHub',
         url: 'https://github.com/nativeui-org/primitives',
       },

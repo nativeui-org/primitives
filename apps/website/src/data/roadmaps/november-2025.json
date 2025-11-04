@@ -1,0 +1,100 @@
+{
+  "id": "november-2025",
+  "title": "November 2025",
+  "period": "November 2025",
+  "deadline": "End of November 2025",
+  "active": true,
+  "components": [
+    {
+      "name": "Separator",
+      "description": "Visual dividers",
+      "status": "pending"
+    },
+    {
+      "name": "Switch",
+      "description": "Toggle switches with native feel",
+      "status": "pending"
+    },
+    {
+      "name": "Radio",
+      "description": "Radio buttons and groups",
+      "status": "pending"
+    },
+    {
+      "name": "Slider",
+      "description": "Value selection with touch support",
+      "status": "pending"
+    },
+    {
+      "name": "Field / Input",
+      "description": "Text input fields with validation",
+      "status": "pending"
+    },
+    {
+      "name": "Select",
+      "description": "Native dropdown menus",
+      "status": "pending"
+    },
+    {
+      "name": "Tabs",
+      "description": "Tab navigation with keyboard support",
+      "status": "pending"
+    },
+    {
+      "name": "List",
+      "description": "Scrollable lists with native performance",
+      "status": "pending"
+    },
+    {
+      "name": "Alert",
+      "description": "Native alert dialogs",
+      "status": "pending"
+    },
+    {
+      "name": "Toast",
+      "description": "Temporary notifications",
+      "status": "pending"
+    },
+    {
+      "name": "Dropdown Menu",
+      "description": "Contextual menus with actions",
+      "status": "pending"
+    },
+    {
+      "name": "Context Menu (Submenu)",
+      "description": "Update with submenu support",
+      "status": "pending"
+    },
+    {
+      "name": "Activity View",
+      "description": "iOS share sheet and Android share dialog",
+      "status": "pending"
+    },
+    {
+      "name": "Drawer",
+      "description": "Side panels for navigation",
+      "status": "pending"
+    },
+    {
+      "name": "Combobox",
+      "description": "Searchable select with autocomplete",
+      "status": "pending"
+    },
+    {
+      "name": "Table",
+      "description": "Data tables with sorting and filtering",
+      "status": "pending"
+    },
+    {
+      "name": "Deploy Sandbox on App Store",
+      "description": "Release sandbox app on iOS App Store",
+      "status": "pending"
+    },
+    {
+      "name": "Deploy Sandbox on Play Store",
+      "description": "Release sandbox app on Google Play Store",
+      "status": "pending"
+    }
+  ]
+}
+
