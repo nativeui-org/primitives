@@ -1,6 +1,6 @@
 {
   "name": "@native-ui-org/sandbox",
-  "version": "0.12.14",
+  "version": "0.12.15",
   "main": "expo-router/entry",
   "scripts": {
     "dev": "expo start",
