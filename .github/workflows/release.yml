@@ -128,7 +128,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
 
       - name: Release Apps (Sandbox & Website)
-        if: steps.changesets.outputs.published == 'true'
+        if: always()
         run: |
           echo "🔍 Checking for app version changes in this commit..."
           echo "Files changed:"
