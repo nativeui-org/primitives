@@ -23,7 +23,7 @@ jobs:
           pnpm install --frozen-lockfile --filter @native-ui-org/website... --ignore-scripts
           pnpm --filter @native-ui-org/primitives build
           pnpm --filter @native-ui-org/website sync-docs
-          pnpm --filter @native-ui-org/website build
+          NEXT_PRIVATE_STANDALONE=true pnpm --filter @native-ui-org/website build
 
       - name: Deploy to Vercel
         env:
