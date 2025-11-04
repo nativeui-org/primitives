@@ -11,6 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build
+        run: |
+          pnpm install --frozen-lockfile --filter @native-ui-org/website... --ignore-scripts
+          pnpm --filter @native-ui-org/primitives build
+          pnpm --filter @native-ui-org/website sync-docs
+          pnpm --filter @native-ui-org/website build
+
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -18,4 +32,6 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
         run: |
           cd apps/website
-          npx vercel deploy --prod --token=$VERCEL_TOKEN --yes
+          npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          npx vercel build --prod
+          npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
