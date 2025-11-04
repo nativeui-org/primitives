@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.7.6
+
+### Patch Changes
+
+- e808d8b: update vercel deployment
+
 ## 0.7.5
 
 ### Patch Changes

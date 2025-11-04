@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.12.6
+
+### Patch Changes
+
+- e808d8b: update vercel deployment
+
 ## 0.12.5
 
 ### Patch Changes
