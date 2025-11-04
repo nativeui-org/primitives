@@ -25,4 +25,5 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
         run: |
           cd apps/website
-          npx vercel deploy --prod --token=$VERCEL_TOKEN --yes
+          npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
+          npx vercel deploy --prod --token=$VERCEL_TOKEN
