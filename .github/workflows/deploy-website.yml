@@ -18,11 +18,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Prepare
-        run: |
-          pnpm install --frozen-lockfile --filter @native-ui-org/website... --ignore-scripts
-          pnpm --filter @native-ui-org/website sync-docs
-
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
@@ -30,6 +25,4 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
         run: |
           cd apps/website
-          npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-          npx vercel build --prod
-          npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
+          npx vercel deploy --prod --token=$VERCEL_TOKEN --yes
