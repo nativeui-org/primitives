@@ -7,7 +7,7 @@ const config = {
   reactStrictMode: true,
   transpilePackages: ['@native-ui-org/primitives'],
   turbopack: {
-    root: '.',
+    root: '../..',
   },
 };
 
