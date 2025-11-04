@@ -1,6 +1,6 @@
 {
-  "buildCommand": "cd ../.. && pnpm install --filter @native-ui-org/sandbox... --ignore-scripts && pnpm --filter @native-ui-org/primitives build && pnpm --filter @native-ui-org/context-menu build && pnpm --filter @native-ui-org/sandbox build",
-  "installCommand": "cd ../.. && pnpm install --filter @native-ui-org/sandbox... --ignore-scripts",
+  "buildCommand": "cd ../.. && pnpm install --frozen-lockfile --filter @native-ui-org/sandbox... --ignore-scripts && pnpm --filter @native-ui-org/primitives build && pnpm --filter @native-ui-org/context-menu build && pnpm --filter @native-ui-org/sandbox build",
+  "installCommand": "echo 'Skipping install, will be done in buildCommand'",
   "framework": null,
   "outputDirectory": "dist",
   "rewrites": [
