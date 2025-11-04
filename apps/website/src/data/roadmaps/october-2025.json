@@ -1,0 +1,100 @@
+{
+  "id": "october-2025",
+  "title": "October 2025",
+  "period": "October 2025",
+  "deadline": "End of October 2025",
+  "active": false,
+  "components": [
+    {
+      "name": "Accordion",
+      "description": "Expandable sections with smooth animations",
+      "status": "done"
+    },
+    {
+      "name": "Alert",
+      "description": "Alert dialogs for important messages",
+      "status": "done"
+    },
+    {
+      "name": "Aspect Ratio",
+      "description": "Maintain consistent aspect ratios",
+      "status": "done"
+    },
+    {
+      "name": "Avatar",
+      "description": "User profile images with fallbacks",
+      "status": "done"
+    },
+    {
+      "name": "Checkbox",
+      "description": "Checkbox inputs with native feel",
+      "status": "done"
+    },
+    {
+      "name": "Checkbox Group",
+      "description": "Multiple checkbox selection",
+      "status": "done"
+    },
+    {
+      "name": "Collapsible",
+      "description": "Collapsible content sections",
+      "status": "done"
+    },
+    {
+      "name": "Context Menu",
+      "description": "Native context menus",
+      "status": "done"
+    },
+    {
+      "name": "Portal",
+      "description": "Render content outside parent hierarchy",
+      "status": "done"
+    },
+    {
+      "name": "Slot",
+      "description": "Component composition utility",
+      "status": "done"
+    },
+    {
+      "name": "Switch",
+      "description": "Toggle switches",
+      "status": "done"
+    },
+    {
+      "name": "Switch Group",
+      "description": "Multiple switch controls",
+      "status": "done"
+    },
+    {
+      "name": "Text",
+      "description": "Text primitive with variants",
+      "status": "done"
+    },
+    {
+      "name": "Toggle",
+      "description": "Toggle buttons",
+      "status": "done"
+    },
+    {
+      "name": "Toggle Group",
+      "description": "Multiple toggle controls",
+      "status": "done"
+    },
+    {
+      "name": "View",
+      "description": "View primitive with variants",
+      "status": "done"
+    },
+    {
+      "name": "Deploy Website",
+      "description": "Deploy documentation website to production",
+      "status": "done"
+    },
+    {
+      "name": "Publish NPM Package",
+      "description": "Publish primitives package to npm",
+      "status": "done"
+    }
+  ]
+}
+

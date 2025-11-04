@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 type PackageManager = 'npm' | 'pnpm' | 'yarn' | 'bun';
 
@@ -14,12 +14,31 @@ const commands: Record<PackageManager, string> = {
 
 export default function HomePage() {
   const [packageManager, setPackageManager] = useState<PackageManager>('npm');
+  const [version, setVersion] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/version')
+      .then((res) => res.json())
+      .then((data) => setVersion(data.version))
+      .catch(() => setVersion(null));
+  }, []);
 
   return (
     <main className="flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 py-16">
       <div className="max-w-3xl mx-auto space-y-12 w-full">
         {/* Title */}
         <div className="space-y-4">
+          {version && (
+            <div className="flex justify-center mb-6">
+              <span className="inline-flex items-center gap-2 px-3 py-1 text-sm font-medium border border-neutral-200 dark:border-neutral-800 rounded-full animate-pulse">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-neutral-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-neutral-500"></span>
+                </span>
+                Beta v{version}
+              </span>
+            </div>
+          )}
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-center">
             NativeUI Primitives
           </h1>
