@@ -1,12 +1,19 @@
-import { requireNativeView } from 'expo';
+import { Platform } from 'react-native';
 import * as React from 'react';
 
 import type { NativeUiOrgContextMenuViewProps } from '../types/NativeUiOrgContextMenu.types';
 
-const NativeView: React.ComponentType<Record<string, unknown>> =
-  requireNativeView('NativeUiOrgContextMenu');
+let NativeView: React.ComponentType<Record<string, unknown>> | null = null;
+
+if (Platform.OS !== 'web') {
+  const { requireNativeView } = require('expo');
+  NativeView = requireNativeView('NativeUiOrgContextMenu') as React.ComponentType<Record<string, unknown>>;
+}
 
 export default function NativeUiOrgContextMenuView(props: NativeUiOrgContextMenuViewProps) {
+  if (Platform.OS === 'web' || !NativeView) {
+    return null;
+  }
   // Ensure menuItems is properly formatted
   const menuItems = React.useMemo(() => {
     const formatted = props.menuItems.map(item => {

@@ -206,27 +206,27 @@ public class NativeUiOrgContextMenuView: ExpoView, UIContextMenuInteractionDeleg
         continue
       } else {
         // Regular menu item
-        var attributes: UIMenuElement.Attributes = []
-        if isDisabled {
-          attributes.insert(.disabled)
-        }
-        if isDestructive {
-          attributes.insert(.destructive)
-        }
-        
-        var image: UIImage? = nil
-        if let iconName = iconName, !iconName.isEmpty {
-          image = UIImage(systemName: iconName)
-        }
-        
-        let action = UIAction(
-          title: title,
-          image: image,
-          attributes: attributes
-        ) { [weak self] _ in
-          self?.onItemPress(["index": index, "label": title])
-        }
-        
+      var attributes: UIMenuElement.Attributes = []
+      if isDisabled {
+        attributes.insert(.disabled)
+      }
+      if isDestructive {
+        attributes.insert(.destructive)
+      }
+      
+      var image: UIImage? = nil
+      if let iconName = iconName, !iconName.isEmpty {
+        image = UIImage(systemName: iconName)
+      }
+      
+      let action = UIAction(
+        title: title,
+        image: image,
+        attributes: attributes
+      ) { [weak self] _ in
+        self?.onItemPress(["index": index, "label": title])
+      }
+      
         currentGroup.append(action)
       }
     }

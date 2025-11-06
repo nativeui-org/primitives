@@ -218,6 +218,22 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
         setMenuItems([]);
     }, []);
 
+    const contextValue = React.useMemo(() => ({
+        open,
+        onOpenChange: handleOpenChange,
+        menuItems: Platform.OS === 'web' ? collectedMenuItems : menuItems,
+        registerMenuItem,
+        registerSubmenu,
+        registerSeparator,
+        registerSection,
+        clearMenuItems,
+        isInSubmenu,
+        setIsInSubmenu,
+        itemsToRemoveRef,
+        mousePosition,
+        setMousePosition,
+    }), [open, handleOpenChange, menuItems, collectedMenuItems, registerMenuItem, registerSubmenu, registerSeparator, registerSection, clearMenuItems, isInSubmenu, mousePosition]);
+
     const trigger = React.Children.toArray(children).find(
         child => React.isValidElement(child) && (child.type as any).displayName === 'ContextMenuTrigger'
     );
@@ -381,22 +397,6 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
 
         return items;
     }, [content]);
-
-    const contextValue = React.useMemo(() => ({
-        open,
-        onOpenChange: handleOpenChange,
-        menuItems: Platform.OS === 'web' ? collectedMenuItems : menuItems,
-        registerMenuItem,
-        registerSubmenu,
-        registerSeparator,
-        registerSection,
-        clearMenuItems,
-        isInSubmenu,
-        setIsInSubmenu,
-        itemsToRemoveRef,
-        mousePosition,
-        setMousePosition,
-    }), [open, handleOpenChange, menuItems, collectedMenuItems, registerMenuItem, registerSubmenu, registerSeparator, registerSection, clearMenuItems, isInSubmenu, mousePosition]);
 
     if (Platform.OS === 'web') {
         return (

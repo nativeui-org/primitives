@@ -308,7 +308,7 @@ export default function ContextMenuPreview() {
                 </ContextMenuItem>
                 <ContextMenuItem
                   onPress={() => showAlert({ title: "Bluetooth", message: "Opening Bluetooth settings..." })}
-                  iosIcon="bluetooth"
+                  iosIcon="antenna.radiowaves.left.and.right.circle"
                   androidIcon="bluetooth"
                   icon="📡"
                 >
