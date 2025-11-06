@@ -30,7 +30,7 @@ primitives/
 │   └── sandbox/          # Testing and development app
 ├── packages/
 │   ├── primitives/       # Core primitives library
-│   └── context-menu/     # Context menu native module
+│   └── native-modules/   # Native modules (context menu, etc.)
 └── ...
 ```
 
@@ -41,7 +41,7 @@ primitives/
 | **apps/website** | Documentation website built with Next.js | Hosts component documentation, examples, and guides |
 | **apps/sandbox** | React Native Expo application | Development playground for testing components on iOS/Android/Web |
 | **packages/primitives** | Core primitives library | Main package containing all primitive components |
-| **packages/context-menu** | Context menu native module | Native implementation for context menu functionality |
+| **packages/native-modules** | Native modules package | Native implementations for context menu and other native components |
 
 ## Development Setup
 
@@ -137,7 +137,7 @@ When you create a commit we kindly ask you to follow the convention `category(sc
 ### Example
 
 ```
-fix(context-menu): prevent menu from closing on right-click
+fix(native-modules): prevent menu from closing on right-click
 ```
 
 If you are interested in the detailed specification you can visit [Conventional Commits](https://www.conventionalcommits.org/) or check out the [Angular Commit Message Guidelines](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit).

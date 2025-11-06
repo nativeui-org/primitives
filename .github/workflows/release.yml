@@ -32,7 +32,7 @@ jobs:
       - name: Build packages
         run: |
           pnpm -r --filter @native-ui-org/primitives run build
-          pnpm -r --filter @native-ui-org/context-menu run build
+          pnpm -r --filter @native-ui-org/native-modules run build
 
       - name: Configure pnpm for npm
         run: |
@@ -110,7 +110,7 @@ jobs:
                 echo "" >> "$releaseNotesFile"
                 echo "Visit [primitives.nativeui.io](https://primitives.nativeui.io) for full documentation." >> "$releaseNotesFile"
                 ;;
-              "context-menu")
+              "native-modules")
                 echo "### 📚 Documentation" >> "$releaseNotesFile"
                 echo "" >> "$releaseNotesFile"
                 echo "Visit [primitives.nativeui.io](https://primitives.nativeui.io) for full documentation." >> "$releaseNotesFile"

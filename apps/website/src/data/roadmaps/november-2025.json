@@ -63,7 +63,7 @@
     {
       "name": "Context Menu (Submenu)",
       "description": "Update with submenu support",
-      "status": "pending"
+      "status": "done"
     },
     {
       "name": "Activity View",

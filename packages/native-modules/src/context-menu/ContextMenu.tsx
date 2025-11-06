@@ -6,11 +6,14 @@ if (Platform.OS !== 'web') {
   NativeContextMenuView = require('./native/NativeUiOrgContextMenuView').default;
 }
 
+type SubmenuIndicatorProp = React.ReactNode | ((isOpen: boolean) => React.ReactNode);
+
 export type ContextMenuProps = ViewProps & {
     open?: boolean;
     defaultOpen?: boolean;
     onOpenChange?: (open: boolean) => void;
     children: React.ReactNode;
+    submenuIndicator?: SubmenuIndicatorProp;
 };
 
 export type ContextMenuTriggerProps = ViewProps & {
@@ -78,6 +81,7 @@ export const ContextMenuContext = React.createContext<{
     itemsToRemoveRef?: React.MutableRefObject<Set<string>>;
     mousePosition?: { x: number; y: number };
     setMousePosition?: (pos: { x: number; y: number }) => void;
+    submenuIndicator?: SubmenuIndicatorProp;
 }>({
     open: false,
     onOpenChange: () => { },
@@ -91,6 +95,7 @@ export const ContextMenuContext = React.createContext<{
     setIsInSubmenu: () => { },
     mousePosition: { x: 0, y: 0 },
     setMousePosition: () => { },
+    submenuIndicator: undefined,
 });
 
 export const useContextMenu = () => React.useContext(ContextMenuContext);
@@ -99,7 +104,7 @@ export const useContextMenu = () => React.useContext(ContextMenuContext);
  * ContextMenu component with native UIContextMenuInteraction (iOS) and PopupMenu (Android)
  */
 export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) => {
-    const { open: openProp, defaultOpen = false, onOpenChange, children, ...rest } = props;
+    const { open: openProp, defaultOpen = false, onOpenChange, children, submenuIndicator, ...rest } = props;
 
     const [internalOpen, setInternalOpen] = React.useState(defaultOpen);
     const [menuItems, setMenuItems] = React.useState<MenuItem[]>([]);
@@ -365,11 +370,11 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
                         }
                     });
 
-                    if (items.length > 0 && sectionItems.length > 0) {
-                        items.push({ label: '', isSeparator: true });
-                    }
-
                     if (sectionItems.length > 0) {
+                        const lastItem = items[items.length - 1];
+                        if (items.length > 0 && !lastItem?.isSeparator && !lastItem?.isSection) {
+                            items.push({ label: '', isSeparator: true });
+                        }
                         const sectionLabel = sectionProps.title || sectionItems.map(item => item.label).join('•');
                         items.push({
                             label: sectionLabel,
@@ -404,7 +409,8 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
         itemsToRemoveRef,
         mousePosition,
         setMousePosition,
-    }), [open, handleOpenChange, collectedMenuItems, registerMenuItem, registerSubmenu, registerSeparator, registerSection, clearMenuItems, isInSubmenu, mousePosition]);
+        submenuIndicator,
+    }), [open, handleOpenChange, collectedMenuItems, registerMenuItem, registerSubmenu, registerSeparator, registerSection, clearMenuItems, isInSubmenu, mousePosition, submenuIndicator]);
 
     if (Platform.OS === 'web') {
         return (
@@ -604,9 +610,51 @@ ContextMenuTrigger.displayName = 'ContextMenuTrigger';
  */
 export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>((props, ref) => {
     const { children, forceMount = false } = props;
-    const { open, onOpenChange, menuItems, mousePosition } = useContextMenu();
+    const { open, onOpenChange, menuItems, mousePosition, submenuIndicator } = useContextMenu();
     const [position, setPosition] = React.useState({ x: 0, y: 0 });
-    const menuRef = React.useRef<any>(null);
+    const menuRef = React.useRef<HTMLDivElement | null>(null);
+
+    type WebSubmenuEntry = {
+        item: MenuItem;
+        rect: DOMRect;
+        level: number;
+        key: string;
+    };
+
+    const [submenuStack, setSubmenuStack] = React.useState<WebSubmenuEntry[]>([]);
+    const submenuCloseTimeout = React.useRef<NodeJS.Timeout | null>(null);
+
+    const clearSubmenuTimeout = React.useCallback(() => {
+        if (submenuCloseTimeout.current) {
+            clearTimeout(submenuCloseTimeout.current);
+            submenuCloseTimeout.current = null;
+        }
+    }, []);
+
+    const closeSubmenusFromLevel = React.useCallback((level: number) => {
+        setSubmenuStack(prev => prev.filter(entry => entry.level < level));
+    }, []);
+
+    const scheduleCloseFromLevel = React.useCallback((level: number) => {
+        clearSubmenuTimeout();
+        submenuCloseTimeout.current = setTimeout(() => {
+            setSubmenuStack(prev => prev.filter(entry => entry.level < level));
+        }, 120);
+    }, [clearSubmenuTimeout]);
+
+    const openSubmenu = React.useCallback((menuItem: MenuItem, level: number, target: HTMLElement, key: string) => {
+        if (!menuItem.submenu || menuItem.submenu.length === 0) {
+            setSubmenuStack(prev => prev.filter(entry => entry.level < level));
+            return;
+        }
+        clearSubmenuTimeout();
+        const rect = target.getBoundingClientRect();
+        setSubmenuStack(prev => {
+            const next = prev.filter(entry => entry.level < level);
+            next.push({ item: menuItem, rect, level, key });
+            return next;
+        });
+    }, [clearSubmenuTimeout]);
 
     React.useLayoutEffect(() => {
         if (!open || Platform.OS !== 'web') return;
@@ -649,17 +697,297 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [open, onOpenChange]);
 
+    React.useEffect(() => {
+        if (!open) {
+            clearSubmenuTimeout();
+            setSubmenuStack([]);
+        }
+    }, [open, clearSubmenuTimeout]);
+
     const renderIcon = (value: React.ReactNode) => {
         if (!value) return null;
         if (typeof value === 'string') return <span>{value}</span>;
         return <span style={{ display: 'flex', alignItems: 'center' }}>{value}</span>;
     };
 
+    const renderSubmenuIndicator = React.useCallback((isOpen: boolean): React.ReactNode => {
+        if (submenuIndicator) {
+            return typeof submenuIndicator === 'function' ? submenuIndicator(isOpen) : submenuIndicator;
+        }
+
+        return (
+            <span
+                style={{
+                    width: 0,
+                    height: 0,
+                    borderTop: '4px solid transparent',
+                    borderBottom: '4px solid transparent',
+                    borderLeft: '4px solid #9ca3af',
+                    transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+                    transformOrigin: '50% 50%',
+                    transition: 'transform 0.12s ease',
+                }}
+            />
+        );
+    }, [submenuIndicator]);
+
     if (Platform.OS === 'web') {
         if (!open && !forceMount) return null;
 
         const ReactDOM = require('react-dom');
-        return ReactDOM.createPortal(
+
+        const renderMenuItems = (items: MenuItem[], level: number, parentKey = ''): React.ReactNode => {
+            return items.map((item, index) => {
+                const key = `${parentKey}${index}`;
+
+                if (item.isSeparator) {
+                    return (
+                        <div
+                            key={`separator-${key}`}
+                            role="separator"
+                            style={{
+                                height: '1px',
+                                backgroundColor: '#e5e7eb',
+                                margin: '8px 0',
+                                width: '100%',
+                            }}
+                        />
+                    );
+                }
+
+                const isSectionItem = item.isSection ?? false;
+                if (isSectionItem && item.submenu && item.submenu.length > 0) {
+                    const sectionTitleText = typeof item.sectionTitle === 'string' && item.sectionTitle.length > 0 ? item.sectionTitle : undefined;
+                    const renderSectionTitle = () => {
+                        if (!sectionTitleText) return null;
+                        try {
+                            const { Text } = require('@native-ui-org/primitives');
+                            return (
+                                <Text
+                                    as="span"
+                                    style={{
+                                        fontSize: 12,
+                                        fontWeight: '600',
+                                        color: '#6b7280',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.5px',
+                                    }}
+                                >
+                                    {sectionTitleText}
+                                </Text>
+                            );
+                        } catch {
+                            return (
+                                <span
+                                    style={{
+                                        fontSize: 12,
+                                        fontWeight: 600,
+                                        color: '#6b7280',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '0.5px',
+                                    }}
+                                >
+                                    {sectionTitleText}
+                                </span>
+                            );
+                        }
+                    };
+
+                    return (
+                        <div key={`section-${key}`} style={{ paddingTop: level === 0 ? 4 : 0, paddingBottom: 4 }}>
+                            {sectionTitleText && (
+                                <div style={{ padding: '8px 16px 4px' }}>
+                                    {renderSectionTitle()}
+                                </div>
+                            )}
+                            <div>{renderMenuItems(item.submenu ?? [], level, `${key}-`)}</div>
+                        </div>
+                    );
+                }
+
+                const hasSubmenu = !!item.submenu && item.submenu.length > 0;
+                const isOpen = hasSubmenu && submenuStack.some(entry => entry.level === level + 1 && entry.key === key);
+                const indicatorNode = hasSubmenu ? renderSubmenuIndicator(isOpen) : null;
+
+                const labelNode = (() => {
+                    try {
+                        const { Text } = require('@native-ui-org/primitives');
+                        return <Text style={{ fontSize: 14, color: item.destructive ? '#ef4444' : '#000' }}>{item.label}</Text>;
+                    } catch {
+                        return <span style={{ fontSize: 14, color: item.destructive ? '#ef4444' : '#000' }}>{item.label}</span>;
+                    }
+                })();
+
+                if (hasSubmenu) {
+                    return (
+                        <div
+                            key={`submenu-${key}`}
+                            role="menuitem"
+                            aria-haspopup="menu"
+                            aria-expanded={isOpen}
+                            tabIndex={item.disabled ? -1 : 0}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (item.disabled) return;
+                                openSubmenu(item, level + 1, e.currentTarget as HTMLElement, key);
+                            }}
+                            onKeyDown={(e) => {
+                                if (item.disabled) return;
+                                if (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowRight') {
+                                    e.preventDefault();
+                                    openSubmenu(item, level + 1, e.currentTarget as HTMLElement, key);
+                                } else if (e.key === 'Escape') {
+                                    e.preventDefault();
+                                    closeSubmenusFromLevel(level + 1);
+                                }
+                            }}
+                            onMouseEnter={(e) => {
+                                if (!item.disabled) {
+                                    e.currentTarget.style.backgroundColor = '#f3f4f6';
+                                }
+                                openSubmenu(item, level + 1, e.currentTarget as HTMLElement, key);
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = 'transparent';
+                                scheduleCloseFromLevel(level + 1);
+                            }}
+                            style={{
+                                padding: '8px 16px',
+                                cursor: item.disabled ? 'not-allowed' : 'pointer',
+                                opacity: item.disabled ? 0.5 : 1,
+                                fontSize: '14px',
+                                fontFamily: 'system-ui, -apple-system, sans-serif',
+                                userSelect: 'none',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                            }}
+                        >
+                            {renderIcon(item.icon)}
+                            {labelNode}
+                            <span
+                                style={{
+                                    marginLeft: 'auto',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: 4,
+                                }}
+                            >
+                                {typeof indicatorNode === 'string' || typeof indicatorNode === 'number'
+                                    ? <span>{indicatorNode}</span>
+                                    : indicatorNode}
+                            </span>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div
+                        key={`item-${key}`}
+                        role="menuitem"
+                        tabIndex={item.disabled ? -1 : 0}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (!item.disabled) {
+                                item.onPress?.();
+                                onOpenChange(false);
+                            }
+                        }}
+                        onKeyDown={(e) => {
+                            if ((e.key === 'Enter' || e.key === ' ') && !item.disabled) {
+                                e.preventDefault();
+                                item.onPress?.();
+                                onOpenChange(false);
+                            } else if (e.key === 'Escape') {
+                                e.preventDefault();
+                                onOpenChange(false);
+                            }
+                        }}
+                        onMouseEnter={(e) => {
+                            if (!item.disabled) {
+                                e.currentTarget.style.backgroundColor = '#f3f4f6';
+                            }
+                            clearSubmenuTimeout();
+                            closeSubmenusFromLevel(level + 1);
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = 'transparent';
+                        }}
+                        style={{
+                            padding: '8px 16px',
+                            cursor: item.disabled ? 'not-allowed' : 'pointer',
+                            opacity: item.disabled ? 0.5 : 1,
+                            color: item.destructive ? '#ef4444' : '#000',
+                            fontSize: '14px',
+                            fontFamily: 'system-ui, -apple-system, sans-serif',
+                            userSelect: 'none',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                        }}
+                    >
+                        {renderIcon(item.icon)}
+                        {labelNode}
+                    </div>
+                );
+            });
+        };
+
+        const SubmenuPanel: React.FC<{ entry: WebSubmenuEntry }> = ({ entry }) => {
+            const panelRef = React.useRef<HTMLDivElement | null>(null);
+            const [panelPosition, setPanelPosition] = React.useState(() => ({
+                left: entry.rect.right + 8,
+                top: entry.rect.top,
+            }));
+
+            React.useLayoutEffect(() => {
+                const node = panelRef.current;
+                if (!node) return;
+                const rect = node.getBoundingClientRect();
+                let left = entry.rect.right + 8;
+                if (left + rect.width > window.innerWidth) {
+                    left = Math.max(entry.rect.left - rect.width - 8, 8);
+                }
+                let top = entry.rect.top;
+                if (top + rect.height > window.innerHeight) {
+                    top = Math.max(window.innerHeight - rect.height - 8, 8);
+                }
+                setPanelPosition(prev => {
+                    if (prev.left === left && prev.top === top) {
+                        return prev;
+                    }
+                    return { left, top };
+                });
+            }, [entry]);
+
+            return ReactDOM.createPortal(
+                <div
+                    ref={panelRef}
+                    role="menu"
+                    style={{
+                        position: 'fixed',
+                        left: panelPosition.left,
+                        top: panelPosition.top,
+                        zIndex: 1000000,
+                        backgroundColor: '#fff',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: 8,
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        padding: '4px 0',
+                        minWidth: '160px',
+                        pointerEvents: 'auto',
+                    } as any}
+                    onMouseEnter={() => clearSubmenuTimeout()}
+                    onMouseLeave={() => scheduleCloseFromLevel(entry.level)}
+                >
+                    {renderMenuItems(entry.item.submenu ?? [], entry.level, `${entry.key}-`)}
+                </div>,
+                document.body
+            );
+        };
+
+        const mainMenu = ReactDOM.createPortal(
             <div
                 ref={menuRef}
                 role="menu"
@@ -676,144 +1004,11 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
                     minWidth: '160px',
                     pointerEvents: 'auto',
                 } as any}
+                onMouseEnter={() => clearSubmenuTimeout()}
+                onMouseLeave={() => scheduleCloseFromLevel(1)}
             >
                 {menuItems.length > 0 ? (
-                    menuItems.map((item, index) => {
-                        if (item.isSeparator) {
-                            return (
-                                <div
-                                    key={`separator-${index}`}
-                                    role="separator"
-                                    style={{
-                                        height: '1px',
-                                        backgroundColor: '#e5e7eb',
-                                        margin: '8px 0',
-                                        width: '100%',
-                                    }}
-                                />
-                            );
-                        }
-
-                        if (item.submenu && item.submenu.length > 0) {
-                            const isSectionItem = item.isSection ?? false;
-                            const sectionTitleText = typeof item.sectionTitle === 'string' && item.sectionTitle.length > 0 ? item.sectionTitle : undefined;
-                            return (
-                                <div key={`${item.label}-section-${index}`} style={isSectionItem ? { marginTop: '8px', paddingTop: '8px', borderTop: '1px solid #e5e7eb' } : { position: 'relative' }}>
-                                    {sectionTitleText && (
-                                        <div style={{ padding: '8px 16px 4px' }}>
-                                            {(() => {
-                                                try {
-                                                    const { Text } = require('@native-ui-org/primitives');
-                                                    return <Text as="span" style={{ fontSize: 12, fontWeight: '600', color: '#6b7280', textTransform: 'uppercase', letterSpacing: 0.5 }}>{sectionTitleText}</Text>;
-                                                } catch {
-                                                    return <span style={{ fontSize: '12px', fontWeight: '600', color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.5px', fontFamily: 'system-ui, -apple-system, sans-serif' }}>{sectionTitleText}</span>;
-                                                }
-                                            })()}
-                                        </div>
-                                    )}
-                                    {item.submenu.map((subItem, subIndex) => (
-                                        <div
-                                            key={`${item.label}-${subItem.label}-${subIndex}`}
-                                            role="menuitem"
-                                            tabIndex={subItem.disabled ? -1 : 0}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                if (!subItem.disabled) {
-                                                    subItem.onPress?.();
-                                                    onOpenChange(false);
-                                                }
-                                            }}
-                                            onKeyDown={(e) => {
-                                                if ((e.key === 'Enter' || e.key === ' ') && !subItem.disabled) {
-                                                    e.preventDefault();
-                                                    subItem.onPress?.();
-                                                    onOpenChange(false);
-                                                }
-                                            }}
-                                            style={{
-                                                padding: '8px 16px',
-                                                cursor: subItem.disabled ? 'not-allowed' : 'pointer',
-                                                opacity: subItem.disabled ? 0.5 : 1,
-                                                color: subItem.destructive ? '#ef4444' : '#000',
-                                                fontSize: '14px',
-                                                fontFamily: 'system-ui, -apple-system, sans-serif',
-                                                userSelect: 'none',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '8px',
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                if (!subItem.disabled) e.currentTarget.style.backgroundColor = '#f3f4f6';
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.backgroundColor = 'transparent';
-                                            }}
-                                        >
-                                            {renderIcon(subItem.icon)}
-                                            {(() => {
-                                                try {
-                                                    const { Text } = require('@native-ui-org/primitives');
-                                                    return <Text style={{ fontSize: 14, color: subItem.destructive ? '#ef4444' : '#000' }}>{subItem.label}</Text>;
-                                                } catch {
-                                                    return <span>{subItem.label}</span>;
-                                                }
-                                            })()}
-                                        </div>
-                                    ))}
-                                </div>
-                            );
-                        }
-
-                        return (
-                            <div
-                                key={`${item.label}-${index}`}
-                                role="menuitem"
-                                tabIndex={item.disabled ? -1 : 0}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (!item.disabled) {
-                                        item.onPress?.();
-                                        onOpenChange(false);
-                                    }
-                                }}
-                                onKeyDown={(e) => {
-                                    if ((e.key === 'Enter' || e.key === ' ') && !item.disabled) {
-                                        e.preventDefault();
-                                        item.onPress?.();
-                                        onOpenChange(false);
-                                    }
-                                }}
-                                style={{
-                                    padding: '8px 16px',
-                                    cursor: item.disabled ? 'not-allowed' : 'pointer',
-                                    opacity: item.disabled ? 0.5 : 1,
-                                    color: item.destructive ? '#ef4444' : '#000',
-                                    fontSize: '14px',
-                                    fontFamily: 'system-ui, -apple-system, sans-serif',
-                                    userSelect: 'none',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '8px',
-                                }}
-                                onMouseEnter={(e) => {
-                                    if (!item.disabled) e.currentTarget.style.backgroundColor = '#f3f4f6';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = 'transparent';
-                                }}
-                            >
-                                {renderIcon(item.icon)}
-                                {(() => {
-                                    try {
-                                        const { Text } = require('@native-ui-org/primitives');
-                                        return <Text style={{ fontSize: 14, color: item.destructive ? '#ef4444' : '#000' }}>{item.label}</Text>;
-                                    } catch {
-                                        return <span>{item.label}</span>;
-                                    }
-                                })()}
-                            </div>
-                        );
-                    })
+                    renderMenuItems(menuItems, 0)
                 ) : (
                     <View ref={ref} style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}>
                         {children}
@@ -821,6 +1016,17 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
                 )}
             </div>,
             document.body
+        );
+
+        const submenuPanels = submenuStack.map(entry => (
+            <SubmenuPanel key={`submenu-panel-${entry.level}-${entry.key}`} entry={entry} />
+        ));
+
+        return (
+            <>
+                {mainMenu}
+                {submenuPanels}
+            </>
         );
     }
 

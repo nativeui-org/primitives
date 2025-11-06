@@ -105,7 +105,7 @@ Interactive package manager tabs.
 
 ```mdx
 <InstallTabs />
-<InstallTabs package="@native-ui-org/context-menu" />
+<InstallTabs package="@native-ui-org/native-modules" />
 ```
 
 ### `<Preview component="name" />`

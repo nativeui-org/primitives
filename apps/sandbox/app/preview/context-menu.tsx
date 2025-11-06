@@ -101,7 +101,7 @@ export default function ContextMenuPreview() {
 
           <ContextMenu>
             <ContextMenuTrigger>
-              <View style={[styles.chatItem, { backgroundColor: '#f0f0f0', padding: 16, borderRadius: 8 }]}>
+              <View style={styles.chatItem}>
                 <View style={styles.chatAvatar}>
                   <Text style={styles.chatAvatarText}>📱</Text>
                 </View>
@@ -219,7 +219,7 @@ export default function ContextMenuPreview() {
 
           <ContextMenu>
             <ContextMenuTrigger>
-              <View style={[styles.chatItem, { backgroundColor: '#f9fafb', padding: 16, borderRadius: 8 }]}> 
+              <View style={styles.chatItem}> 
                 <View style={styles.chatAvatar}>
                   <Text style={styles.chatAvatarText}>💬</Text>
                 </View>
@@ -285,7 +285,7 @@ export default function ContextMenuPreview() {
 
           <ContextMenu>
             <ContextMenuTrigger>
-              <View style={[styles.chatItem, { backgroundColor: '#f0f0f0', padding: 16, borderRadius: 8 }]}>
+              <View style={styles.chatItem}>
                 <View style={styles.chatAvatar}>
                   <Text style={styles.chatAvatarText}>⚙️</Text>
                 </View>
