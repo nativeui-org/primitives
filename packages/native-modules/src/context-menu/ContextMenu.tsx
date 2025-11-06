@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Platform, View, Pressable, type ViewProps } from 'react-native';
+import { Platform, View, type ViewProps } from 'react-native';
 
 let NativeContextMenuView: React.ComponentType<any> | null = null;
 if (Platform.OS !== 'web') {
@@ -369,7 +369,15 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
                         items.push({ label: '', isSeparator: true });
                     }
 
-                    items.push(...sectionItems);
+                    if (sectionItems.length > 0) {
+                        const sectionLabel = sectionProps.title || sectionItems.map(item => item.label).join('•');
+                        items.push({
+                            label: sectionLabel,
+                            submenu: sectionItems,
+                            isSection: true,
+                            sectionTitle: sectionProps.title,
+                        });
+                    }
                 } else if (child.props && (child.props as any).children) {
                     processChildren((child.props as any).children, isInSubmenu, isInSection);
                 }
@@ -385,7 +393,7 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
     const contextValue = React.useMemo(() => ({
         open,
         onOpenChange: handleOpenChange,
-        menuItems: Platform.OS === 'web' ? collectedMenuItems : menuItems,
+        menuItems: collectedMenuItems,
         registerMenuItem,
         registerSubmenu,
         registerSeparator,
@@ -396,7 +404,7 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
         itemsToRemoveRef,
         mousePosition,
         setMousePosition,
-    }), [open, handleOpenChange, menuItems, collectedMenuItems, registerMenuItem, registerSubmenu, registerSeparator, registerSection, clearMenuItems, isInSubmenu, mousePosition]);
+    }), [open, handleOpenChange, collectedMenuItems, registerMenuItem, registerSubmenu, registerSeparator, registerSection, clearMenuItems, isInSubmenu, mousePosition]);
 
     if (Platform.OS === 'web') {
         return (
@@ -566,18 +574,6 @@ export const ContextMenuTrigger = React.forwardRef<any, ContextMenuTriggerProps 
             <View ref={triggerRef} {...filterProps} style={[{ position: 'relative' }, rest.style]}>
                 {children}
             </View>
-        );
-    }
-
-    if (Platform.OS === 'android') {
-        return (
-            <Pressable
-                {...filterProps}
-                style={rest.style}
-                onLongPress={handleMenuOpen}
-            >
-                {children}
-            </Pressable>
         );
     }
 
@@ -828,180 +824,11 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
         );
     }
 
-    if (Platform.OS === 'android') {
-        const Modal = require('react-native').Modal;
-        const Pressable = require('react-native').Pressable;
-        const Text = require('react-native').Text;
-
-        return (
-            <>
-                {/* Render children invisibly to collect items */}
-                <View ref={ref} style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}>
-                    {children}
-                </View>
-
-                <Modal
-                    visible={open}
-                    transparent
-                    animationType="fade"
-                    onRequestClose={() => onOpenChange(false)}
-                >
-                    <Pressable
-                        style={styles.overlay}
-                        onPress={() => onOpenChange(false)}
-                    >
-                        <View style={styles.bottomSheet}>
-                            {menuItems.map((item, index) => {
-                                // Handle separators
-                                if (item.isSeparator) {
-                                    return (
-                                        <View
-                                            key={index}
-                                            style={{
-                                                height: 1,
-                                                backgroundColor: '#e5e7eb',
-                                                marginVertical: 8,
-                                                marginHorizontal: 16,
-                                            }}
-                                        />
-                                    );
-                                }
-
-                                if (item.submenu && item.submenu.length > 0) {
-                                    const isSectionItem = item.isSection ?? false;
-                                    const sectionTitleText = typeof item.sectionTitle === 'string' && item.sectionTitle.length > 0 ? item.sectionTitle : undefined;
-                                    const headerLabel = sectionTitleText ?? item.label;
-                                    return (
-                                        <View key={index} style={isSectionItem ? styles.sectionGroup : undefined}>
-                                            {headerLabel.length > 0 && (
-                                                <View style={styles.submenuHeader}>
-                                                    <Text style={[
-                                                        styles.submenuHeaderText,
-                                                        item.disabled && styles.menuItemDisabled
-                                                    ]}>
-                                                        {headerLabel}
-                                                    </Text>
-                                                </View>
-                                            )}
-                                            {item.submenu.map((subItem, subIndex) => (
-                                                <Pressable
-                                                    key={`${index}_${subIndex}`}
-                                                    style={[
-                                                        styles.menuItem,
-                                                        styles.submenuItem,
-                                                        subItem.disabled && styles.menuItemDisabled
-                                                    ]}
-                                                    onPress={() => {
-                                                        if (!subItem.disabled) {
-                                                            subItem.onPress?.();
-                                                            onOpenChange(false);
-                                                        }
-                                                    }}
-                                                    disabled={subItem.disabled}
-                                                >
-                                                    <View style={styles.menuItemContent}>
-                                                        <Text style={[
-                                                            styles.menuItemText,
-                                                            subItem.destructive && styles.menuItemDestructive
-                                                        ]}>
-                                                            {subItem.label}
-                                                        </Text>
-                                                    </View>
-                                                </Pressable>
-                                            ))}
-                                        </View>
-                                    );
-                                }
-                                // Regular menu item
-                                return (
-                                    <Pressable
-                                        key={index}
-                                        style={[
-                                            styles.menuItem,
-                                            item.disabled && styles.menuItemDisabled
-                                        ]}
-                                        onPress={() => {
-                                            if (!item.disabled) {
-                                                item.onPress?.();
-                                                onOpenChange(false);
-                                            }
-                                        }}
-                                        disabled={item.disabled}
-                                    >
-                                        <View style={styles.menuItemContent}>
-                                            <Text style={[
-                                                styles.menuItemText,
-                                                item.destructive && styles.menuItemDestructive
-                                            ]}>
-                                                {item.label}
-                                            </Text>
-                                        </View>
-                                    </Pressable>
-                                );
-                            })}
-                        </View>
-                    </Pressable>
-                </Modal>
-            </>
-        );
-    }
-
     return (
         <View ref={ref} style={{ opacity: 0, position: 'absolute', pointerEvents: 'none' }}>
             {children}
         </View>
     );
-});
-
-const styles = require('react-native').StyleSheet.create({
-    overlay: {
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        justifyContent: 'flex-end',
-    },
-    bottomSheet: {
-        backgroundColor: '#fff',
-        borderTopLeftRadius: 16,
-        borderTopRightRadius: 16,
-        paddingVertical: 8,
-        paddingBottom: 24,
-    },
-    menuItem: {
-        paddingVertical: 16,
-        paddingHorizontal: 20,
-    },
-    menuItemDisabled: {
-        opacity: 0.5,
-    },
-    menuItemContent: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 12,
-    },
-    menuItemText: {
-        fontSize: 16,
-        color: '#000',
-    },
-    menuItemDestructive: {
-        color: '#ef4444',
-    },
-    submenuHeader: {
-        paddingVertical: 12,
-        paddingHorizontal: 20,
-        backgroundColor: '#f5f5f5',
-    },
-    submenuHeaderText: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#666',
-        textTransform: 'uppercase',
-    },
-    submenuItem: {
-        paddingLeft: 40,
-    },
-    sectionGroup: {
-        paddingTop: 12,
-    },
 });
 
 ContextMenuContent.displayName = 'ContextMenuContent';

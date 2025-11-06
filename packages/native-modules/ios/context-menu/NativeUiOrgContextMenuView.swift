@@ -187,21 +187,27 @@ public class NativeUiOrgContextMenuView: ExpoView, UIContextMenuInteractionDeleg
           image = UIImage(systemName: iconName)
         }
         
-        let inlineTitle = (sectionTitle?.isEmpty == false ? sectionTitle! : title)
-        let options: UIMenu.Options = isSection ? [.displayInline] : []
-        let submenu = UIMenu(
-          title: inlineTitle,
-          image: isSection ? nil : image,
-          identifier: nil,
-          options: options,
-          children: submenuActions
-        )
-
         if isSection {
-          elements.append(submenu)
+          let sectionTitleText = (sectionTitle?.isEmpty == false ? sectionTitle! : title)
+          let sectionMenu = UIMenu(
+            title: sectionTitleText,
+            image: nil,
+            identifier: nil,
+            options: [.displayInline],
+            children: submenuActions
+          )
+          elements.append(sectionMenu)
           continue
         }
-
+        
+        // Regular submenu (not a section)
+        let submenu = UIMenu(
+          title: title,
+          image: image,
+          identifier: nil,
+          options: [],
+          children: submenuActions
+        )
         currentGroup.append(submenu)
         continue
       } else {
