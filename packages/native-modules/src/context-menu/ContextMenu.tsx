@@ -23,9 +23,9 @@ export type ContextMenuItemProps = ViewProps & {
     disabled?: boolean;
     destructive?: boolean;
     onPress?: () => void;
-    icon?: string; // For web
-    iosIcon?: string; // SF Symbol name for iOS
-    androidIcon?: string; // Material Icon name for Android
+    icon?: React.ReactNode;
+    iosIcon?: string;
+    androidIcon?: string;
     children: React.ReactNode;
 };
 
@@ -34,9 +34,9 @@ export type ContextMenuSeparatorProps = ViewProps;
 export type ContextMenuSubmenuProps = ViewProps & {
     label: string;
     disabled?: boolean;
-    icon?: string; // For web
-    iosIcon?: string; // For iOS
-    androidIcon?: string; // For Android
+    icon?: React.ReactNode;
+    iosIcon?: string;
+    androidIcon?: string;
     children: React.ReactNode;
 };
 
@@ -50,11 +50,13 @@ type MenuItem = {
     onPress?: () => void;
     destructive?: boolean;
     disabled?: boolean;
-    icon?: string; // For web
-    iosIcon?: string; // For iOS
-    androidIcon?: string; // For Android
-    submenu?: MenuItem[]; // Submenu items
-    isSeparator?: boolean; // For separators
+    icon?: React.ReactNode;
+    iosIcon?: string;
+    androidIcon?: string;
+    submenu?: MenuItem[];
+    isSeparator?: boolean;
+    isSection?: boolean;
+    sectionTitle?: string;
 };
 
 // Context for managing state
@@ -63,7 +65,7 @@ export const ContextMenuContext = React.createContext<{
     onOpenChange: (open: boolean) => void;
     menuItems: MenuItem[];
     registerMenuItem: (item: MenuItem) => void;
-    registerSubmenu: (label: string, items: MenuItem[], icon?: string, iosIcon?: string, androidIcon?: string, disabled?: boolean) => void;
+    registerSubmenu: (label: string, items: MenuItem[], icon?: React.ReactNode, iosIcon?: string, androidIcon?: string, disabled?: boolean) => void;
     registerSeparator: () => void;
     registerSection: (title: string, items: MenuItem[]) => void;
     clearMenuItems: () => void;
@@ -126,7 +128,7 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
         });
     }, []);
 
-    const registerSubmenu = React.useCallback((label: string, items: MenuItem[], icon?: string, iosIcon?: string, androidIcon?: string, disabled?: boolean) => {
+    const registerSubmenu = React.useCallback((label: string, items: MenuItem[], icon?: React.ReactNode, iosIcon?: string, androidIcon?: string, disabled?: boolean) => {
         // Mark items as "to remove" IMMEDIATELY
         items.forEach(item => {
             itemsToRemoveRef.current.add(item.label);
@@ -159,32 +161,47 @@ export const ContextMenu = React.forwardRef<any, ContextMenuProps>((props, ref) 
     }, []);
 
     const registerSection = React.useCallback((title: string, items: MenuItem[]) => {
-        // Mark items as "to remove" IMMEDIATELY
         items.forEach(item => {
             if (!item.submenu) {
                 itemsToRemoveRef.current.add(item.label);
             } else {
-                // For submenus in sections, mark their sub-items
                 item.submenu?.forEach(subItem => {
                     itemsToRemoveRef.current.add(subItem.label);
                 });
             }
         });
-        
+
         setMenuItems(prev => {
-            // Remove any items that are now part of this section
-            const itemLabels = new Set(items.flatMap(item => 
+            const sectionKey = title || items.map(i => i.label).join('•');
+            const itemLabels = new Set(items.flatMap(item =>
                 item.submenu ? item.submenu.map(s => s.label) : [item.label]
             ));
+
             const filtered = prev.filter(m => {
                 if (m.isSeparator) return true;
-                return !itemLabels.has(m.label);
+                if (m.isSection && (m.sectionTitle ?? m.label) === sectionKey) {
+                    return false;
+                }
+                if (itemLabels.has(m.label)) {
+                    return false;
+                }
+                return true;
             });
-            
-            // Add separator before section (except if it's the first item)
-            const withSeparator = filtered.length > 0 ? [...filtered, { label: '', isSeparator: true }] : filtered;
-            // Add section items
-            return [...withSeparator, ...items];
+
+            const next = [...filtered];
+            const needsSeparator = next.length > 0 && !next[next.length - 1]?.isSeparator;
+            if (needsSeparator) {
+                next.push({ label: `separator-${next.length}`, isSeparator: true });
+            }
+
+            next.push({
+                label: sectionKey || `section-${next.length}`,
+                sectionTitle: title || undefined,
+                submenu: items,
+                isSection: true,
+            });
+
+            return next;
         });
     }, []);
 
@@ -509,23 +526,28 @@ export const ContextMenuTrigger = React.forwardRef<any, ContextMenuTriggerProps 
         _onOpenChange?.(false);
     }, [_onOpenChange]);
 
-    // Native - wrap children with native context menu view (but make it transparent)
-    // Include separators in the data so iOS can group items properly
+    const getNativeIcon = (value: MenuItem['icon']) =>
+        typeof value === 'string' ? value : '';
+
     const menuItemsData = cleanedMenuItems.map(item => ({
         label: item.label || '',
         destructive: item.destructive || false,
         disabled: item.disabled || false,
-        icon: item.icon || '',
+        icon: getNativeIcon(item.icon),
         iosIcon: item.iosIcon || '',
         androidIcon: item.androidIcon || '',
         isSeparator: item.isSeparator || false,
+        isSection: item.isSection || false,
+        sectionTitle: item.sectionTitle || '',
         submenu: item.submenu?.map(subItem => ({
             label: subItem.label || '',
             destructive: subItem.destructive || false,
             disabled: subItem.disabled || false,
-            icon: subItem.icon || '',
+            icon: getNativeIcon(subItem.icon),
             iosIcon: subItem.iosIcon || '',
             androidIcon: subItem.androidIcon || '',
+            isSection: subItem.isSection || false,
+            sectionTitle: subItem.sectionTitle || '',
         })) || [],
     }));
 
@@ -618,17 +640,21 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
                                 }
 
                                 if (item.submenu && item.submenu.length > 0) {
-                                    // Render submenu with nested items
+                                    const isSectionItem = item.isSection ?? false;
+                                    const sectionTitleText = typeof item.sectionTitle === 'string' && item.sectionTitle.length > 0 ? item.sectionTitle : undefined;
+                                    const headerLabel = sectionTitleText ?? item.label;
                                     return (
-                                        <View key={index}>
-                                            <View style={styles.submenuHeader}>
-                                                <Text style={[
-                                                    styles.submenuHeaderText,
-                                                    item.disabled && styles.menuItemDisabled
-                                                ]}>
-                                                    {item.label}
-                                                </Text>
-                                            </View>
+                                        <View key={index} style={isSectionItem ? styles.sectionGroup : undefined}>
+                                            {headerLabel.length > 0 && (
+                                                <View style={styles.submenuHeader}>
+                                                    <Text style={[
+                                                        styles.submenuHeaderText,
+                                                        item.disabled && styles.menuItemDisabled
+                                                    ]}>
+                                                        {headerLabel}
+                                                    </Text>
+                                                </View>
+                                            )}
                                             {item.submenu.map((subItem, subIndex) => (
                                                 <Pressable
                                                     key={`${index}_${subIndex}`}
@@ -745,6 +771,9 @@ const styles = require('react-native').StyleSheet.create({
     submenuItem: {
         paddingLeft: 40,
     },
+    sectionGroup: {
+        paddingTop: 12,
+    },
 });
 
 ContextMenuContent.displayName = 'ContextMenuContent';
@@ -772,13 +801,21 @@ export const ContextMenuItem = React.forwardRef<any, ContextMenuItemProps>((prop
 
     const label = getTextLabel(children);
 
+    const iconDependency = typeof icon === 'string' ? icon : icon ? '__node__' : null;
+
     React.useLayoutEffect(() => {
-        // Only register if NOT inside a submenu (submenu items are collected by ContextMenuSubmenu)
-        // Use useLayoutEffect to run before children render
         if (label && !isInSubmenu) {
             registerMenuItem({ label, onPress, destructive, disabled, icon, iosIcon, androidIcon });
         }
-    }, [label, onPress, destructive, disabled, icon, iosIcon, androidIcon, registerMenuItem, isInSubmenu]);
+    }, [label, onPress, destructive, disabled, iconDependency, iosIcon, androidIcon, registerMenuItem, isInSubmenu]);
+
+    const renderIcon = (value: React.ReactNode) => {
+        if (!value) return null;
+        if (typeof value === 'string') {
+            return <span>{value}</span>;
+        }
+        return <span style={{ display: 'flex', alignItems: 'center' }}>{value}</span>;
+    };
 
     if (Platform.OS === 'web') {
         return (
@@ -809,7 +846,7 @@ export const ContextMenuItem = React.forwardRef<any, ContextMenuItemProps>((prop
                     e.currentTarget.style.backgroundColor = 'transparent';
                 }}
             >
-                {icon && <span>{icon}</span>}
+                {renderIcon(icon)}
                 {children}
             </div>
         );
@@ -854,18 +891,7 @@ ContextMenuSeparator.displayName = 'ContextMenuSeparator';
 export const ContextMenuSubmenu = React.forwardRef<any, ContextMenuSubmenuProps>((props, ref) => {
     const { label, disabled = false, icon, iosIcon, androidIcon, children } = props;
     const parentContext = useContextMenu();
-    const {
-        registerSubmenu,
-        registerMenuItem: parentRegisterMenuItem,
-        itemsToRemoveRef: parentItemsToRemoveRef,
-        isInSubmenu: parentIsInSubmenu,
-        setIsInSubmenu: parentSetIsInSubmenu,
-        onOpenChange: parentOnOpenChange,
-        menuItems: parentMenuItems,
-        registerSection: parentRegisterSection,
-        registerSeparator: parentRegisterSeparator,
-        clearMenuItems: parentClearMenuItems,
-    } = parentContext;
+    const { registerSubmenu, itemsToRemoveRef: parentItemsToRemoveRef } = parentContext;
     
     // Collect submenu items from children IMMEDIATELY (synchronously)
     const submenuItems = React.useMemo(() => {

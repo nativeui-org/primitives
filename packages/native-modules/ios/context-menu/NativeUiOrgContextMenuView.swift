@@ -88,6 +88,7 @@ public class NativeUiOrgContextMenuView: ExpoView, UIContextMenuInteractionDeleg
     for (index, item) in menuItems.enumerated() {
       // Check if this is a separator (empty label and isSeparator flag)
       let isSeparator = item["isSeparator"] as? Bool ?? false
+      let isSection = item["isSection"] as? Bool ?? false
       if isSeparator {
         // When we hit a separator, add current group as a menu and start a new group
         if !currentGroup.isEmpty {
@@ -103,22 +104,16 @@ public class NativeUiOrgContextMenuView: ExpoView, UIContextMenuInteractionDeleg
       let isDestructive = item["destructive"] as? Bool ?? false
       let isDisabled = item["disabled"] as? Bool ?? false
       let iconName = item["iosIcon"] as? String
+      let sectionTitle = item["sectionTitle"] as? String
       
       // Check if this item has a submenu
       // Try multiple ways to extract the submenu array
       var submenuArray: [[String: Any]]? = nil
       
       if let submenuRaw = item["submenu"] {
-        #if DEBUG
-        print("🔍 Item '\(title)' has submenu property: \(type(of: submenuRaw))")
-        #endif
-        
         // Try direct cast first
         if let directCast = submenuRaw as? [[String: Any]] {
           submenuArray = directCast
-          #if DEBUG
-          print("  ✅ Direct cast successful: \(directCast.count) items")
-          #endif
         }
         // Try casting from NSArray
         else if let nsArray = submenuRaw as? NSArray {
@@ -138,26 +133,16 @@ public class NativeUiOrgContextMenuView: ExpoView, UIContextMenuInteractionDeleg
           }
           if !converted.isEmpty {
             submenuArray = converted
-            #if DEBUG
-            print("  ✅ NSArray conversion successful: \(converted.count) items")
-            #endif
-          } else {
-            #if DEBUG
-            print("  ❌ Failed to extract submenu array from NSArray")
-            #endif
           }
-        } else {
-          #if DEBUG
-          print("  ❌ Failed to extract submenu array")
-          #endif
         }
       }
       
       if let submenuArray = submenuArray, !submenuArray.isEmpty {
-        // Create a submenu
-        #if DEBUG
-        print("✅ Creating submenu for '\(title)' with \(submenuArray.count) items")
-        #endif
+        if isSection && !currentGroup.isEmpty {
+          let groupMenu = UIMenu(title: "", options: .displayInline, children: currentGroup)
+          elements.append(groupMenu)
+          currentGroup = []
+        }
         var submenuActions: [UIMenuElement] = []
         
         for (subIndex, subItem) in submenuArray.enumerated() {
@@ -202,16 +187,23 @@ public class NativeUiOrgContextMenuView: ExpoView, UIContextMenuInteractionDeleg
           image = UIImage(systemName: iconName)
         }
         
-        // Create a UIMenu (submenu) instead of UIAction
+        let inlineTitle = (sectionTitle?.isEmpty == false ? sectionTitle! : title)
+        let options: UIMenu.Options = isSection ? [.displayInline] : []
         let submenu = UIMenu(
-          title: title,
-          image: image,
+          title: inlineTitle,
+          image: isSection ? nil : image,
           identifier: nil,
-          options: [],
+          options: options,
           children: submenuActions
         )
-        
+
+        if isSection {
+          elements.append(submenu)
+          continue
+        }
+
         currentGroup.append(submenu)
+        continue
       } else {
         // Regular menu item
         var attributes: UIMenuElement.Attributes = []

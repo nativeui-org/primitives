@@ -12,8 +12,8 @@ import {
   ContextMenuSection
 } from "@native-ui-org/primitives";
 import { StyleSheet, Platform, ScrollView } from "react-native";
-import React from "react";
-import { Share, Edit, Archive, Download, Trash2 } from "lucide-react-native";
+import * as React from "react";
+import { Share, Edit, Archive, Download, Trash2, Reply, Forward, Smile } from "lucide-react-native";
 
 export default function ContextMenuPreview() {
   React.useEffect(() => {
@@ -206,6 +206,72 @@ export default function ContextMenuPreview() {
                 icon="🗑️"
               >
                 <Text>Delete</Text>
+              </ContextMenuItem>
+            </ContextMenuContent>
+          </ContextMenu>
+        </View>
+
+        <View style={styles.section}>
+          <Text as="h3" style={styles.subTitle}>Separator Demo</Text>
+          <Text as="p" style={styles.description}>
+            Simple separators between standalone actions (native separators appear inline on iOS)
+          </Text>
+
+          <ContextMenu>
+            <ContextMenuTrigger>
+              <View style={[styles.chatItem, { backgroundColor: '#f9fafb', padding: 16, borderRadius: 8 }]}> 
+                <View style={styles.chatAvatar}>
+                  <Text style={styles.chatAvatarText}>💬</Text>
+                </View>
+                <View style={styles.chatContent}>
+                  <Text style={styles.chatTitle}>Separator playground</Text>
+                  <Text style={styles.chatSubtitle}>Long press to see spaced actions</Text>
+                </View>
+              </View>
+            </ContextMenuTrigger>
+
+            <ContextMenuContent>
+              <ContextMenuItem
+                onPress={() => showAlert({ title: "Add Reaction", message: "Reacting…" })}
+                iosIcon="face.smiling"
+                androidIcon="insert_emoticon"
+                icon={<Smile size={18} color="#6366f1" />}
+              >
+                <Text>Add Reaction</Text>
+              </ContextMenuItem>
+
+              <ContextMenuSeparator />
+
+              <ContextMenuItem
+                onPress={() => showAlert({ title: "Reply", message: "Replying…" })}
+                iosIcon="arrowshape.turn.up.left"
+                androidIcon="reply"
+                icon={<Reply size={18} color="#0ea5e9" />}
+              >
+                <Text>Reply</Text>
+              </ContextMenuItem>
+
+              <ContextMenuSeparator />
+
+              <ContextMenuItem
+                onPress={() => showAlert({ title: "Forward", message: "Forwarding…" })}
+                iosIcon="arrowshape.turn.up.right"
+                androidIcon="forward"
+                icon={<Forward size={18} color="#22c55e" />}
+              >
+                <Text>Forward</Text>
+              </ContextMenuItem>
+
+              <ContextMenuSeparator />
+
+              <ContextMenuItem
+                onPress={() => showAlert({ title: "Delete", message: "Deleting message…" })}
+                destructive
+                iosIcon="trash"
+                androidIcon="delete"
+                icon={<Trash2 size={18} color="#ef4444" />}
+              >
+                <Text>Delete Message</Text>
               </ContextMenuItem>
             </ContextMenuContent>
           </ContextMenu>

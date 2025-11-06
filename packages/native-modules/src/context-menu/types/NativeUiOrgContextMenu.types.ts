@@ -9,6 +9,8 @@ export type MenuItemData = {
   androidIcon?: string;
   submenu?: MenuItemData[];
   isSeparator?: boolean;
+  isSection?: boolean;
+  sectionTitle?: string;
 };
 
 export type NativeUiOrgContextMenuModuleEvents = {

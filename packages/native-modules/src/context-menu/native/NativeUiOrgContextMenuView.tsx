@@ -1,9 +1,9 @@
 import { requireNativeView } from 'expo';
 import * as React from 'react';
 
-import { NativeUiOrgContextMenuViewProps } from '../types/NativeUiOrgContextMenu.types';
+import type { NativeUiOrgContextMenuViewProps } from '../types/NativeUiOrgContextMenu.types';
 
-const NativeView: React.ComponentType<any> =
+const NativeView: React.ComponentType<Record<string, unknown>> =
   requireNativeView('NativeUiOrgContextMenu');
 
 export default function NativeUiOrgContextMenuView(props: NativeUiOrgContextMenuViewProps) {
@@ -11,7 +11,7 @@ export default function NativeUiOrgContextMenuView(props: NativeUiOrgContextMenu
   const menuItems = React.useMemo(() => {
     const formatted = props.menuItems.map(item => {
       // Ensure submenu is properly formatted as an array
-      let submenu: any[] = [];
+      let submenu: Array<Record<string, unknown>> = [];
       if (item.submenu && Array.isArray(item.submenu) && item.submenu.length > 0) {
         submenu = item.submenu.map(subItem => ({
           label: String(subItem.label || ''),
@@ -20,6 +20,9 @@ export default function NativeUiOrgContextMenuView(props: NativeUiOrgContextMenu
           icon: String(subItem.icon || ''),
           iosIcon: String(subItem.iosIcon || ''),
           androidIcon: String(subItem.androidIcon || ''),
+          isSeparator: Boolean(subItem.isSeparator),
+          isSection: Boolean(subItem.isSection),
+          sectionTitle: String(subItem.sectionTitle || ''),
         }));
       }
       
@@ -31,25 +34,13 @@ export default function NativeUiOrgContextMenuView(props: NativeUiOrgContextMenu
         iosIcon: String(item.iosIcon || ''),
         androidIcon: String(item.androidIcon || ''),
         isSeparator: Boolean(item.isSeparator),
+        isSection: Boolean(item.isSection),
+        sectionTitle: String(item.sectionTitle || ''),
         submenu: submenu, // Always include submenu, even if empty
       };
       
       return formattedItem;
     });
-    
-    // Debug: log the structure BEFORE sending to native
-    if (__DEV__) {
-      console.log('🔍 NativeUiOrgContextMenuView: Sending menuItems to native:', JSON.stringify(formatted, null, 2));
-      // Also log submenu structure specifically
-      formatted.forEach((item, idx) => {
-        if (item.submenu && item.submenu.length > 0) {
-          console.log(`  ✅ Item ${idx} "${item.label}" has submenu with ${item.submenu.length} items:`, item.submenu.map(s => s.label));
-        } else {
-          console.log(`  ❌ Item ${idx} "${item.label}" has NO submenu (submenu.length = ${item.submenu?.length || 0})`);
-        }
-      });
-    }
-    
     return formatted;
   }, [props.menuItems]);
 
