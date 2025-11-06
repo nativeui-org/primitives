@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.1
+
+### Patch Changes
+
+- 102fddc: Update package picture
+
 ## 0.6.0
 
 ### Minor Changes
