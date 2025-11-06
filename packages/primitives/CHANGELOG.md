@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.6.0
+
+### Minor Changes
+
+- f43fd72: Adding submenu support to context menu and section
+
+### Patch Changes
+
+- Updated dependencies [f43fd72]
+  - @native-ui-org/native-modules@1.1.0
+
 ## 0.5.0
 
 ### Minor Changes

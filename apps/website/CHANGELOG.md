@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.10.0
+
+### Minor Changes
+
+- f43fd72: Adding submenu support to context menu and section
+
 ## 0.9.0
 
 ### Minor Changes
