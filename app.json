@@ -1,0 +1,8 @@
+{
+  "android": {
+    "package": "com.uwalk.nativeuimonorepo"
+  },
+  "ios": {
+    "bundleIdentifier": "com.uwalk.nativeuimonorepo"
+  }
+}

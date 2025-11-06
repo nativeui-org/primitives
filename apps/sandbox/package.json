@@ -11,7 +11,7 @@
     "build:web": "expo export -p web"
   },
   "dependencies": {
-    "@native-ui-org/context-menu": "workspace:*",
+    "@native-ui-org/native-modules": "workspace:*",
     "@native-ui-org/primitives": "workspace:*",
     "expo": "~54.0.13",
     "expo-router": "^6.0.12",

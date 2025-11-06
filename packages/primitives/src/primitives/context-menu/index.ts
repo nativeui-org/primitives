@@ -4,6 +4,9 @@ export {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
+  ContextMenuSubmenu,
+  ContextMenuSection,
+  ContextMenuContext,
   useContextMenu,
 } from "./context-menu";
 
@@ -13,4 +16,7 @@ export type {
   ContextMenuContentProps,
   ContextMenuItemProps,
   ContextMenuSeparatorProps,
+  ContextMenuSubmenuProps,
+  ContextMenuSectionProps,
 } from "./context-menu";
+

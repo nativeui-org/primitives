@@ -1,13 +1,16 @@
 import { Stack } from "expo-router";
-import { View, Text, showAlert } from "@native-ui-org/primitives";
-
 import {
+  View,
+  Text,
+  showAlert,
   ContextMenu,
   ContextMenuTrigger,
   ContextMenuContent,
   ContextMenuItem,
-  ContextMenuSeparator
-} from "@native-ui-org/context-menu";
+  ContextMenuSeparator,
+  ContextMenuSubmenu,
+  ContextMenuSection
+} from "@native-ui-org/primitives";
 import { StyleSheet, Platform, ScrollView } from "react-native";
 import React from "react";
 import { Share, Edit, Archive, Download, Trash2 } from "lucide-react-native";
@@ -88,6 +91,228 @@ export default function ContextMenuPreview() {
             • <Text style={styles.bold}>Keyboard:</Text> Escape to close, Enter/Space to select{"\n"}
             • <Text style={styles.bold}>Positioning:</Text> Auto-adjusts to avoid screen edges
           </Text>
+        </View>
+
+        <View style={styles.section}>
+          <Text as="h3" style={styles.subTitle}>Submenu & Separator Example</Text>
+          <Text as="p" style={styles.description}>
+            Context menu with nested submenus and separators (works on iOS, Android, and Web)
+          </Text>
+
+          <ContextMenu>
+            <ContextMenuTrigger>
+              <View style={[styles.chatItem, { backgroundColor: '#f0f0f0', padding: 16, borderRadius: 8 }]}>
+                <View style={styles.chatAvatar}>
+                  <Text style={styles.chatAvatarText}>📱</Text>
+                </View>
+                <View style={styles.chatContent}>
+                  <Text style={styles.chatTitle}>Example with Submenu</Text>
+                  <Text style={styles.chatSubtitle}>Long press or right-click to see submenus</Text>
+                </View>
+              </View>
+            </ContextMenuTrigger>
+
+            <ContextMenuContent>
+              <ContextMenuItem
+                onPress={() => showAlert({ title: "Share", message: "Sharing..." })}
+                iosIcon="square.and.arrow.up"
+                androidIcon="share"
+                icon="📤"
+              >
+                <Text>Share</Text>
+              </ContextMenuItem>
+              
+              <ContextMenuSubmenu label="Export" iosIcon="square.and.arrow.down" androidIcon="download" icon="💾">
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Export", message: "Exporting as PDF..." })}
+                  iosIcon="doc.fill"
+                  androidIcon="picture_as_pdf"
+                  icon="📄"
+                >
+                  <Text>Export as PDF</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Export", message: "Exporting as Markdown..." })}
+                  iosIcon="doc.text"
+                  androidIcon="description"
+                  icon="📝"
+                >
+                  <Text>Export as Markdown</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Export", message: "Exporting as JSON..." })}
+                  iosIcon="doc.badge.gearshape"
+                  androidIcon="code"
+                  icon="📋"
+                >
+                  <Text>Export as JSON</Text>
+                </ContextMenuItem>
+              </ContextMenuSubmenu>
+
+              <ContextMenuSubmenu label="Move To" iosIcon="folder" androidIcon="folder" icon="📁">
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Move", message: "Moving to Archive..." })}
+                  iosIcon="archivebox"
+                  androidIcon="archive"
+                  icon="📦"
+                >
+                  <Text>Archive</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Move", message: "Moving to Favorites..." })}
+                  iosIcon="star"
+                  androidIcon="star"
+                  icon="⭐"
+                >
+                  <Text>Favorites</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Move", message: "Moving to Trash..." })}
+                  iosIcon="trash"
+                  androidIcon="delete"
+                  icon="🗑️"
+                >
+                  <Text>Trash</Text>
+                </ContextMenuItem>
+              </ContextMenuSubmenu>
+
+              <ContextMenuSeparator />
+
+              <ContextMenuItem
+                onPress={() => showAlert({ title: "Rename", message: "Renaming..." })}
+                iosIcon="pencil"
+                androidIcon="edit"
+                icon="✏️"
+              >
+                <Text>Rename</Text>
+              </ContextMenuItem>
+
+              <ContextMenuItem
+                onPress={() => showAlert({ title: "Duplicate", message: "Duplicating..." })}
+                iosIcon="doc.on.doc"
+                androidIcon="content-copy"
+                icon="📋"
+              >
+                <Text>Duplicate</Text>
+              </ContextMenuItem>
+
+              <ContextMenuSeparator />
+
+              <ContextMenuItem
+                onPress={() => showAlert({ title: "Delete", message: "Deleting..." })}
+                destructive
+                iosIcon="trash"
+                androidIcon="delete"
+                icon="🗑️"
+              >
+                <Text>Delete</Text>
+              </ContextMenuItem>
+            </ContextMenuContent>
+          </ContextMenu>
+        </View>
+
+        <View style={styles.section}>
+          <Text as="h3" style={styles.subTitle}>Section Example (SwiftUI Style)</Text>
+          <Text as="p" style={styles.description}>
+            Context menu with sections (like SwiftUI Section) - works on iOS, Android, and Web
+          </Text>
+
+          <ContextMenu>
+            <ContextMenuTrigger>
+              <View style={[styles.chatItem, { backgroundColor: '#f0f0f0', padding: 16, borderRadius: 8 }]}>
+                <View style={styles.chatAvatar}>
+                  <Text style={styles.chatAvatarText}>⚙️</Text>
+                </View>
+                <View style={styles.chatContent}>
+                  <Text style={styles.chatTitle}>Settings Menu</Text>
+                  <Text style={styles.chatSubtitle}>Long press or right-click to see sections</Text>
+                </View>
+              </View>
+            </ContextMenuTrigger>
+
+            <ContextMenuContent>
+              <ContextMenuSection title="General Settings">
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Wi-Fi", message: "Opening Wi-Fi settings..." })}
+                  iosIcon="wifi"
+                  androidIcon="wifi"
+                  icon="📶"
+                >
+                  <Text>Wi-Fi</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Bluetooth", message: "Opening Bluetooth settings..." })}
+                  iosIcon="bluetooth"
+                  androidIcon="bluetooth"
+                  icon="📡"
+                >
+                  <Text>Bluetooth</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Notifications", message: "Opening Notification settings..." })}
+                  iosIcon="bell"
+                  androidIcon="notifications"
+                  icon="🔔"
+                >
+                  <Text>Notifications</Text>
+                </ContextMenuItem>
+              </ContextMenuSection>
+
+              <ContextMenuSection title="Account Settings">
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Profile", message: "Opening Profile settings..." })}
+                  iosIcon="person"
+                  androidIcon="person"
+                  icon="👤"
+                >
+                  <Text>Profile</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Security", message: "Opening Security settings..." })}
+                  iosIcon="lock"
+                  androidIcon="lock"
+                  icon="🔒"
+                >
+                  <Text>Security</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Privacy", message: "Opening Privacy settings..." })}
+                  iosIcon="hand.raised"
+                  androidIcon="privacy"
+                  icon="🛡️"
+                >
+                  <Text>Privacy</Text>
+                </ContextMenuItem>
+              </ContextMenuSection>
+
+              <ContextMenuSection title="Advanced Settings">
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Developer Options", message: "Opening Developer options..." })}
+                  iosIcon="hammer"
+                  androidIcon="developer"
+                  icon="🔧"
+                >
+                  <Text>Developer Options</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "System Update", message: "Checking for updates..." })}
+                  iosIcon="arrow.down.circle"
+                  androidIcon="system-update"
+                  icon="🔄"
+                >
+                  <Text>System Update</Text>
+                </ContextMenuItem>
+                <ContextMenuItem
+                  onPress={() => showAlert({ title: "Backup & Restore", message: "Opening Backup & Restore..." })}
+                  iosIcon="arrow.clockwise"
+                  androidIcon="backup"
+                  icon="💾"
+                >
+                  <Text>Backup & Restore</Text>
+                </ContextMenuItem>
+              </ContextMenuSection>
+            </ContextMenuContent>
+          </ContextMenu>
         </View>
 
         <View style={styles.section}>
