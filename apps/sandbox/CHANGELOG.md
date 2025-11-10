@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.14.4
+
+### Patch Changes
+
+- 1c8cae3: update deploy now it should works (works locallylyyyyyy)
+
 ## 0.14.3
 
 ### Patch Changes
