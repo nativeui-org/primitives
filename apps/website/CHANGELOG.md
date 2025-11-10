@@ -1,5 +1,11 @@
 # @native-ui-org/website
 
+## 0.11.0
+
+### Minor Changes
+
+- 194dfa3: Add ActivityView components
+
 ## 0.10.0
 
 ### Minor Changes

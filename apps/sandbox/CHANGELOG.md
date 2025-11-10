@@ -1,5 +1,16 @@
 # @native-ui-org/sandbox
 
+## 0.15.0
+
+### Minor Changes
+
+- 194dfa3: Add ActivityView components
+
+### Patch Changes
+
+- Updated dependencies [194dfa3]
+  - @native-ui-org/primitives@0.7.0
+
 ## 0.14.6
 
 ### Patch Changes
