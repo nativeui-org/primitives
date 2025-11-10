@@ -1,5 +1,11 @@
 # @native-ui-org/sandbox
 
+## 0.14.2
+
+### Patch Changes
+
+- c07b19d: updating deployments
+
 ## 0.14.1
 
 ### Patch Changes
