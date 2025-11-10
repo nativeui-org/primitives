@@ -68,7 +68,7 @@
     {
       "name": "Activity View",
       "description": "iOS share sheet and Android share dialog",
-      "status": "pending"
+      "status": "done"
     },
     {
       "name": "Drawer",
