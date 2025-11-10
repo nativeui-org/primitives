@@ -14,13 +14,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
-
-      - uses: pnpm/action-setup@v4
-        with: { version: 10 }
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter @native-ui-org/sandbox... --ignore-scripts
 
       - name: Deploy to Vercel
         env:
@@ -28,6 +21,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_SANDBOX_PROJECT_ID }}
         run: |
+          corepack enable
+          corepack prepare pnpm@10 --activate
           npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN --cwd=apps/sandbox
-          npx vercel build --token=$VERCEL_TOKEN --cwd=apps/sandbox
-          npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN --cwd=apps/sandbox
+          npx vercel deploy --prod --token=$VERCEL_TOKEN --cwd=apps/sandbox
