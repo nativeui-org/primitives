@@ -14,3 +14,4 @@ export * from "./primitives/switch";
 export * from "./primitives/switch-group";
 export * from "./primitives/toggle";
 export * from "./primitives/toggle-group";
+export * from "./primitives/activity-view";

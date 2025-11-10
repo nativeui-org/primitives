@@ -90,29 +90,29 @@ Allow multiple toggles to be pressed simultaneously:
 
 ```tsx
 <ToggleGroup type="multiple" defaultValue={["bold", "italic"]}>
-  <Toggle value="bold">
+    <Toggle value="bold">
     {({ pressed }) => (
       <View style={pressed && styles.active}>
         <Icon name="bold" />
       </View>
     )}
-  </Toggle>
-  
-  <Toggle value="italic">
+    </Toggle>
+    
+    <Toggle value="italic">
     {({ pressed }) => (
       <View style={pressed && styles.active}>
         <Icon name="italic" />
       </View>
     )}
-  </Toggle>
-  
-  <Toggle value="underline">
+    </Toggle>
+    
+    <Toggle value="underline">
     {({ pressed }) => (
       <View style={pressed && styles.active}>
         <Icon name="underline" />
       </View>
     )}
-  </Toggle>
+    </Toggle>
 </ToggleGroup>
 ```
 

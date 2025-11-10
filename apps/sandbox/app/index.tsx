@@ -8,16 +8,17 @@ const primitives = [
   { name: "Collapsible", path: "/preview/collapsible", description: "Expandable content with controlled/uncontrolled state" },
   { name: "Accordion", path: "/preview/accordion", description: "Grouped collapsibles with single or multiple selection" },
   { name: "Alert", path: "/preview/alert", description: "Cross-platform alerts: native on mobile, custom on web" },
+  { name: "Activity View", path: "/preview/activity-view", description: "Share content: native share sheet on mobile, Web Share API on web" },
   { name: "Portal", path: "/preview/portal", description: "Render children outside React tree" },
   { name: "Aspect Ratio", path: "/preview/aspect-ratio", description: "Maintain specific aspect ratios for responsive content" },
   { name: "Avatar", path: "/preview/avatar", description: "User profile images with intelligent fallback text support" },
   { name: "Checkbox", path: "/preview/checkbox", description: "Individual checkbox with clickable labels" },
-  { name: "CheckboxGroup", path: "/preview/checkbox-group", description: "Manage multiple checkboxes with coordinated state" },
+  { name: "Checkbox Group", path: "/preview/checkbox-group", description: "Manage multiple checkboxes with coordinated state" },
   { name: "Context Menu", path: "/preview/context-menu", description: "Cross-platform context menu: right-click on web, long press on native" },
   { name: "Switch", path: "/preview/switch", description: "Switch between on/off states with customizable styling" },
-  { name: "SwitchGroup", path: "/preview/switch-group", description: "Manage multiple switches with coordinated state" },
+  { name: "Switch Group", path: "/preview/switch-group", description: "Manage multiple switches with coordinated state" },
   { name: "Toggle", path: "/preview/toggle", description: "Button-like toggles for formatting and actions" },
-  { name: "ToggleGroup", path: "/preview/toggle-group", description: "Manage multiple toggles with coordinated state" },
+  { name: "Toggle Group", path: "/preview/toggle-group", description: "Manage multiple toggles with coordinated state" },
 ];
 
 export default function Home() {
