@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.0
+
+### Minor Changes
+
+- 194dfa3: Add ActivityView components
+
 ## 0.6.1
 
 ### Patch Changes
