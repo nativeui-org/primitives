@@ -24,6 +24,7 @@ jobs:
           corepack enable
           corepack prepare pnpm@10 --activate
           pnpm install --frozen-lockfile --filter @native-ui-org/sandbox... --ignore-scripts
+          pnpm --filter @native-ui-org/primitives build
           npx vercel pull --yes --environment=production --token=$VERCEL_TOKEN --cwd=apps/sandbox
           npx vercel build --token=$VERCEL_TOKEN --cwd=apps/sandbox
           npx vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN --cwd=apps/sandbox
