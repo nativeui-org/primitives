@@ -19,6 +19,7 @@ const primitives = [
   { name: "Switch Group", path: "/preview/switch-group", description: "Manage multiple switches with coordinated state" },
   { name: "Toggle", path: "/preview/toggle", description: "Button-like toggles for formatting and actions" },
   { name: "Toggle Group", path: "/preview/toggle-group", description: "Manage multiple toggles with coordinated state" },
+  { name: "Drawer", path: "/preview/drawer", description: "Side-based navigation with customizable content" },
 ];
 
 export default function Home() {
