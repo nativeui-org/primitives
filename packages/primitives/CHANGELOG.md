@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.0
+
+### Minor Changes
+
+- f4e2267: Add drawer components
+
 ## 0.7.0
 
 ### Minor Changes
