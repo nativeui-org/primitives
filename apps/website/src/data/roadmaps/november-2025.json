@@ -73,7 +73,7 @@
     {
       "name": "Drawer",
       "description": "Side panels for navigation",
-      "status": "pending"
+      "status": "done"
     },
     {
       "name": "Combobox",
