@@ -1,0 +1,183 @@
+---
+title: "Drawer"
+description: "Create a fast bottom sheet drawer that slides from the bottom, supports snapping to multiple positions, and works the same on iOS, Android, and Web."
+---
+
+---
+
+## Preview
+
+<Preview component="drawer" title="Interactive Demo" />
+
+---
+
+## Installation
+
+<InstallTabs />
+
+---
+
+## Overview
+
+Drawer is a cross-platform primitive that mounts an overlay at the root of your app and animates a sheet from the bottom of the screen. It supports:
+
+| Feature              | Description                                         | Platforms         |
+| -------------------- | --------------------------------------------------- | ----------------- |
+| **Portal-based**     | Renders using the Portal primitive                  | iOS, Android, Web |
+| **Snap Points**      | Provide percentage or pixel based snap points       | iOS, Android, Web |
+| **Gestures**         | Drag to resize / dismiss with native performance    | iOS, Android, Web |
+| **Controlled mode**  | Manage `open` state externally via props            | iOS, Android, Web |
+| **Keyboard aware**   | Optional `KeyboardAvoidingView` integration on iOS  | iOS, Android, Web |
+
+---
+
+## Usage
+
+### 1. Basic Drawer
+
+```tsx
+import {
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerHandle,
+} from "@native-ui-org/primitives";
+
+function Example() {
+  return (
+    <Drawer defaultOpen snapPoints={[0.4, 0.7]}>
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerHandle />
+        <View style={{ padding: 24 }}>
+          <Text style={{ fontSize: 18, fontWeight: "600" }}>Bottom Sheet</Text>
+          <Text style={{ color: "#555", marginTop: 8 }}>
+            Drag the handle or tap outside to dismiss.
+          </Text>
+        </View>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+```
+
+### 2. Controlled Drawer
+
+```tsx
+function Controlled() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <>
+      <Pressable onPress={() => setOpen(true)}>
+        <Text>Open drawer</Text>
+      </Pressable>
+
+      <Drawer
+        open={open}
+        onOpenChange={setOpen}
+        snapPoints={[0.35, 0.6, 0.9]}
+        initialSnapIndex={1}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHandle />
+          <ScrollView style={{ padding: 24 }}>
+            <Text style={{ fontWeight: "600", fontSize: 18 }}>Controlled drawer</Text>
+            <Text style={{ color: "#555", marginTop: 12 }}>
+              The parent decides when we open or close.
+            </Text>
+          </ScrollView>
+        </DrawerContent>
+      </Drawer>
+    </>
+  );
+}
+```
+
+### 3. Non-resizable drawer
+
+```tsx
+<Drawer resizable={false} snapPoints={[0.5]}>
+  <DrawerOverlay />
+  <DrawerContent>
+    <View style={{ padding: 24 }}>
+      <Text>This drawer cannot be resized.</Text>
+    </View>
+  </DrawerContent>
+</Drawer>
+```
+
+---
+
+## Props
+
+### `Drawer`
+
+| Prop                | Type                                    | Default      | Description                                                                 |
+| ------------------- | --------------------------------------- | ------------ | --------------------------------------------------------------------------- |
+| `open`              | `boolean`                               | —            | Controlled open state.                                                      |
+| `defaultOpen`       | `boolean`                               | `false`      | Initial open state (uncontrolled).                                          |
+| `onOpenChange`      | `(open: boolean) => void`               | —            | Called when drawer requests a state change (close gesture, overlay tap…).   |
+| `snapPoints`        | `number[]`                              | `[0.5]`      | Heights for the sheet. Percentages `0-1` or pixel values.                   |
+| `initialSnapIndex`  | `number`                                | `0`          | Index of the snap point to use when opening.                                |
+| `dismissible`       | `boolean`                               | `true`       | Allow tapping the overlay or dragging past the threshold to close.          |
+| `resizable`         | `boolean`                               | `true`       | Enable drag gestures on the sheet.                                          |
+| `overlayOpacity`    | `number`                                | `0.45`       | Target opacity for the backdrop when opened.                                |
+| `keyboardBehavior`  | `'padding' | 'height' | 'position' | 'none'` | `padding` on iOS | Behavior passed to `KeyboardAvoidingView`. Uses `height` on Android.          |
+| `keyboardOffset`    | `number`                                | `0`          | Offset applied to `KeyboardAvoidingView`.                                   |
+| `portal`            | `boolean`                               | `true`       | Render inside the `Portal` primitive. Set to `false` to inline render.      |
+
+### `DrawerContent`
+
+| Prop     | Type        | Default | Description                                                   |
+| -------- | ----------- | ------- | ------------------------------------------------------------- |
+| `asChild`| `boolean`   | `false` | Use the Slot pattern and merge props into the child element.  |
+
+The content automatically receives the pan handlers. Apply your own padding/layout.
+
+### `DrawerHandle`
+
+| Prop     | Type        | Default | Description                                                   |
+| -------- | ----------- | ------- | ------------------------------------------------------------- |
+| `asChild`| `boolean`   | `false` | Render the handle as a custom component via Slot.             |
+
+Children default to a simple pill indicator if none are provided.
+
+### `DrawerOverlay`
+
+| Prop         | Type      | Default | Description                                              |
+| ------------ | --------- | ------- | -------------------------------------------------------- |
+| `dismissible`| `boolean` | `true`  | Whether tapping the overlay should request closing.      |
+| `style`      | `StyleProp<ViewStyle>` | — | Additional styles for the animated overlay view. |
+
+---
+
+## Gestures & Snap Points
+
+- Snap points can be declared as percentages (`0.3` = 30% height) or pixels (`320`).
+- The sheet animates with native springs and clamps to the nearest snap point on release.
+- If `dismissible` is `true`, dragging beyond ~90px from the bottom or flicking down quickly closes the drawer.
+- Set `resizable={false}` to disable drag gestures entirely.
+
+---
+
+## Accessibility
+
+- The overlay receives `accessibilityRole="button"` when dismissible so screen readers can close it.
+- The content container uses `accessibilityRole="dialog"` and `aria-modal` on web.
+- Focus management is left to the consumer (e.g. move focus inside the sheet when opening).
+
+---
+
+## Tips
+
+- Use the `portal={false}` prop to embed the drawer inside another Portal or custom layout.
+- Combine with `KeyboardAvoidingView` props on iOS when showing large forms.
+- You can read the drawer state using the `useDrawer()` hook inside children for custom controls. (Returns `open`, `close`, `setSnapIndex`, etc.)
+
+---
+
+The Drawer primitive gives you a polished bottom sheet experience with a minimal, composable API and native-feeling performance everywhere.
+
+
