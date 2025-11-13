@@ -14,6 +14,8 @@ const primitives = [
   { name: "Avatar", path: "/preview/avatar", description: "User profile images with intelligent fallback text support" },
   { name: "Checkbox", path: "/preview/checkbox", description: "Individual checkbox with clickable labels" },
   { name: "Checkbox Group", path: "/preview/checkbox-group", description: "Manage multiple checkboxes with coordinated state" },
+  { name: "Radio", path: "/preview/radio", description: "Individual radio button with clickable labels" },
+  { name: "Radio Group", path: "/preview/radiogroup", description: "Manage multiple radios with coordinated state (single selection)" },
   { name: "Context Menu", path: "/preview/context-menu", description: "Cross-platform context menu: right-click on web, long press on native" },
   { name: "Switch", path: "/preview/switch", description: "Switch between on/off states with customizable styling" },
   { name: "Switch Group", path: "/preview/switch-group", description: "Manage multiple switches with coordinated state" },

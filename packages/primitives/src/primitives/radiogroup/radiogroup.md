@@ -1,0 +1,168 @@
+# Radio Group
+
+Coordinate **multiple radio buttons** with shared state management and validation. Only one radio can be selected at a time.
+
+---
+
+## Overview
+
+RadioGroup manages multiple radios as a coordinated group with single-value state. Unlike CheckboxGroup, only one option can be selected.
+
+| Feature            | Description                            | Platforms         |
+| ------------------ | -------------------------------------- | ----------------- |
+| **RadioGroup**     | Root container coordinating radios      | iOS, Android, Web |
+
+---
+
+## Setup & Usage Guide
+
+RadioGroup simplifies managing multiple radio selections with exclusive choice.
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
+
+```tsx
+import { 
+  RadioGroup, 
+  Radio, 
+  RadioIndicator,
+  RadioLabel 
+} from "@native-ui-org/primitives";
+```
+
+---
+
+### 2. Basic Usage
+
+Manage multiple radios as a group:
+
+```tsx
+<RadioGroup defaultValue="option1">
+  <Radio value="option1">
+    <RadioIndicator>
+      {({ checked }) => <View style={checked ? styles.checked : styles.unchecked} />}
+    </RadioIndicator>
+    <RadioLabel htmlFor="option1"><Text>Option 1</Text></RadioLabel>
+  </Radio>
+  
+  <Radio value="option2">
+    <RadioIndicator>
+      {({ checked }) => <View style={checked ? styles.checked : styles.unchecked} />}
+    </RadioIndicator>
+    <RadioLabel htmlFor="option2"><Text>Option 2</Text></RadioLabel>
+  </Radio>
+  
+  <Radio value="option3">
+    <RadioIndicator>
+      {({ checked }) => <View style={checked ? styles.checked : styles.unchecked} />}
+    </RadioIndicator>
+    <RadioLabel htmlFor="option3"><Text>Option 3</Text></RadioLabel>
+  </Radio>
+</RadioGroup>
+```
+
+---
+
+### 3. Controlled State
+
+Manage group state externally:
+
+```tsx
+const [selected, setSelected] = useState("option1");
+
+<RadioGroup value={selected} onValueChange={setSelected}>
+  <Radio value="option1">
+    <RadioIndicator>{({ checked }) => /* ... */}</RadioIndicator>
+    <RadioLabel htmlFor="option1"><Text>Option 1</Text></RadioLabel>
+  </Radio>
+  
+  <Radio value="option2">
+    <RadioIndicator>{({ checked }) => /* ... */}</RadioIndicator>
+    <RadioLabel htmlFor="option2"><Text>Option 2</Text></RadioLabel>
+  </Radio>
+</RadioGroup>
+```
+
+---
+
+### 4. Disabled Group
+
+Disable all radios at once:
+
+```tsx
+<RadioGroup disabled>
+  <Radio value="option1">
+    <RadioIndicator>{({ checked }) => /* ... */}</RadioIndicator>
+    <RadioLabel htmlFor="option1"><Text>Option 1</Text></RadioLabel>
+  </Radio>
+</RadioGroup>
+```
+
+---
+
+## API Reference
+
+### RadioGroup
+
+Container coordinating multiple radios.
+
+| Prop              | Type                            | Default | Description                              |
+| ----------------- | ------------------------------- | ------- | ---------------------------------------- |
+| `value`           | `string`                        | —       | Controlled selected value               |
+| `defaultValue`    | `string`                        | —       | Initial selected value (uncontrolled)   |
+| `onValueChange`   | `(value: string) => void`      | —       | Callback when selection changes          |
+| `disabled`        | boolean                         | `false` | Disable all radios                      |
+| `required`        | boolean                         | `false` | One must be selected                    |
+| `asChild`         | boolean                         | `false` | Use Slot pattern                         |
+
+**Note:** Individual radios inside the group use their `value` prop to identify themselves. Only one radio can be selected at a time.
+
+---
+
+## Platform Behavior
+
+| Platform              | Implementation                     | Characteristics               |
+| --------------------- | ---------------------------------- | ----------------------------- |
+| **iOS / Android**     | Context-based state coordination   | Native performance            |
+| **Web**               | Fieldset with radios               | Form compatible               |
+| **All Platforms**     | Consistent API                     | Same props, same behavior     |
+
+---
+
+## Accessibility
+
+**Web:**
+
+* Wraps in `<fieldset>` for semantic grouping
+* Proper keyboard navigation
+* Form validation support
+* Radio group semantics ensure only one selection
+
+**Mobile:**
+
+* Group label announced by screen readers
+* Individual radio states accessible
+* Exclusive selection enforced
+
+---
+
+## Version History
+
+| Version | Notes                                                                   |
+| ------- | ----------------------------------------------------------------------- |
+| `0.1.0` | Initial release — radio group with single-value state management. |
+
+---
+
+**Summary:**
+RadioGroup simplifies managing multiple radio selections with exclusive choice.
+Use it for single-select forms, option groups, or any exclusive choice input.
+Provides coordinated state management with single-value selection.
+

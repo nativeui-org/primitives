@@ -9,6 +9,8 @@ export * from "./primitives/aspect-ratio";
 export * from "./primitives/avatar";
 export * from "./primitives/checkbox";
 export * from "./primitives/checkbox-group";
+export * from "./primitives/radio";
+export * from "./primitives/radiogroup";
 export * from "./primitives/context-menu";
 export * from "./primitives/switch";
 export * from "./primitives/switch-group";
