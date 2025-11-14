@@ -1,10 +1,10 @@
 {
   "platforms": ["apple", "android", "web"],
   "apple": {
-    "modules": ["NativeUiOrgContextMenuModule"]
+    "modules": ["NativeUiOrgContextMenuModule", "NativeUiOrgTabsModule"]
   },
   "android": {
-    "modules": ["expo.modules.nativeuiorgnativemodules.NativeUiOrgContextMenuModule"]
+    "modules": ["expo.modules.nativeuiorgnativemodules.NativeUiOrgContextMenuModule", "expo.modules.nativeuiorgnativemodules.tabs.NativeUiOrgTabsModule"]
   }
 }
 

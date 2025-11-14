@@ -18,3 +18,4 @@ export * from "./primitives/toggle";
 export * from "./primitives/toggle-group";
 export * from "./primitives/activity-view";
 export * from "./primitives/drawer";
+export * from "./primitives/tabs";
