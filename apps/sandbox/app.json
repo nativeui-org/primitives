@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "sandbox",
-    "slug": "sandbox",
+    "name": "sandbox-primitives",
+    "slug": "sandbox-primitives",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +15,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.theoribbi.sandboxprimitives"
+      "bundleIdentifier": "com.theoribbi.sandboxprimitives",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.theoribbi.sandboxprimitives",
@@ -47,6 +50,12 @@
     "plugins": [
       "expo-router",
       "@native-ui-org/native-modules"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "f972e551-2fb7-4750-9ed9-f73c7dd6e738"
+      }
+    }
   }
 }
