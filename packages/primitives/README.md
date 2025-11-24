@@ -1,4 +1,4 @@
-![hero](https://github.com/nativeui-org/primitives/raw/main/assets/hero.svg)
+![hero](https://github.com/nativeui-org/primitives/raw/main/assets/hero-black.svg)
 
 # NativeUI Primitives
 
