@@ -32,6 +32,7 @@ jobs:
       - name: Build packages
         run: |
           pnpm -r --filter @native-ui-org/native-modules run build
+          pnpm install --frozen-lockfile
           pnpm -r --filter @native-ui-org/primitives run build
 
       - name: Configure pnpm for npm

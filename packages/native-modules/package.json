@@ -5,9 +5,17 @@
   "main": "build/index.js",
   "react-native": "build/index.native.js",
   "types": "build/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js",
+      "require": "./build/index.js",
+      "react-native": "./build/index.native.js"
+    }
+  },
   "scripts": {
     "build": "expo-module build && npm run build:types",
-    "build:types": "node scripts/generate-types.js",
+    "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap false && node scripts/post-build-types.js",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
