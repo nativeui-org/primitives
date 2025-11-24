@@ -1,0 +1,364 @@
+# Button
+
+Cross-platform button primitive that wraps React Native's `Pressable`. Provides a consistent API for interactive buttons across iOS, Android, and Web.
+
+---
+
+## Overview
+
+Button is a cross-platform button primitive that provides a consistent API for interactive elements across iOS, Android, and Web. It's designed to be the foundation for building any type of button or pressable element.
+
+| Feature      | Description                                | Platforms         |
+| ------------ | ------------------------------------------ | ----------------- |
+| **Button**   | Standard pressable button with all Pressable props | iOS, Android, Web |
+| **asChild**  | Polymorphic rendering for any component | iOS, Android, Web |
+| **Accessibility** | Proper ARIA attributes and roles | Web               |
+| **Composable** | Use with any component via `asChild` | iOS, Android, Web |
+
+---
+
+## Setup & Usage Guide
+
+Button works out of the box with no configuration. It's a drop-in replacement for React Native's `Pressable` with enhanced web semantics.
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
+
+```tsx
+import { Button } from "@native-ui-org/primitives";
+```
+
+---
+
+### 2. Basic Usage
+
+Use Button just like React Native's `Pressable`:
+
+```tsx
+import { Button, Text } from "@native-ui-org/primitives";
+
+function MyComponent() {
+  return (
+    <Button onPress={() => console.log("Pressed!")}>
+      <Text>Click me</Text>
+    </Button>
+  );
+}
+```
+
+---
+
+### 3. With Styling
+
+Apply styles directly to the Button:
+
+```tsx
+<Button
+  onPress={handlePress}
+  style={{
+    backgroundColor: "#007AFF",
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 8,
+  }}
+>
+  <Text style={{ color: "white", fontWeight: "600" }}>
+    Submit
+  </Text>
+</Button>
+```
+
+---
+
+### 4. Disabled State
+
+Disable the button when needed:
+
+```tsx
+<Button
+  onPress={handlePress}
+  disabled={isLoading}
+  style={{
+    opacity: isLoading ? 0.5 : 1,
+  }}
+>
+  <Text>Submit</Text>
+</Button>
+```
+
+---
+
+### 5. Press States
+
+Handle different press states:
+
+```tsx
+<Button
+  onPress={handlePress}
+  onPressIn={() => console.log("Pressing...")}
+  onPressOut={() => console.log("Released")}
+  onLongPress={() => console.log("Long press!")}
+>
+  <Text>Press me</Text>
+</Button>
+```
+
+---
+
+### 6. Polymorphic Components with asChild
+
+Use `asChild` to render any component as a button without an extra wrapper:
+
+```tsx
+import { Button, View, Text } from "@native-ui-org/primitives";
+
+// Render a View as a button
+<Button asChild onPress={handlePress}>
+  <View style={{ backgroundColor: "blue", padding: 16 }}>
+    <Text style={{ color: "white" }}>Custom Button</Text>
+  </View>
+</Button>
+```
+
+---
+
+### 7. Composing with Other Components
+
+Use `asChild` to compose Button with other primitives:
+
+```tsx
+import { Button, Checkbox, View } from "@native-ui-org/primitives";
+
+// Make a Checkbox pressable via Button
+<Button asChild onPress={toggleCheckbox}>
+  <View>
+    <Checkbox checked={isChecked} />
+  </View>
+</Button>
+```
+
+---
+
+### 8. Web Semantic Elements
+
+On web, use `asChild` to render semantic HTML elements:
+
+```tsx
+// Render as a native <button> element
+<Button asChild onPress={handleSubmit}>
+  <button type="submit">
+    Submit Form
+  </button>
+</Button>
+
+// Render as an anchor tag
+<Button asChild onPress={handleNavigation}>
+  <a href="/about">About</a>
+</Button>
+```
+
+---
+
+### 9. Accessibility
+
+Button automatically includes proper accessibility attributes:
+
+```tsx
+<Button
+  onPress={handlePress}
+  accessibilityLabel="Submit form"
+  accessibilityHint="Submits the current form"
+  accessibilityRole="button"
+>
+  <Text>Submit</Text>
+</Button>
+```
+
+---
+
+## API Reference
+
+### Button
+
+The base button component for all platforms.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `asChild`       | boolean                   | `false` | Render child element without Button wrapper    |
+| `onPress`       | `(event: PressEvent) => void` | —    | Callback when button is pressed                |
+| `onPressIn`     | `(event: PressEvent) => void` | —    | Callback when press starts                     |
+| `onPressOut`    | `(event: PressEvent) => void` | —    | Callback when press ends                        |
+| `onLongPress`   | `(event: PressEvent) => void` | —    | Callback for long press                         |
+| `disabled`      | boolean                   | `false` | Whether the button is disabled                 |
+| `accessibilityRole` | `"button"`            | `"button"` | Accessibility role (defaults to "button")     |
+| `accessibilityLabel` | string                | —       | Accessibility label for screen readers         |
+| `accessibilityHint` | string                | —       | Accessibility hint for screen readers          |
+| `accessibilityState` | `AccessibilityState` | —    | Accessibility state (disabled, selected, etc.) |
+| `...props`      | `PressableProps`          | —       | All React Native Pressable props               |
+
+---
+
+## Platform Behavior
+
+| Platform              | Implementation                              | Characteristics                   |
+| --------------------- | ------------------------------------------- | --------------------------------- |
+| **iOS / Android**     | Standard React Native `Pressable`           | Native touch handling and feedback |
+| **Web**               | Renders with `role="button"`                | Proper semantic HTML and keyboard support |
+| **All Platforms**     | Consistent API                              | Same props, same behavior         |
+
+---
+
+## Accessibility
+
+**Web:**
+
+* Automatic `role="button"` attribute
+* Keyboard navigation support (Enter/Space)
+* Proper focus management
+* ARIA attributes support
+
+**Mobile:**
+
+* Standard React Native accessibility props
+* Works with VoiceOver and TalkBack
+* Proper accessibility roles and states
+
+---
+
+## Examples
+
+### Form Submit Button
+
+```tsx
+import { Button, Text } from "@native-ui-org/primitives";
+
+function Form() {
+  const handleSubmit = () => {
+    // Handle form submission
+  };
+
+  return (
+    <Button
+      onPress={handleSubmit}
+      style={{
+        backgroundColor: "#007AFF",
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        borderRadius: 8,
+      }}
+    >
+      <Text style={{ color: "white", fontWeight: "600" }}>
+        Submit
+      </Text>
+    </Button>
+  );
+}
+```
+
+### Icon Button
+
+```tsx
+import { Button, View } from "@native-ui-org/primitives";
+
+function IconButton() {
+  return (
+    <Button
+      onPress={handlePress}
+      style={{
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: "#F0F0F0",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <View>
+        {/* Your icon component here */}
+      </View>
+    </Button>
+  );
+}
+```
+
+### Loading State
+
+```tsx
+import { Button, Text, ActivityIndicator } from "@native-ui-org/primitives";
+
+function LoadingButton() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  return (
+    <Button
+      onPress={async () => {
+        setIsLoading(true);
+        await doSomething();
+        setIsLoading(false);
+      }}
+      disabled={isLoading}
+      style={{
+        opacity: isLoading ? 0.6 : 1,
+      }}
+    >
+      {isLoading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <Text>Submit</Text>
+      )}
+    </Button>
+  );
+}
+```
+
+### Custom Button with asChild
+
+```tsx
+import { Button, View, Text } from "@native-ui-org/primitives";
+
+function CustomButton() {
+  return (
+    <Button asChild onPress={handlePress}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          backgroundColor: "#007AFF",
+          paddingHorizontal: 20,
+          paddingVertical: 12,
+          borderRadius: 8,
+          gap: 8,
+        }}
+      >
+        {/* Icon */}
+        <View style={{ width: 20, height: 20, backgroundColor: "white" }} />
+        <Text style={{ color: "white", fontWeight: "600" }}>
+          Custom Button
+        </Text>
+      </View>
+    </Button>
+  );
+}
+```
+
+---
+
+## Version History
+
+| Version | Notes                                                                           |
+| ------- | ------------------------------------------------------------------------------- |
+| `0.9.0` | Initial release — cross-platform Button with `asChild` polymorphism and accessibility support. |
+
+---
+
+**Summary:**
+Button is the foundation for all interactive pressable elements in cross-platform apps.
+Use it everywhere you'd use React Native's Pressable, with the added benefit of better web semantics and composability through `asChild`.
+
