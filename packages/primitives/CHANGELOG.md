@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.0
+
+### Minor Changes
+
+- c7e787a: add file, input, and input-file components
+
+### Patch Changes
+
+- df80bc7: temporary delete tabs and add button components
+- Updated dependencies [df80bc7]
+  - @native-ui-org/native-modules@1.1.1
+
 ## 0.9.0
 
 ### Minor Changes
