@@ -1,5 +1,11 @@
 # @native-ui-org/native-modules
 
+## 1.1.6
+
+### Patch Changes
+
+- 2706cdf: lazy load native module components
+
 ## 1.1.5
 
 ### Patch Changes
