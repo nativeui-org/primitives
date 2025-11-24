@@ -3,17 +3,33 @@ import * as React from 'react';
 
 import type { NativeUiOrgContextMenuViewProps } from '../types/NativeUiOrgContextMenu.types';
 
+// Lazy load the native view only when actually used
 let NativeView: React.ComponentType<Record<string, unknown>> | null = null;
+let nativeViewLoadAttempted = false;
 
-if (Platform.OS !== 'web') {
-  const { requireNativeView } = require('expo');
-  NativeView = requireNativeView('NativeUiOrgContextMenu') as React.ComponentType<Record<string, unknown>>;
+function loadNativeView() {
+  if (Platform.OS === 'web' || nativeViewLoadAttempted) {
+    return NativeView;
+  }
+  
+  nativeViewLoadAttempted = true;
+  
+  try {
+    const { requireNativeView } = require('expo');
+    NativeView = requireNativeView('NativeUiOrgContextMenu') as React.ComponentType<Record<string, unknown>>;
+  } catch {
+    // Silently fail - the warning will appear when the component is actually used
+    // This prevents the warning from appearing if ContextMenu is never imported
+    NativeView = null;
+  }
+  
+  return NativeView;
 }
 
 export default function NativeUiOrgContextMenuView(props: NativeUiOrgContextMenuViewProps) {
-  if (Platform.OS === 'web' || !NativeView) {
-    return null;
-  }
+  // Only load native view when component is actually rendered
+  const loadedNativeView = React.useMemo(() => loadNativeView(), []);
+  
   // Ensure menuItems is properly formatted
   const menuItems = React.useMemo(() => {
     const formatted = props.menuItems.map(item => {
@@ -51,13 +67,19 @@ export default function NativeUiOrgContextMenuView(props: NativeUiOrgContextMenu
     return formatted;
   }, [props.menuItems]);
 
+  if (Platform.OS === 'web' || !loadedNativeView) {
+    return null;
+  }
+
+  const NativeComponent = loadedNativeView;
+  
   return (
-    <NativeView
+    <NativeComponent
       {...props}
       menuItems={menuItems}
     >
       {props.children}
-    </NativeView>
+    </NativeComponent>
   );
 }
 

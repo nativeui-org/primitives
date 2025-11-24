@@ -1,19 +1,6 @@
----
-title: "ContextMenu"
-description: "A cross-platform context menu component that provides native context menus on iOS and Android, and a custom menu on web."
----
+# ContextMenu
 
-## Preview
-
-<Preview component="context-menu" title="Interactive Demo" />
-
----
-
-## Installation
-
-<InstallTabs />
-
----
+A cross-platform context menu component that provides native context menus on iOS and Android, and a custom menu on web.
 
 ## Installation
 
@@ -325,5 +312,4 @@ This warning appears when the native module isn't properly linked. This is **nor
 ```
 
 The `ContextMenu` component uses a composition pattern, not a simple `actions` prop. Always use `ContextMenuTrigger`, `ContextMenuContent`, and `ContextMenuItem`.
-
 
