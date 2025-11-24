@@ -1,0 +1,489 @@
+# Field
+
+Composable form field system for building accessible, flexible forms. Provides components for labels, descriptions, errors, grouping, and layout control.
+
+---
+
+## Overview
+
+Field is a comprehensive form field system inspired by shadcn/ui, adapted for React Native. It provides semantic HTML on web and accessible components on native, making it easy to build consistent forms across platforms.
+
+| Feature      | Description                                | Platforms         |
+| ------------ | ------------------------------------------ | ----------------- |
+| **Field**    | Core wrapper with orientation control       | iOS, Android, Web |
+| **FieldLabel** | Accessible label component                | iOS, Android, Web |
+| **FieldDescription** | Helper text component                    | iOS, Android, Web |
+| **FieldError** | Error message display                      | iOS, Android, Web |
+| **FieldGroup** | Group related fields                       | iOS, Android, Web |
+| **FieldSet** | Semantic fieldset grouping                 | iOS, Android, Web |
+| **FieldLegend** | Legend for fieldsets                       | iOS, Android, Web |
+| **FieldSeparator** | Visual separator with optional text        | iOS, Android, Web |
+| **FieldContent** | Content wrapper for horizontal layouts     | iOS, Android, Web |
+| **FieldTitle** | Title component for FieldContent           | iOS, Android, Web |
+
+---
+
+## Setup & Usage Guide
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import the components you need:
+
+```tsx
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+  Input,
+} from "@native-ui-org/primitives";
+```
+
+---
+
+### 2. Basic Usage
+
+Create a simple form field:
+
+```tsx
+import { Field, FieldLabel, Input, FieldError } from "@native-ui-org/primitives";
+import { useState } from "react";
+
+function MyForm() {
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
+  
+  return (
+    <Field>
+      <FieldLabel>Email</FieldLabel>
+      <Input
+        placeholder="Enter your email"
+        value={value}
+        onChangeText={setValue}
+        keyboardType="email-address"
+      />
+      {error && <FieldError>{error}</FieldError>}
+    </Field>
+  );
+}
+```
+
+---
+
+### 3. Field Orientation
+
+Control the layout direction:
+
+```tsx
+// Vertical layout (default)
+<Field orientation="vertical">
+  <FieldLabel>Name</FieldLabel>
+  <Input placeholder="Enter name" />
+</Field>
+
+// Horizontal layout
+<Field orientation="horizontal">
+  <FieldLabel>Remember me</FieldLabel>
+  <Checkbox />
+</Field>
+
+// Horizontal with FieldContent
+<Field orientation="horizontal">
+  <FieldContent>
+    <FieldLabel>Email</FieldLabel>
+    <FieldDescription>We'll never share your email</FieldDescription>
+  </FieldContent>
+  <Input placeholder="email@example.com" />
+</Field>
+```
+
+---
+
+### 4. Complete Form Example
+
+Build a complete form with labels, descriptions, and errors:
+
+```tsx
+import {
+  Field,
+  FieldLabel,
+  FieldDescription,
+  FieldError,
+  Input,
+  Button,
+} from "@native-ui-org/primitives";
+import { useState } from "react";
+
+function SignUpForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    if (!email) newErrors.email = "Email is required";
+    if (!password) newErrors.password = "Password is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  return (
+    <>
+      <Field>
+        <FieldLabel>Email</FieldLabel>
+        <FieldDescription>We'll never share your email</FieldDescription>
+        <Input
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          placeholder="email@example.com"
+        />
+        {errors.email && <FieldError>{errors.email}</FieldError>}
+      </Field>
+      
+      <Field>
+        <FieldLabel>Password</FieldLabel>
+        <Input
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          placeholder="Enter password"
+        />
+        {errors.password && <FieldError>{errors.password}</FieldError>}
+      </Field>
+      
+      <Button onPress={validate}>
+        <Text>Sign Up</Text>
+      </Button>
+    </>
+  );
+}
+```
+
+---
+
+### 5. Field Groups
+
+Group related fields together:
+
+```tsx
+import { FieldGroup, Field, FieldLabel, Input } from "@native-ui-org/primitives";
+
+function AddressForm() {
+  return (
+    <FieldGroup>
+      <Field>
+        <FieldLabel>Street</FieldLabel>
+        <Input placeholder="123 Main St" />
+      </Field>
+      
+      <Field>
+        <FieldLabel>City</FieldLabel>
+        <Input placeholder="New York" />
+      </Field>
+      
+      <Field>
+        <FieldLabel>ZIP Code</FieldLabel>
+        <Input placeholder="10001" keyboardType="numeric" />
+      </Field>
+    </FieldGroup>
+  );
+}
+```
+
+---
+
+### 6. Field Sets
+
+Use semantic fieldsets for better accessibility:
+
+```tsx
+import {
+  FieldSet,
+  FieldLegend,
+  Field,
+  FieldLabel,
+  Input,
+} from "@native-ui-org/primitives";
+
+function PersonalInfoForm() {
+  return (
+    <FieldSet>
+      <FieldLegend>Personal Information</FieldLegend>
+      
+      <Field>
+        <FieldLabel>First Name</FieldLabel>
+        <Input placeholder="John" />
+      </Field>
+      
+      <Field>
+        <FieldLabel>Last Name</FieldLabel>
+        <Input placeholder="Doe" />
+      </Field>
+    </FieldSet>
+  );
+}
+```
+
+---
+
+### 7. Field Separator
+
+Add visual separators between sections:
+
+```tsx
+import { FieldSeparator, FieldGroup } from "@native-ui-org/primitives";
+
+function FormWithSeparator() {
+  return (
+    <FieldGroup>
+      {/* First section */}
+      <Field>
+        <FieldLabel>Email</FieldLabel>
+        <Input />
+      </Field>
+      
+      {/* Separator */}
+      <FieldSeparator>Or continue with</FieldSeparator>
+      
+      {/* Second section */}
+      <Field>
+        <FieldLabel>Phone</FieldLabel>
+        <Input keyboardType="phone-pad" />
+      </Field>
+    </FieldGroup>
+  );
+}
+```
+
+---
+
+### 8. React Hook Form Integration
+
+Field components work seamlessly with React Hook Form:
+
+```tsx
+import { useForm, Controller } from "react-hook-form";
+import {
+  Field,
+  FieldLabel,
+  FieldError,
+  Input,
+} from "@native-ui-org/primitives";
+
+function HookFormExample() {
+  const { control, handleSubmit, formState: { errors } } = useForm();
+  
+  return (
+    <Field>
+      <FieldLabel>Email</FieldLabel>
+      <Controller
+        control={control}
+        name="email"
+        rules={{ required: "Email is required" }}
+        render={({ field: { onChange, value } }) => (
+          <Input
+            value={value}
+            onChangeText={onChange}
+            keyboardType="email-address"
+          />
+        )}
+      />
+      {errors.email && (
+        <FieldError>{errors.email.message as string}</FieldError>
+      )}
+    </Field>
+  );
+}
+```
+
+---
+
+## API Reference
+
+### Field
+
+Core wrapper for a single form field. Controls orientation and spacing.
+
+| Prop            | Type                      | Default     | Description                                    |
+| --------------- | ------------------------- | ----------- | ---------------------------------------------- |
+| `orientation`   | `"vertical" \| "horizontal" \| "responsive"` | `"vertical"` | Layout direction                               |
+| `...props`      | `ViewProps`               | —           | All React Native View props                    |
+
+### FieldLabel
+
+Accessible label component. Renders as `<label>` on web.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `htmlFor`       | string                    | —       | ID of the associated input (web only)         |
+| `...props`      | `TextProps`               | —       | All React Native Text props                    |
+
+### FieldDescription
+
+Helper text component for providing additional context.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `...props`      | `TextProps`               | —       | All React Native Text props                    |
+
+### FieldError
+
+Error message display component. Supports single or multiple errors.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `children`      | `string \| string[]`       | —       | Error message(s) to display                    |
+| `...props`      | `TextProps`               | —       | All React Native Text props                    |
+
+### FieldGroup
+
+Container for grouping related fields.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `...props`      | `ViewProps`               | —       | All React Native View props                    |
+
+### FieldSet
+
+Semantic fieldset for grouping related fields. Renders as `<fieldset>` on web.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `...props`      | `ViewProps`               | —       | All React Native View props                    |
+
+### FieldLegend
+
+Legend component for fieldsets. Renders as `<legend>` on web.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `variant`       | `"legend" \| "label"`     | `"legend"` | Styling variant                                |
+| `...props`      | `TextProps`               | —       | All React Native Text props                    |
+
+### FieldSeparator
+
+Visual separator with optional inline text.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `children`      | `React.ReactNode`         | —       | Optional text to display in separator          |
+| `...props`      | `ViewProps`               | —       | All React Native View props                    |
+
+### FieldContent
+
+Content wrapper for horizontal layouts. Groups label and description.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `...props`      | `ViewProps`               | —       | All React Native View props                    |
+
+### FieldTitle
+
+Title component for use within FieldContent.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `...props`      | `TextProps`               | —       | All React Native Text props                    |
+
+---
+
+## Platform Behavior
+
+| Platform              | Implementation                              | Characteristics                   |
+| --------------------- | ------------------------------------------- | --------------------------------- |
+| **iOS / Android**     | React Native View/Text components          | Native rendering                  |
+| **Web**               | Semantic HTML (`<label>`, `<fieldset>`, `<legend>`) | Better accessibility and SEO |
+| **All Platforms**     | Consistent API                              | Same props, platform-optimized rendering |
+
+---
+
+## Accessibility
+
+**Web:**
+
+* Semantic HTML (`<label>`, `<fieldset>`, `<legend>`)
+* Proper label-input association with `htmlFor`
+* ARIA attributes for error states
+* Keyboard navigation support
+
+**Mobile:**
+
+* Standard React Native accessibility props
+* Works with VoiceOver and TalkBack
+* Proper accessibility labels and hints
+
+---
+
+## Examples
+
+### Horizontal Layout with Description
+
+```tsx
+<Field orientation="horizontal">
+  <FieldContent>
+    <FieldLabel>Email</FieldLabel>
+    <FieldDescription>We'll never share your email</FieldDescription>
+  </FieldContent>
+  <Input placeholder="email@example.com" />
+</Field>
+```
+
+### Multiple Errors
+
+```tsx
+<Field>
+  <FieldLabel>Password</FieldLabel>
+  <Input secureTextEntry />
+  <FieldError>
+    {[
+      "Password must be at least 8 characters",
+      "Password must contain a number",
+    ]}
+  </FieldError>
+</Field>
+```
+
+### Nested Fieldsets
+
+```tsx
+<FieldSet>
+  <FieldLegend>Account Settings</FieldLegend>
+  
+  <FieldSet>
+    <FieldLegend variant="label">Profile</FieldLegend>
+    <Field>
+      <FieldLabel>Name</FieldLabel>
+      <Input />
+    </Field>
+  </FieldSet>
+  
+  <FieldSet>
+    <FieldLegend variant="label">Security</FieldLegend>
+    <Field>
+      <FieldLabel>Password</FieldLabel>
+      <Input secureTextEntry />
+    </Field>
+  </FieldSet>
+</FieldSet>
+```
+
+---
+
+## Version History
+
+| Version | Notes                                                                           |
+| ------- | ------------------------------------------------------------------------------- |
+| `0.9.0` | Initial release — comprehensive field system with semantic HTML support on web. |
+
+---
+
+**Summary:**
+Field provides a complete, accessible form field system for cross-platform apps.
+Use it to build consistent, semantic forms that work beautifully on all platforms.

@@ -1,0 +1,254 @@
+---
+title: "Input"
+description: "Cross-platform text input primitive that wraps React Native's TextInput. Compatible with React Hook Form and native forms. Use asChild to compose with file pickers, selects, or any custom input component."
+---
+
+---
+
+## Installation
+
+<InstallTabs />
+
+---
+
+## Overview
+
+Input is a cross-platform text input primitive that provides a consistent API for text inputs across iOS, Android, and Web. It's designed to be the foundation for building any type of text-based form field.
+
+| Feature      | Description                                | Platforms         |
+| ------------ | ------------------------------------------ | ----------------- |
+| **Text Input** | Standard text input with all TextInput props | iOS, Android, Web |
+| **File Picker** | Use asChild with file input or image picker | iOS, Android, Web |
+| **Select**   | Use asChild to create custom dropdown/select | iOS, Android, Web |
+| **Forms**    | Compatible with React Hook Form and native forms | iOS, Android, Web |
+| **asChild**  | Polymorphic rendering for any component | iOS, Android, Web |
+| **Accessibility** | Proper ARIA attributes and roles | Web               |
+
+---
+
+## Setup & Usage Guide
+
+Input works out of the box with no configuration. It's a drop-in replacement for React Native's `TextInput` with enhanced form compatibility.
+
+### 1. Install and Import
+
+Install from npm:
+
+```bash
+npm install @native-ui-org/primitives
+```
+
+Then import from the package:
+
+```tsx
+import { Input } from "@native-ui-org/primitives";
+```
+
+---
+
+### 2. Basic Usage
+
+Use Input just like React Native's TextInput:
+
+```tsx
+import { Input } from "@native-ui-org/primitives";
+import { useState } from "react";
+
+function MyForm() {
+  const [value, setValue] = useState("");
+  
+  return (
+    <Input 
+      placeholder="Enter your name"
+      value={value}
+      onChangeText={setValue}
+    />
+  );
+}
+```
+
+---
+
+### 3. React Hook Form Integration
+
+Input works seamlessly with React Hook Form:
+
+```tsx
+import { useForm, Controller } from "react-hook-form";
+import { Input } from "@native-ui-org/primitives";
+
+function MyForm() {
+  const { control, handleSubmit } = useForm();
+  
+  return (
+    <Controller
+      control={control}
+      name="email"
+      render={({ field: { onChange, value } }) => (
+        <Input
+          placeholder="Email"
+          value={value}
+          onChangeText={onChange}
+          keyboardType="email-address"
+        />
+      )}
+    />
+  );
+}
+```
+
+---
+
+### 4. Different Input Types
+
+Input supports all TextInput types:
+
+```tsx
+// Email input
+<Input 
+  keyboardType="email-address"
+  autoCapitalize="none"
+  placeholder="Email"
+/>
+
+// Password input
+<Input 
+  secureTextEntry
+  placeholder="Password"
+/>
+
+// Multiline input
+<Input 
+  multiline
+  numberOfLines={4}
+  placeholder="Message"
+/>
+
+// Numeric input
+<Input 
+  keyboardType="numeric"
+  placeholder="Phone number"
+/>
+```
+
+---
+
+### 5. File/Image Picker
+
+Use `asChild` to create file or image pickers:
+
+```tsx
+// Web: Use native file input
+<Input asChild>
+  <input 
+    type="file" 
+    accept="image/*"
+    onChange={(e) => {
+      const file = e.target.files?.[0];
+      // Handle file selection
+    }}
+  />
+</Input>
+
+// Native: Use with image picker library
+<Input asChild>
+  <Button onPress={openImagePicker}>
+    <Text>Select Image</Text>
+  </Button>
+</Input>
+```
+
+### 6. Custom Select/Dropdown
+
+Use `asChild` to create custom select components:
+
+```tsx
+<Input asChild>
+  <View>
+    <Button onPress={toggleDropdown}>
+      <Text>{selectedValue || "Select..."}</Text>
+    </Button>
+    {isOpen && (
+      <View>
+        {options.map(option => (
+          <Button key={option} onPress={() => select(option)}>
+            <Text>{option}</Text>
+          </Button>
+        ))}
+      </View>
+    )}
+  </View>
+</Input>
+```
+
+### 7. Polymorphic Components
+
+Use `asChild` for any custom input component:
+
+```tsx
+<Input asChild onChangeText={handleChange}>
+  <CustomTextInput placeholder="Custom input" />
+</Input>
+```
+
+---
+
+## API Reference
+
+### Input
+
+The base text input component for all platforms.
+
+| Prop            | Type                      | Default | Description                                    |
+| --------------- | ------------------------- | ------- | ---------------------------------------------- |
+| `asChild`       | boolean                   | `false` | Render child element without Input wrapper     |
+| `value`         | string                    | —       | Controlled value                               |
+| `defaultValue`  | string                    | —       | Uncontrolled default value                     |
+| `onChangeText`  | `(text: string) => void`  | —       | Callback when text changes                     |
+| `placeholder`   | string                    | —       | Placeholder text                               |
+| `multiline`     | boolean                   | `false` | Enable multiline input                         |
+| `secureTextEntry` | boolean                | `false` | Hide text (for passwords)                     |
+| `keyboardType`  | `KeyboardTypeOptions`     | —       | Keyboard type (email, numeric, etc.)           |
+| `editable`      | boolean                   | `true`  | Whether the field is editable                  |
+| `...props`      | `TextInputProps`          | —       | All React Native TextInput props               |
+
+---
+
+## Platform Behavior
+
+| Platform              | Implementation                              | Characteristics                   |
+| --------------------- | ------------------------------------------- | --------------------------------- |
+| **iOS / Android**     | Standard React Native `TextInput`           | Native keyboard and input handling |
+| **Web**               | Renders as `<input>` or `<textarea>`         | Proper form integration           |
+| **All Platforms**     | Consistent API                              | Same props, same behavior         |
+
+---
+
+## Accessibility
+
+**Web:**
+
+* Proper ARIA attributes (`role="textbox"`)
+* Form label association
+* Keyboard navigation support
+
+**Mobile:**
+
+* Standard React Native accessibility props
+* Works with VoiceOver and TalkBack
+
+---
+
+## Version History
+
+| Version | Notes                                                                           |
+| ------- | ------------------------------------------------------------------------------- |
+| `0.9.0` | Initial release — cross-platform Input with form compatibility and `asChild` polymorphism. |
+
+---
+
+**Summary:**
+Input is the foundation for all text-based form inputs in cross-platform apps.
+Use it everywhere you'd use React Native's TextInput, with the added benefit of better form library compatibility.
+
+

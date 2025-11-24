@@ -17,7 +17,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.theoribbi.sandboxprimitives",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to let you select and upload images.",
+        "NSPhotoLibraryAddUsageDescription": "This app needs access to save photos to your photo library."
       }
     },
     "android": {
@@ -49,7 +51,14 @@
     },
     "plugins": [
       "expo-router",
-      "@native-ui-org/native-modules"
+      "@native-ui-org/native-modules",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "This app needs access to your photo library to let you select and upload images.",
+          "cameraPermission": "This app needs access to your camera to take photos."
+        }
+      ]
     ],
     "extra": {
       "router": {},

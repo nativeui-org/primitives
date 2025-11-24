@@ -2,6 +2,7 @@ import * as React from "react";
 import { Platform, type ViewProps } from "react-native";
 import { Slot } from "../slot";
 import { Button } from "../button";
+import { useFieldContext } from "../field/field-context";
 
 export type RadioProps = Omit<ViewProps, "children"> & {
   /**
@@ -100,6 +101,7 @@ export const Radio = React.forwardRef<any, RadioProps>((props, ref) => {
   } = props;
 
   const groupContext = useRadio();
+  const fieldContext = useFieldContext();
   const isInGroup = groupContext.value !== undefined;
 
   const [internalChecked, setInternalChecked] = React.useState<boolean>(defaultChecked);
@@ -126,6 +128,16 @@ export const Radio = React.forwardRef<any, RadioProps>((props, ref) => {
       onCheckedChange?.(nextChecked);
     }
   }, [disabled, checked, isInGroup, groupContext, value, checkedProp, onCheckedChange]);
+
+  // Register with FieldContext if id is provided
+  React.useEffect(() => {
+    if (id && fieldContext.registerControl) {
+      fieldContext.registerControl(id, handleToggle);
+      return () => {
+        fieldContext.unregisterControl?.(id);
+      };
+    }
+  }, [id, handleToggle, fieldContext]);
 
   const handleKeyDown = React.useCallback((e: any) => {
     if (Platform.OS === "web" && (e.key === " " || e.key === "Enter")) {

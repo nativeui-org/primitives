@@ -28,7 +28,7 @@
     {
       "name": "Field / Input",
       "description": "Text input fields with validation",
-      "status": "pending"
+      "status": "done"
     },
     {
       "name": "Select",
@@ -39,6 +39,11 @@
       "name": "Tabs",
       "description": "Tab navigation with keyboard support",
       "status": "pending"
+    },
+    {
+      "name": "Button",
+      "description": "Button component",
+      "status": "done"
     },
     {
       "name": "List",

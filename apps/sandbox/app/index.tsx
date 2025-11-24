@@ -6,6 +6,7 @@ const primitives = [
   { name: "View", path: "/preview/view", description: "Layout container with cross‑platform a11y & asChild" },
   { name: "Text", path: "/preview/text", description: "Unified Text: RN on mobile, semantic tags on web" },
   { name: "Button", path: "/preview/button", description: "Unstyled, accessible button wrapper around Pressable" },
+  { name: "Field", path: "/preview/field", description: "Unstyled input field wrapper around TextInput, compatible with forms" },
   { name: "Collapsible", path: "/preview/collapsible", description: "Expandable content with controlled/uncontrolled state" },
   { name: "Accordion", path: "/preview/accordion", description: "Grouped collapsibles with single or multiple selection" },
   { name: "Alert", path: "/preview/alert", description: "Cross-platform alerts: native on mobile, custom on web" },

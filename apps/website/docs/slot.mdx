@@ -86,9 +86,9 @@ Child handlers run first, then parent handlers:
 
 ```tsx
 <Slot onPress={() => console.log('Parent')}>
-  <Button onPress={() => console.log('Child')}>
+  <Pressable onPress={() => console.log('Child')}>
     <Text>Press me</Text>
-  </Button>
+  </Pressable>
 </Slot>
 
 // Logs: "Child", then "Parent"

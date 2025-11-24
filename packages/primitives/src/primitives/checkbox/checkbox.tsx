@@ -2,6 +2,7 @@ import * as React from "react";
 import { Platform, type ViewProps } from "react-native";
 import { Slot } from "../slot";
 import { Button } from "../button";
+import { useFieldContext } from "../field/field-context";
 
 export type CheckedState = boolean | "indeterminate";
 
@@ -102,6 +103,7 @@ export const Checkbox = React.forwardRef<any, CheckboxProps>((props, ref) => {
   } = props;
 
   const groupContext = useCheckbox();
+  const fieldContext = useFieldContext();
   const isInGroup = groupContext.value !== undefined;
 
   const [internalChecked, setInternalChecked] = React.useState<CheckedState>(defaultChecked);
@@ -133,6 +135,16 @@ export const Checkbox = React.forwardRef<any, CheckboxProps>((props, ref) => {
       onCheckedChange?.(nextChecked);
     }
   }, [disabled, checked, isInGroup, groupContext, value, checkedProp, onCheckedChange]);
+
+  // Register with FieldContext if id is provided
+  React.useEffect(() => {
+    if (id && fieldContext.registerControl) {
+      fieldContext.registerControl(id, handleToggle);
+      return () => {
+        fieldContext.unregisterControl?.(id);
+      };
+    }
+  }, [id, handleToggle, fieldContext]);
 
   const handleKeyDown = React.useCallback((e: any) => {
     if (Platform.OS === "web" && (e.key === " " || e.key === "Enter")) {
@@ -175,9 +187,10 @@ export const Checkbox = React.forwardRef<any, CheckboxProps>((props, ref) => {
         {children}
       </Comp>
 
-      {Platform.OS === "web" && name && (
+      {Platform.OS === "web" && id && (
         <input
           type="checkbox"
+          id={id}
           name={name}
           value={value}
           checked={checked === true}
@@ -191,7 +204,12 @@ export const Checkbox = React.forwardRef<any, CheckboxProps>((props, ref) => {
             width: 1,
             height: 1,
           }}
-          onChange={() => {}}
+          onChange={(e) => {
+            // Sync with label clicks
+            if (e.target.checked !== checked) {
+              handleToggle();
+            }
+          }}
         />
       )}
     </CheckboxItemContext.Provider>

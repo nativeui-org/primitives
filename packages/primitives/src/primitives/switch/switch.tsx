@@ -3,6 +3,7 @@ import { Platform, Animated } from "react-native";
 import { Slot } from "../slot";
 import { Button, type ButtonProps } from "../button";
 import { SwitchGroupContext } from "../switch-group/context";
+import { useFieldContext } from "../field/field-context";
 
 export type SwitchProps = ButtonProps & {
   /**
@@ -31,6 +32,11 @@ export type SwitchProps = ButtonProps & {
   disabled?: boolean;
 
   /**
+   * The unique ID for the switch (for label association).
+   */
+  id?: string;
+
+  /**
    * Replace the host element by cloning the child.
    * Useful to avoid extra wrappers or to render semantic elements on web.
    */
@@ -52,6 +58,7 @@ export const Switch = React.forwardRef<any, SwitchProps>(function Switch(props, 
     onPressedChange, 
     value,
     disabled = false,
+    id,
     asChild = false,
     ...rest 
   } = props;
@@ -61,6 +68,7 @@ export const Switch = React.forwardRef<any, SwitchProps>(function Switch(props, 
   const thumbAnimation = React.useRef(new Animated.Value(defaultPressed ? 1 : 0)).current;
   
   const groupContext = React.useContext(SwitchGroupContext);
+  const fieldContext = useFieldContext();
   
   const isPressed = React.useMemo(() => {
     if (pressedProp !== undefined) {
@@ -101,6 +109,16 @@ export const Switch = React.forwardRef<any, SwitchProps>(function Switch(props, 
     }
   }, [isPressed, pressedProp, onPressedChange, disabled, groupContext, value]);
 
+  // Register with FieldContext if id is provided
+  React.useEffect(() => {
+    if (id && fieldContext.registerControl) {
+      fieldContext.registerControl(id, handlePress);
+      return () => {
+        fieldContext.unregisterControl?.(id);
+      };
+    }
+  }, [id, handlePress, fieldContext]);
+
   const Comp: any = asChild ? Slot : Button;
   
   const switchProps = {
@@ -122,9 +140,14 @@ export const Switch = React.forwardRef<any, SwitchProps>(function Switch(props, 
   if (Platform.OS === "web") {
     (switchProps as any)["aria-checked"] = isPressed;
     (switchProps as any)["aria-disabled"] = disabled || groupContext?.disabled;
+    if (id) {
+      (switchProps as any).id = id;
+    }
     if (value) {
       (switchProps as any)["value"] = value;
     }
+  } else if (id) {
+    (switchProps as any).id = id;
   }
   
   return <Comp {...switchProps} />;
