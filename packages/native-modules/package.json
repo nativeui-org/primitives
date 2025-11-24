@@ -4,13 +4,15 @@
   "description": "Native modules for NativeUI Primitives (iOS and Android)",
   "main": "build/index.js",
   "react-native": "build/index.native.js",
+  "types": "build/index.d.ts",
   "scripts": {
-    "build": "expo-module build",
+    "build": "expo-module build && npm run build:types",
+    "build:types": "node scripts/generate-types.js",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
     "prepare": "expo-module prepare",
-    "prepublishOnly": "expo-module prepublishOnly",
+    "prepublishOnly": "npm run build && expo-module prepublishOnly",
     "expo-module": "expo-module",
     "open:ios": "xed example/ios",
     "open:android": "open -a \"Android Studio\" example/android"
@@ -28,6 +30,14 @@
   "author": "Theo Ribbi <theo@ribbi.ch> (https://github.com/nativeui-org)",
   "license": "MIT",
   "homepage": "https://github.com/nativeui-org/primitives#readme",
+  "files": [
+    "build/**/*.js",
+    "build/**/*.d.ts",
+    "ios/**/*",
+    "android/**/*",
+    "app.plugin.js",
+    "expo-module.config.json"
+  ],
   "dependencies": {},
   "devDependencies": {
     "@types/react": "~19.1.0",
