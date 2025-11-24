@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.4
+
+### Patch Changes
+
+- 84f143f: upadte lockfiles pnpm
+- Updated dependencies [84f143f]
+  - @native-ui-org/native-modules@1.1.4
+
 ## 0.10.3
 
 ### Patch Changes
