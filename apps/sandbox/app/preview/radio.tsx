@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
-import { View, Text } from "@native-ui-org/primitives";
+import { View, Text, Button } from "@native-ui-org/primitives";
 import { Radio, RadioLabel, RadioIndicator } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React, { useState } from "react";
 
 export default function RadioPreview() {
@@ -35,7 +35,7 @@ export default function RadioPreview() {
             Parent manages state
           </Text>
 
-          <Pressable style={styles.row} onPress={() => setControlled(!controlled)}>
+          <Button style={styles.row} onPress={() => setControlled(!controlled)}>
             <Radio
               id="controlled"
               checked={controlled}
@@ -49,7 +49,7 @@ export default function RadioPreview() {
             <RadioLabel htmlFor="controlled" style={styles.label}>
               Controlled radio
             </RadioLabel>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -58,7 +58,7 @@ export default function RadioPreview() {
             Internal state with defaultChecked
           </Text>
 
-          <Pressable style={styles.row}>
+          <Button style={styles.row}>
             <Radio
               id="uncontrolled"
               defaultChecked={true}
@@ -71,7 +71,7 @@ export default function RadioPreview() {
             <RadioLabel htmlFor="uncontrolled" style={styles.label}>
               Uncontrolled radio (default checked)
             </RadioLabel>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>

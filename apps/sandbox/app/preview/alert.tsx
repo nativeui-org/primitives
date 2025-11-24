@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
-import { View, Text, showAlert } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { View, Text, showAlert, Button } from "@native-ui-org/primitives";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React from "react";
 
 export default function AlertPreview() {
@@ -87,10 +87,10 @@ export default function AlertPreview() {
           <Text as="p" style={styles.description}>
             Simple notification with single OK button
           </Text>
-          
-          <Pressable style={styles.button} onPress={handleBasicAlert}>
+
+          <Button style={styles.button} onPress={handleBasicAlert}>
             <Text style={styles.buttonText}>Show Basic Alert</Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -98,10 +98,10 @@ export default function AlertPreview() {
           <Text as="p" style={styles.description}>
             Two buttons: Cancel and Confirm
           </Text>
-          
-          <Pressable style={styles.button} onPress={handleConfirm}>
+
+          <Button style={styles.button} onPress={handleConfirm}>
             <Text style={styles.buttonText}>Show Confirm Dialog</Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -109,10 +109,10 @@ export default function AlertPreview() {
           <Text as="p" style={styles.description}>
             Delete confirmation with destructive styling
           </Text>
-          
-          <Pressable style={styles.button} onPress={handleDestructive}>
+
+          <Button style={styles.button} onPress={handleDestructive}>
             <Text style={styles.buttonText}>Show Delete Confirm</Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -120,10 +120,10 @@ export default function AlertPreview() {
           <Text as="p" style={styles.description}>
             Save, Don't Save, or Cancel
           </Text>
-          
-          <Pressable style={styles.button} onPress={handleThreeButtons}>
+
+          <Button style={styles.button} onPress={handleThreeButtons}>
             <Text style={styles.buttonText}>Show Save Dialog</Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -131,10 +131,10 @@ export default function AlertPreview() {
           <Text as="p" style={styles.description}>
             Must choose an option (Escape won't work on web)
           </Text>
-          
-          <Pressable style={styles.button} onPress={handleNonCancelable}>
+
+          <Button style={styles.button} onPress={handleNonCancelable}>
             <Text style={styles.buttonText}>Show Required Choice</Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>

@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Pressable, Platform, type ViewProps } from "react-native";
+import { Platform, type ViewProps } from "react-native";
 import { Slot } from "../slot";
+import { Button } from "../button";
 
 export type CheckedState = boolean | "indeterminate";
 
@@ -82,7 +83,7 @@ export const useCheckboxItem = () => React.useContext(CheckboxItemContext);
  * 
  * @example
  * <Checkbox asChild checked={isChecked}>
- *   <Pressable><CustomIndicator /></Pressable>
+ *   <Button><CustomIndicator /></Button>
  * </Checkbox>
  */
 export const Checkbox = React.forwardRef<any, CheckboxProps>((props, ref) => {
@@ -147,7 +148,7 @@ export const Checkbox = React.forwardRef<any, CheckboxProps>((props, ref) => {
 
   const ariaChecked = checked === "indeterminate" ? "mixed" : checked;
 
-  const Comp = asChild ? Slot : Pressable;
+  const Comp = asChild ? Slot : Button;
 
   return (
     <CheckboxItemContext.Provider value={itemContextValue}>

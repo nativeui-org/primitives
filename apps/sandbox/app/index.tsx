@@ -5,6 +5,7 @@ import { StyleSheet, Platform, ScrollView } from "react-native";
 const primitives = [
   { name: "View", path: "/preview/view", description: "Layout container with cross‑platform a11y & asChild" },
   { name: "Text", path: "/preview/text", description: "Unified Text: RN on mobile, semantic tags on web" },
+  { name: "Button", path: "/preview/button", description: "Unstyled, accessible button wrapper around Pressable" },
   { name: "Collapsible", path: "/preview/collapsible", description: "Expandable content with controlled/uncontrolled state" },
   { name: "Accordion", path: "/preview/accordion", description: "Grouped collapsibles with single or multiple selection" },
   { name: "Alert", path: "/preview/alert", description: "Cross-platform alerts: native on mobile, custom on web" },
@@ -16,7 +17,6 @@ const primitives = [
   { name: "Checkbox Group", path: "/preview/checkbox-group", description: "Manage multiple checkboxes with coordinated state" },
   { name: "Radio", path: "/preview/radio", description: "Individual radio button with clickable labels" },
   { name: "Radio Group", path: "/preview/radiogroup", description: "Manage multiple radios with coordinated state (single selection)" },
-  { name: "Tabs", path: "/preview/tabs", description: "Organize content into tabs: classic on web, liquid glass dropdown on mobile" },
   { name: "Context Menu", path: "/preview/context-menu", description: "Cross-platform context menu: right-click on web, long press on native" },
   { name: "Switch", path: "/preview/switch", description: "Switch between on/off states with customizable styling" },
   { name: "Switch Group", path: "/preview/switch-group", description: "Manage multiple switches with coordinated state" },

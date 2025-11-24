@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Pressable, type PressableProps, Platform } from "react-native";
+import { Platform } from "react-native";
 import { Slot } from "../slot";
+import { Button, type ButtonProps } from "../button";
 import { ToggleGroupContext } from "../toggle-group/context";
 
-export type ToggleProps = PressableProps & {
+export type ToggleProps = ButtonProps & {
   /**
    * Whether the toggle is pressed/active.
    */
@@ -90,7 +91,7 @@ export const Toggle = React.forwardRef<any, ToggleProps>(function Toggle(props, 
     }
   }, [isPressed, pressedProp, onPressedChange, disabled, groupContext, value]);
 
-  const Comp: any = asChild ? Slot : Pressable;
+  const Comp: any = asChild ? Slot : Button;
   
   const toggleProps = {
     ref,

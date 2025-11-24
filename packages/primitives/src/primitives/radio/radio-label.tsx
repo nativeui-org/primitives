@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, Platform, type TextProps } from "react-native";
+import { Platform, type TextProps } from "react-native";
 import { Text } from "../text";
 
 export type RadioLabelProps = TextProps & {
@@ -22,9 +22,9 @@ export const RadioLabel = React.forwardRef<any, RadioLabelProps>((props, ref) =>
 
   if (Platform.OS === "web") {
     return (
-      <label 
-        htmlFor={htmlFor} 
-        style={{ 
+      <label
+        htmlFor={htmlFor}
+        style={{
           cursor: "pointer",
           userSelect: "none",
           WebkitUserSelect: "none",

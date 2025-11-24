@@ -571,13 +571,13 @@ export const ContextMenuTrigger = React.forwardRef<any, ContextMenuTriggerProps 
 
     if (Platform.OS === 'android') {
         return (
-            <Pressable
+            <Button
                 {...filterProps}
                 style={rest.style}
                 onLongPress={handleMenuOpen}
             >
                 {children}
-            </Pressable>
+            </Button>
         );
     }
 
@@ -846,7 +846,7 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
                     animationType="fade"
                     onRequestClose={() => onOpenChange(false)}
                 >
-                    <Pressable
+                    <Button
                         style={styles.overlay}
                         onPress={() => onOpenChange(false)}
                     >
@@ -884,7 +884,7 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
                                                 </View>
                                             )}
                                             {item.submenu.map((subItem, subIndex) => (
-                                                <Pressable
+                                                <Button
                                                     key={`${index}_${subIndex}`}
                                                     style={[
                                                         styles.menuItem,
@@ -907,14 +907,14 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
                                                             {subItem.label}
                                                         </Text>
                                                     </View>
-                                                </Pressable>
+                                                </Button>
                                             ))}
                                         </View>
                                     );
                                 }
                                 // Regular menu item
                                 return (
-                                    <Pressable
+                                    <Button
                                         key={index}
                                         style={[
                                             styles.menuItem,
@@ -936,11 +936,11 @@ export const ContextMenuContent = React.forwardRef<any, ContextMenuContentProps>
                                                 {item.label}
                                             </Text>
                                         </View>
-                                    </Pressable>
+                                    </Button>
                                 );
                             })}
                         </View>
-                    </Pressable>
+                    </Button>
                 </Modal>
             </>
         );

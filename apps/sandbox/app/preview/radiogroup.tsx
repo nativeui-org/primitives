@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
-import { View, Text } from "@native-ui-org/primitives";
+import { View, Text, Button } from "@native-ui-org/primitives";
 import { Radio, RadioGroup, RadioLabel, RadioIndicator } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React, { useState } from "react";
 
 export default function RadioGroupPreview() {
@@ -38,7 +38,7 @@ export default function RadioGroupPreview() {
           
           <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
             <View style={styles.group}>
-              <Pressable style={styles.row} onPress={() => setPaymentMethod("credit")}>
+              <Button style={styles.row} onPress={() => setPaymentMethod("credit")}>
                 <Radio id="credit" value="credit" style={styles.radioBox}>
                   <RadioIndicator>
                     <View style={styles.dot} />
@@ -47,9 +47,9 @@ export default function RadioGroupPreview() {
                 <RadioLabel htmlFor="credit" style={styles.label}>
                   Credit Card
                 </RadioLabel>
-              </Pressable>
+              </Button>
               
-              <Pressable style={styles.row} onPress={() => setPaymentMethod("paypal")}>
+              <Button style={styles.row} onPress={() => setPaymentMethod("paypal")}>
                 <Radio id="paypal" value="paypal" style={styles.radioBox}>
                   <RadioIndicator>
                     <View style={styles.dot} />
@@ -58,9 +58,9 @@ export default function RadioGroupPreview() {
                 <RadioLabel htmlFor="paypal" style={styles.label}>
                   PayPal
                 </RadioLabel>
-              </Pressable>
+              </Button>
               
-              <Pressable style={styles.row} onPress={() => setPaymentMethod("bank")}>
+              <Button style={styles.row} onPress={() => setPaymentMethod("bank")}>
                 <Radio id="bank" value="bank" style={styles.radioBox}>
                   <RadioIndicator>
                     <View style={styles.dot} />
@@ -69,7 +69,7 @@ export default function RadioGroupPreview() {
                 <RadioLabel htmlFor="bank" style={styles.label}>
                   Bank Transfer
                 </RadioLabel>
-              </Pressable>
+              </Button>
             </View>
           </RadioGroup>
           
@@ -86,7 +86,7 @@ export default function RadioGroupPreview() {
           
           <RadioGroup value={shipping} onValueChange={setShipping}>
             <View style={styles.group}>
-              <Pressable style={styles.row} onPress={() => setShipping("standard")}>
+              <Button style={styles.row} onPress={() => setShipping("standard")}>
                 <Radio id="standard" value="standard" style={styles.radioBox}>
                   <RadioIndicator>
                     <View style={styles.dot} />
@@ -95,9 +95,9 @@ export default function RadioGroupPreview() {
                 <RadioLabel htmlFor="standard" style={styles.label}>
                   Standard (5-7 business days)
                 </RadioLabel>
-              </Pressable>
+              </Button>
               
-              <Pressable style={styles.row} onPress={() => setShipping("express")}>
+              <Button style={styles.row} onPress={() => setShipping("express")}>
                 <Radio id="express" value="express" style={styles.radioBox}>
                   <RadioIndicator>
                     <View style={styles.dot} />
@@ -106,9 +106,9 @@ export default function RadioGroupPreview() {
                 <RadioLabel htmlFor="express" style={styles.label}>
                   Express (2-3 business days)
                 </RadioLabel>
-              </Pressable>
+              </Button>
               
-              <Pressable style={styles.row} onPress={() => setShipping("overnight")}>
+              <Button style={styles.row} onPress={() => setShipping("overnight")}>
                 <Radio id="overnight" value="overnight" style={styles.radioBox}>
                   <RadioIndicator>
                     <View style={styles.dot} />
@@ -117,7 +117,7 @@ export default function RadioGroupPreview() {
                 <RadioLabel htmlFor="overnight" style={styles.label}>
                   Overnight (next business day)
                 </RadioLabel>
-              </Pressable>
+              </Button>
             </View>
           </RadioGroup>
           

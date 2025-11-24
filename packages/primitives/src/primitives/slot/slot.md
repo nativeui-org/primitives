@@ -42,9 +42,9 @@ Slot merges props from parent into its child:
 
 ```tsx
 <Slot style={{ padding: 16 }}>
-  <Pressable onPress={() => console.log('pressed')}>
+  <Button onPress={() => console.log('pressed')}>
     <Text>Click me</Text>
-  </Pressable>
+  </Button>
 </Slot>
 ```
 

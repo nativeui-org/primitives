@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Pressable, Platform, type TextProps } from "react-native";
+import { Platform, type TextProps } from "react-native";
 import { Text } from "../text";
 
 export type CheckboxLabelProps = TextProps & {

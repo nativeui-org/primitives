@@ -1,5 +1,6 @@
 import * as React from "react";
-import { View, type ViewProps } from "react-native";
+import { type ViewProps } from "../view";
+import { View } from "../view";
 import { Slot } from "../slot";
 
 export type AspectRatioProps = ViewProps & {
@@ -33,9 +34,9 @@ export type AspectRatioProps = ViewProps & {
  * @example
  * // With asChild
  * <AspectRatio ratio="4:3" asChild>
- *   <Pressable>
+ *   <Button>
  *     <Text>Clickable content</Text>
- *   </Pressable>
+ *   </Button>
  * </AspectRatio>
  */
 export const AspectRatio = React.forwardRef<any, AspectRatioProps>((props, ref) => {
@@ -46,14 +47,14 @@ export const AspectRatio = React.forwardRef<any, AspectRatioProps>((props, ref) 
     if (typeof ratio === "number") {
       return ratio;
     }
-    
+
     // Parse string ratios like "16:9", "1:1", "4/3"
     const match = ratio.toString().match(/^(\d+(?:\.\d+)?)[:/](\d+(?:\.\d+)?)$/);
     if (match) {
       const [, width, height] = match;
       return parseFloat(width!) / parseFloat(height!);
     }
-    
+
     // Fallback to 1:1 if parsing fails
     console.warn(`Invalid aspect ratio: ${ratio}. Using 1:1 as fallback.`);
     return 1;

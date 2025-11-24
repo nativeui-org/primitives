@@ -50,9 +50,9 @@ export type AvatarProps = ViewProps & {
  * @example
  * // With asChild
  * <Avatar asChild size="md">
- *   <Pressable>
+ *   <Button>
  *     <Image source={{ uri: "..." }} />
- *   </Pressable>
+ *   </Button>
  * </Avatar>
  */
 export const Avatar = React.forwardRef<any, AvatarProps>((props, ref) => {

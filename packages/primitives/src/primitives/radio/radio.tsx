@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Pressable, Platform, type ViewProps } from "react-native";
+import { Platform, type ViewProps } from "react-native";
 import { Slot } from "../slot";
+import { Button } from "../button";
 
 export type RadioProps = Omit<ViewProps, "children"> & {
   /**
@@ -80,7 +81,7 @@ export const useRadioItem = () => React.useContext(RadioItemContext);
  * 
  * @example
  * <Radio asChild checked={isChecked}>
- *   <Pressable><CustomIndicator /></Pressable>
+ *   <Button><CustomIndicator /></Button>
  * </Radio>
  */
 export const Radio = React.forwardRef<any, RadioProps>((props, ref) => {
@@ -102,7 +103,7 @@ export const Radio = React.forwardRef<any, RadioProps>((props, ref) => {
   const isInGroup = groupContext.value !== undefined;
 
   const [internalChecked, setInternalChecked] = React.useState<boolean>(defaultChecked);
-  
+
   const checked: boolean = React.useMemo(() => {
     if (isInGroup && value) {
       return groupContext.value === value;
@@ -138,7 +139,7 @@ export const Radio = React.forwardRef<any, RadioProps>((props, ref) => {
     disabled,
   }), [checked, disabled]);
 
-  const Comp = asChild ? Slot : Pressable;
+  const Comp = asChild ? Slot : Button;
 
   return (
     <RadioItemContext.Provider value={itemContextValue}>
@@ -181,7 +182,7 @@ export const Radio = React.forwardRef<any, RadioProps>((props, ref) => {
             width: 1,
             height: 1,
           }}
-          onChange={() => {}}
+          onChange={() => { }}
         />
       )}
     </RadioItemContext.Provider>

@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Pressable, type PressableProps, Platform, Animated } from "react-native";
+import { Platform, Animated } from "react-native";
 import { Slot } from "../slot";
+import { Button, type ButtonProps } from "../button";
 import { SwitchGroupContext } from "../switch-group/context";
 
-export type SwitchProps = PressableProps & {
+export type SwitchProps = ButtonProps & {
   /**
    * Whether the switch is pressed/on.
    */
@@ -100,7 +101,7 @@ export const Switch = React.forwardRef<any, SwitchProps>(function Switch(props, 
     }
   }, [isPressed, pressedProp, onPressedChange, disabled, groupContext, value]);
 
-  const Comp: any = asChild ? Slot : Pressable;
+  const Comp: any = asChild ? Slot : Button;
   
   const switchProps = {
     ref,

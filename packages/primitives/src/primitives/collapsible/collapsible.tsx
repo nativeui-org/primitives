@@ -1,6 +1,7 @@
 import * as React from "react";
-import { View, Pressable, type ViewProps, type PressableProps } from "react-native";
+import { View, type ViewProps } from "react-native";
 import { Slot } from "../slot";
+import { Button, type ButtonProps } from "../button";
 
 // Context to share state between Collapsible components
 type CollapsibleContextValue = {
@@ -133,7 +134,7 @@ Collapsible.displayName = "Collapsible";
 
 /* ---------------------------------- CollapsibleTrigger ---------------------------------- */
 
-export type CollapsibleTriggerProps = PressableProps & {
+export type CollapsibleTriggerProps = ButtonProps & {
   /**
    * Replace the host element by cloning the child.
    */
@@ -166,7 +167,7 @@ export const CollapsibleTrigger = React.forwardRef<any, CollapsibleTriggerProps>
       [disabled, context, onPress]
     );
 
-    const Comp: any = asChild ? Slot : Pressable;
+    const Comp: any = asChild ? Slot : Button;
 
     // Web accessibility props
     const webA11yProps = {

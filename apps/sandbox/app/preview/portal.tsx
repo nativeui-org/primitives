@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
-import { View, Text, Portal } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { View, Text, Portal, Button } from "@native-ui-org/primitives";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React, { useState } from "react";
 
 export default function PortalPreview() {
@@ -36,11 +36,11 @@ export default function PortalPreview() {
             Renders content to document.body on web, normally on native
           </Text>
 
-          <Pressable style={styles.button} onPress={() => setShowPortal(!showPortal)}>
+          <Button style={styles.button} onPress={() => setShowPortal(!showPortal)}>
             <Text style={styles.buttonText}>
               {showPortal ? "Hide" : "Show"} Portal Content
             </Text>
-          </Pressable>
+          </Button>
 
           {showPortal && (
             <Portal>
@@ -55,12 +55,12 @@ export default function PortalPreview() {
                 <Text style={styles.portalText}>
                   On native: Rendered normally
                 </Text>
-                <Pressable
+                <Button
                   style={styles.closeButton}
                   onPress={() => setShowPortal(false)}
                 >
                   <Text style={styles.closeButtonText}>Close</Text>
-                </Pressable>
+                </Button>
               </View>
             </Portal>
           )}
@@ -73,11 +73,11 @@ export default function PortalPreview() {
               Specify a custom DOM container to render into
             </Text>
 
-            <Pressable style={styles.button} onPress={() => setShowCustomPortal(!showCustomPortal)}>
+            <Button style={styles.button} onPress={() => setShowCustomPortal(!showCustomPortal)}>
               <Text style={styles.buttonText}>
                 {showCustomPortal ? "Hide" : "Show"} Custom Portal
               </Text>
-            </Pressable>
+            </Button>
 
             <View style={styles.customContainer}>
               <Text style={styles.containerLabel}>Custom Container:</Text>
@@ -94,12 +94,12 @@ export default function PortalPreview() {
                   <Text style={styles.portalText}>
                     Rendered in the custom container above
                   </Text>
-                  <Pressable
+                  <Button
                     style={styles.closeButton}
                     onPress={() => setShowCustomPortal(false)}
                   >
                     <Text style={styles.closeButtonText}>Close</Text>
-                  </Pressable>
+                  </Button>
                 </View>
               </Portal>
             )}

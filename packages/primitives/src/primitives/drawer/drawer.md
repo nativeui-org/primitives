@@ -56,9 +56,9 @@ function Controlled() {
 
   return (
     <>
-      <Pressable onPress={() => setOpen(true)}>
+      <Button onPress={() => setOpen(true)}>
         <Text>Open drawer</Text>
-      </Pressable>
+      </Button>
 
       <Drawer
         open={open}

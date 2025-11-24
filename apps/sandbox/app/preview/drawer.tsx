@@ -7,8 +7,9 @@ import {
   DrawerContent,
   DrawerOverlay,
   useDrawer,
+  Button,
 } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React from "react";
 
 function HandleBar() {
@@ -72,9 +73,9 @@ export default function DrawerPreview() {
             Simple drawer with default snap points
           </Text>
 
-          <Pressable style={styles.button} onPress={() => setOpen1(true)}>
+          <Button style={styles.button} onPress={() => setOpen1(true)}>
             <Text style={styles.buttonText}>Show Basic Drawer</Text>
-          </Pressable>
+          </Button>
 
           <Drawer
             open={open1}
@@ -106,12 +107,12 @@ export default function DrawerPreview() {
             State managed externally: {open2 ? "Open" : "Closed"}
           </Text>
 
-          <Pressable
+          <Button
             style={styles.button}
             onPress={() => setOpen2(true)}
           >
             <Text style={styles.buttonText}>Open Controlled Drawer</Text>
-          </Pressable>
+          </Button>
 
           <Drawer open={open2} onOpenChange={setOpen2} snapPoints={[0.4, 0.8]}>
             <DrawerOverlay />
@@ -139,12 +140,12 @@ export default function DrawerPreview() {
             Multiple snap points with callback
           </Text>
 
-          <Pressable
+          <Button
             style={styles.button}
             onPress={() => setOpenSnap(true)}
           >
             <Text style={styles.buttonText}>Open Drawer with Snap Points</Text>
-          </Pressable>
+          </Button>
 
           <Drawer
             open={openSnap}
@@ -181,9 +182,9 @@ export default function DrawerPreview() {
             Fixed height drawer without resizing
           </Text>
 
-          <Pressable style={styles.button} onPress={() => setOpenStatic(true)}>
+          <Button style={styles.button} onPress={() => setOpenStatic(true)}>
             <Text style={styles.buttonText}>Open Non-Resizable Drawer</Text>
-          </Pressable>
+          </Button>
 
           <Drawer
             open={openStatic}

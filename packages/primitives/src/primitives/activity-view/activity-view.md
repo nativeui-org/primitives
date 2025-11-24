@@ -78,8 +78,7 @@ await share({
 Wrap a button with `ActivityView` to add sharing functionality:
 
 ```tsx
-import { ActivityView } from "@native-ui-org/primitives";
-import { Pressable, Text } from "react-native";
+import { ActivityView, Button, Text } from "@native-ui-org/primitives";
 
 function ShareButton() {
   return (
@@ -95,9 +94,9 @@ function ShareButton() {
         }
       }}
     >
-      <Pressable style={{ padding: 12, backgroundColor: "#007AFF" }}>
+      <Button style={{ padding: 12, backgroundColor: "#007AFF" }}>
         <Text style={{ color: "#fff" }}>Share</Text>
-      </Pressable>
+      </Button>
     </ActivityView>
   );
 }
@@ -205,8 +204,7 @@ await share({
 ### Complete Example
 
 ```tsx
-import { share, ActivityView } from "@native-ui-org/primitives";
-import { Pressable, Text, View } from "react-native";
+import { share, ActivityView, Button, Text, View } from "@native-ui-org/primitives";
 
 export default function ShareExample() {
   const handleShare = async () => {
@@ -227,9 +225,9 @@ export default function ShareExample() {
 
   return (
     <View>
-      <Pressable onPress={handleShare}>
+      <Button onPress={handleShare}>
         <Text>Share</Text>
-      </Pressable>
+      </Button>
 
       <ActivityView
         shareOptions={{
@@ -240,9 +238,9 @@ export default function ShareExample() {
           console.log(result.action);
         }}
       >
-        <Pressable>
+        <Button>
           <Text>Share with ActivityView</Text>
-        </Pressable>
+        </Button>
       </ActivityView>
     </View>
   );

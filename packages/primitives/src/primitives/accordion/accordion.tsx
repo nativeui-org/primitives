@@ -1,6 +1,7 @@
 import * as React from "react";
-import { View, Pressable, type ViewProps, type PressableProps } from "react-native";
+import { View, type ViewProps } from "react-native";
 import { Slot } from "../slot";
+import { Button, type ButtonProps } from "../button";
 
 // Context to share state between Accordion components
 type AccordionContextValue =
@@ -310,7 +311,7 @@ AccordionItem.displayName = "AccordionItem";
 
 /* ---------------------------------- AccordionTrigger ---------------------------------- */
 
-export type AccordionTriggerProps = PressableProps & {
+export type AccordionTriggerProps = ButtonProps & {
   /**
    * Replace the host element by cloning the child.
    */
@@ -350,7 +351,7 @@ export const AccordionTrigger = React.forwardRef<any, AccordionTriggerProps>(
       [disabled, accordion, item, onPress]
     );
 
-    const Comp: any = asChild ? Slot : Pressable;
+    const Comp: any = asChild ? Slot : Button;
 
     // Web accessibility props
     const webA11yProps = {

@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
-import { View, Text, share, ActivityView } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { View, Text, share, ActivityView, Button } from "@native-ui-org/primitives";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React from "react";
 
 export default function ActivityViewPreview() {
@@ -136,9 +136,9 @@ export default function ActivityViewPreview() {
                             }
                         }}
                     >
-                        <Pressable style={styles.button} onPress={() => {}}>
+                        <Button style={styles.button} onPress={() => {}}>
                             <Text style={styles.buttonText}>Share Text</Text>
-                        </Pressable>
+                        </Button>
                     </ActivityView>
                 </View>
 
@@ -148,9 +148,9 @@ export default function ActivityViewPreview() {
                         Share using the share() function directly (native dialog on web)
                     </Text>
 
-                    <Pressable style={styles.button} onPress={handleShareText}>
+                    <Button style={styles.button} onPress={handleShareText}>
                         <Text style={styles.buttonText}>Share Text</Text>
-                    </Pressable>
+                    </Button>
                 </View>
 
                 <View style={styles.section}>
@@ -159,9 +159,9 @@ export default function ActivityViewPreview() {
                         Share content with both title and message
                     </Text>
 
-                    <Pressable style={styles.button} onPress={handleShareWithTitle}>
+                    <Button style={styles.button} onPress={handleShareWithTitle}>
                         <Text style={styles.buttonText}>Share with Title</Text>
-                    </Pressable>
+                    </Button>
                 </View>
 
                 <View style={styles.section}>
@@ -170,9 +170,9 @@ export default function ActivityViewPreview() {
                         Share a URL with title and message (works best on web)
                     </Text>
 
-                    <Pressable style={styles.button} onPress={handleShareURL}>
+                    <Button style={styles.button} onPress={handleShareURL}>
                         <Text style={styles.buttonText}>Share URL</Text>
-                    </Pressable>
+                    </Button>
                 </View>
 
                 <View style={styles.section}>
@@ -181,9 +181,9 @@ export default function ActivityViewPreview() {
                         Share with just a title (minimal example)
                     </Text>
                     
-                    <Pressable style={styles.button} onPress={handleShareMinimal}>
+                    <Button style={styles.button} onPress={handleShareMinimal}>
                         <Text style={styles.buttonText}>Share Title Only</Text>
-                    </Pressable>
+                    </Button>
                 </View>
 
                 <View style={styles.section}>
@@ -192,9 +192,9 @@ export default function ActivityViewPreview() {
                         Share a deep link that opens this ActivityView screen directly in the app. When someone taps the link, it will open this screen automatically!
                     </Text>
                     
-                    <Pressable style={styles.button} onPress={handleShareDeepLink}>
+                    <Button style={styles.button} onPress={handleShareDeepLink}>
                         <Text style={styles.buttonText}>Share Deep Link</Text>
-                    </Pressable>
+                    </Button>
                 </View>
 
                 <View style={styles.section}>

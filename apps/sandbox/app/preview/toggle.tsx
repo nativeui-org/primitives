@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
-import { View, Text } from "@native-ui-org/primitives";
+import { View, Text, Button } from "@native-ui-org/primitives";
 import { Toggle } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React, { useState } from "react";
 
 export default function TogglePreview() {
@@ -38,7 +38,7 @@ export default function TogglePreview() {
             Parent manages state
           </Text>
 
-          <Pressable style={styles.row} onPress={() => setBold(!bold)}>
+          <Button style={styles.row} onPress={() => setBold(!bold)}>
             <Toggle
               pressed={bold}
               onPressedChange={setBold}
@@ -59,7 +59,7 @@ export default function TogglePreview() {
             <Text style={styles.label}>
               Bold formatting
             </Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -68,7 +68,7 @@ export default function TogglePreview() {
             Internal state with defaultPressed
           </Text>
 
-          <Pressable style={styles.row}>
+          <Button style={styles.row}>
             <Toggle
               defaultPressed={true}
               style={styles.toggle}
@@ -88,7 +88,7 @@ export default function TogglePreview() {
             <Text style={styles.label}>
               Uncontrolled toggle (default active)
             </Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -98,7 +98,7 @@ export default function TogglePreview() {
           </Text>
 
           <View style={styles.toolbar}>
-            <Pressable style={styles.row} onPress={() => setBold(!bold)}>
+            <Button style={styles.row} onPress={() => setBold(!bold)}>
               <Toggle
                 pressed={bold}
                 onPressedChange={setBold}
@@ -116,9 +116,9 @@ export default function TogglePreview() {
                   </Text>
                 </View>
               </Toggle>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row} onPress={() => setItalic(!italic)}>
+            <Button style={styles.row} onPress={() => setItalic(!italic)}>
               <Toggle
                 pressed={italic}
                 onPressedChange={setItalic}
@@ -136,9 +136,9 @@ export default function TogglePreview() {
                   </Text>
                 </View>
               </Toggle>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row} onPress={() => setUnderline(!underline)}>
+            <Button style={styles.row} onPress={() => setUnderline(!underline)}>
               <Toggle
                 pressed={underline}
                 onPressedChange={setUnderline}
@@ -156,7 +156,7 @@ export default function TogglePreview() {
                   </Text>
                 </View>
               </Toggle>
-            </Pressable>
+            </Button>
           </View>
         </View>
 

@@ -1,5 +1,8 @@
 import * as React from "react";
-import { View, Pressable, type ViewProps, type PressableProps } from "react-native";
+import { View } from "../view";
+import { type ViewProps } from "../view";
+import { Button } from "../button";
+import { type ButtonProps } from "../button";
 import { Slot } from "../slot";
 
 /* ---------------------------------- Context ---------------------------------- */
@@ -63,7 +66,7 @@ export const AlertDialog = React.forwardRef<any, AlertDialogProps>((props, ref) 
   const contextValue = React.useMemo(
     () => ({
       open,
-      onOpenChange: onOpenChange || (() => {}),
+      onOpenChange: onOpenChange || (() => { }),
       titleId,
       descriptionId,
     }),
@@ -85,7 +88,7 @@ AlertDialog.displayName = "AlertDialog";
 
 /* ---------------------------------- AlertDialogOverlay ---------------------------------- */
 
-export type AlertDialogOverlayProps = PressableProps & {
+export type AlertDialogOverlayProps = ButtonProps & {
   /**
    * Replace the host element by cloning the child.
    */
@@ -105,99 +108,25 @@ export const AlertDialogOverlay = React.forwardRef<any, AlertDialogOverlayProps>
       return null;
     }
 
-    const handlePress = React.useCallback(
-      (event: any) => {
-        // Alert dialogs typically don't close on overlay click
-        // but we allow custom onPress
-        onPress?.(event);
-      },
-      [onPress]
-    );
-
-    const Comp: any = asChild ? Slot : Pressable;
-
     return (
-      <Comp ref={ref} onPress={handlePress} {...rest}>
+      <Button ref={ref} onPress={onPress} {...rest} role="button">
         {children}
-      </Comp>
+      </Button>
     );
   }
 );
 
-AlertDialogOverlay.displayName = "AlertDialogOverlay";
+export type AlertDialogTitleProps = ViewProps;
 
-/* ---------------------------------- AlertDialogContent ---------------------------------- */
-
-export type AlertDialogContentProps = ViewProps & {
-  /**
-   * Replace the host element by cloning the child.
-   */
-  asChild?: boolean;
-
-  /**
-   * Force mount even when closed.
-   */
-  forceMount?: boolean;
-};
-
-/**
- * AlertDialog content container.
- * Contains the title, description, and actions.
- */
-export const AlertDialogContent = React.forwardRef<any, AlertDialogContentProps>(
-  (props, ref) => {
-    const { asChild, forceMount, children, ...rest } = props;
-    const context = useAlertDialogContext();
-
-    const shouldRender = forceMount || context.open;
-
-    if (!shouldRender) {
-      return null;
-    }
-
-    const Comp = asChild ? Slot : View;
-
-    // Web accessibility props
-    const webA11yProps = {
-      role: "alertdialog" as any,
-      "aria-modal": true,
-      "aria-labelledby": context.titleId,
-      "aria-describedby": context.descriptionId,
-    };
-
-    return (
-      <Comp ref={ref} {...webA11yProps} {...rest}>
-        {children}
-      </Comp>
-    );
-  }
-);
-
-AlertDialogContent.displayName = "AlertDialogContent";
-
-/* ---------------------------------- AlertDialogTitle ---------------------------------- */
-
-export type AlertDialogTitleProps = ViewProps & {
-  /**
-   * Replace the host element by cloning the child.
-   */
-  asChild?: boolean;
-};
-
-/**
- * AlertDialog title.
- */
 export const AlertDialogTitle = React.forwardRef<any, AlertDialogTitleProps>(
   (props, ref) => {
-    const { asChild, children, ...rest } = props;
+    const { children, ...rest } = props;
     const context = useAlertDialogContext();
 
-    const Comp = asChild ? Slot : View;
-
     return (
-      <Comp ref={ref} id={context.titleId} {...rest}>
+      <View ref={ref} id={context.titleId} {...rest}>
         {children}
-      </Comp>
+      </View>
     );
   }
 );
@@ -235,7 +164,7 @@ AlertDialogDescription.displayName = "AlertDialogDescription";
 
 /* ---------------------------------- AlertDialogAction ---------------------------------- */
 
-export type AlertDialogActionProps = PressableProps & {
+export type AlertDialogActionProps = ButtonProps & {
   /**
    * Replace the host element by cloning the child.
    */
@@ -259,10 +188,10 @@ export const AlertDialogAction = React.forwardRef<any, AlertDialogActionProps>(
       [context, onPress]
     );
 
-    const Comp: any = asChild ? Slot : Pressable;
+    const Comp: any = asChild ? Slot : Button;
 
     return (
-      <Comp ref={ref} onPress={handlePress} {...rest}>
+      <Comp ref={ref} onPress={handlePress} {...rest} role="button">
         {children}
       </Comp>
     );
@@ -273,7 +202,7 @@ AlertDialogAction.displayName = "AlertDialogAction";
 
 /* ---------------------------------- AlertDialogCancel ---------------------------------- */
 
-export type AlertDialogCancelProps = PressableProps & {
+export type AlertDialogCancelProps = ButtonProps & {
   /**
    * Replace the host element by cloning the child.
    */
@@ -297,10 +226,10 @@ export const AlertDialogCancel = React.forwardRef<any, AlertDialogCancelProps>(
       [context, onPress]
     );
 
-    const Comp: any = asChild ? Slot : Pressable;
+    const Comp: any = asChild ? Slot : Button;
 
     return (
-      <Comp ref={ref} onPress={handlePress} {...rest}>
+      <Comp ref={ref} onPress={handlePress} {...rest} role="button">
         {children}
       </Comp>
     );

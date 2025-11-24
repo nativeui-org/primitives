@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
-import { View, Text } from "@native-ui-org/primitives";
+import { View, Text, Button } from "@native-ui-org/primitives";
 import { Checkbox, CheckboxLabel, CheckboxIndicator } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React, { useState } from "react";
 
 export default function CheckboxPreview() {
@@ -37,7 +37,7 @@ export default function CheckboxPreview() {
             Parent manages state
           </Text>
 
-          <Pressable style={styles.row} onPress={() => setControlled(!controlled)}>
+          <Button style={styles.row} onPress={() => setControlled(!controlled)}>
             <Checkbox
               id="controlled"
               checked={controlled}
@@ -51,7 +51,7 @@ export default function CheckboxPreview() {
             <CheckboxLabel htmlFor="controlled" style={styles.label}>
               Controlled checkbox
             </CheckboxLabel>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -60,7 +60,7 @@ export default function CheckboxPreview() {
             Internal state with defaultChecked
           </Text>
 
-          <Pressable style={styles.row}>
+          <Button style={styles.row}>
             <Checkbox
               id="uncontrolled"
               defaultChecked={true}
@@ -73,7 +73,7 @@ export default function CheckboxPreview() {
             <CheckboxLabel htmlFor="uncontrolled" style={styles.label}>
               Uncontrolled checkbox (default checked)
             </CheckboxLabel>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -83,7 +83,7 @@ export default function CheckboxPreview() {
           </Text>
 
           <View style={styles.group}>
-            <Pressable style={styles.row} onPress={() => setTerms(!terms)}>
+            <Button style={styles.row} onPress={() => setTerms(!terms)}>
               <Checkbox
                 id="terms"
                 name="terms"
@@ -99,9 +99,9 @@ export default function CheckboxPreview() {
               <CheckboxLabel htmlFor="terms" style={styles.label}>
                 I agree to the Terms of Service
               </CheckboxLabel>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row} onPress={() => setPrivacy(!privacy)}>
+            <Button style={styles.row} onPress={() => setPrivacy(!privacy)}>
               <Checkbox
                 id="privacy"
                 name="privacy"
@@ -117,7 +117,7 @@ export default function CheckboxPreview() {
               <CheckboxLabel htmlFor="privacy" style={styles.label}>
                 I have read the Privacy Policy
               </CheckboxLabel>
-            </Pressable>
+            </Button>
           </View>
         </View>
 

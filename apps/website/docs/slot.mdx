@@ -49,9 +49,9 @@ Slot merges props from parent into its child:
 
 ```tsx
 <Slot style={{ padding: 16 }}>
-  <Pressable onPress={() => console.log('pressed')}>
+  <Button onPress={() => console.log('pressed')}>
     <Text>Click me</Text>
-  </Pressable>
+  </Button>
 </Slot>
 ```
 
@@ -86,9 +86,9 @@ Child handlers run first, then parent handlers:
 
 ```tsx
 <Slot onPress={() => console.log('Parent')}>
-  <Pressable onPress={() => console.log('Child')}>
+  <Button onPress={() => console.log('Child')}>
     <Text>Press me</Text>
-  </Pressable>
+  </Button>
 </Slot>
 
 // Logs: "Child", then "Parent"

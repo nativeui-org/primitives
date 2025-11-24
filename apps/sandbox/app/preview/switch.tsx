@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
-import { View, Text } from "@native-ui-org/primitives";
+import { View, Text, Button } from "@native-ui-org/primitives";
 import { Switch } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable, Animated } from "react-native";
+import { StyleSheet, Platform, ScrollView, Animated } from "react-native";
 import React, { useState } from "react";
 
 // Animated Switch Component
@@ -74,7 +74,7 @@ export default function SwitchPreview() {
             Parent manages state
           </Text>
 
-          <Pressable style={styles.row} onPress={() => setControlled(!controlled)}>
+          <Button style={styles.row} onPress={() => setControlled(!controlled)}>
             <AnimatedSwitch
               pressed={controlled}
               onPressedChange={setControlled}
@@ -83,7 +83,7 @@ export default function SwitchPreview() {
             <Text style={styles.label}>
               Controlled switch
             </Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -92,7 +92,7 @@ export default function SwitchPreview() {
             Internal state with defaultPressed
           </Text>
 
-          <Pressable style={styles.row}>
+          <Button style={styles.row}>
             <AnimatedSwitch
               pressed={true}
               onPressedChange={() => {}}
@@ -101,7 +101,7 @@ export default function SwitchPreview() {
             <Text style={styles.label}>
               Uncontrolled switch (default on)
             </Text>
-          </Pressable>
+          </Button>
         </View>
 
         <View style={styles.section}>
@@ -111,7 +111,7 @@ export default function SwitchPreview() {
           </Text>
 
           <View style={styles.group}>
-            <Pressable style={styles.row} onPress={() => setNotifications(!notifications)}>
+            <Button style={styles.row} onPress={() => setNotifications(!notifications)}>
               <AnimatedSwitch
                 pressed={notifications}
                 onPressedChange={setNotifications}
@@ -120,9 +120,9 @@ export default function SwitchPreview() {
               <Text style={styles.label}>
                 Push notifications
               </Text>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row} onPress={() => setDarkMode(!darkMode)}>
+            <Button style={styles.row} onPress={() => setDarkMode(!darkMode)}>
               <AnimatedSwitch
                 pressed={darkMode}
                 onPressedChange={setDarkMode}
@@ -131,7 +131,7 @@ export default function SwitchPreview() {
               <Text style={styles.label}>
                 Dark mode
               </Text>
-            </Pressable>
+            </Button>
           </View>
         </View>
 

@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
-import { View, Text } from "@native-ui-org/primitives";
+import { View, Text, Button } from "@native-ui-org/primitives";
 import { Checkbox, CheckboxGroup, CheckboxLabel, CheckboxIndicator } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable } from "react-native";
+import { StyleSheet, Platform, ScrollView } from "react-native";
 import React, { useState } from "react";
 
 export default function CheckboxGroupPreview() {
@@ -38,7 +38,7 @@ export default function CheckboxGroupPreview() {
           
           <CheckboxGroup value={notifications} onValueChange={setNotifications}>
             <View style={styles.group}>
-              <Pressable style={styles.row} onPress={() => {
+              <Button style={styles.row} onPress={() => {
                 setNotifications(prev => 
                   prev.includes("email") 
                     ? prev.filter(v => v !== "email") 
@@ -53,9 +53,9 @@ export default function CheckboxGroupPreview() {
                 <CheckboxLabel htmlFor="email" style={styles.label}>
                   Email notifications
                 </CheckboxLabel>
-              </Pressable>
+              </Button>
               
-              <Pressable style={styles.row} onPress={() => {
+              <Button style={styles.row} onPress={() => {
                 setNotifications(prev => 
                   prev.includes("push") 
                     ? prev.filter(v => v !== "push") 
@@ -70,9 +70,9 @@ export default function CheckboxGroupPreview() {
                 <CheckboxLabel htmlFor="push" style={styles.label}>
                   Push notifications
                 </CheckboxLabel>
-              </Pressable>
+              </Button>
               
-              <Pressable style={styles.row} onPress={() => {
+              <Button style={styles.row} onPress={() => {
                 setNotifications(prev => 
                   prev.includes("sms") 
                     ? prev.filter(v => v !== "sms") 
@@ -87,7 +87,7 @@ export default function CheckboxGroupPreview() {
                 <CheckboxLabel htmlFor="sms" style={styles.label}>
                   SMS alerts
                 </CheckboxLabel>
-              </Pressable>
+              </Button>
             </View>
           </CheckboxGroup>
           
@@ -104,7 +104,7 @@ export default function CheckboxGroupPreview() {
           
           <CheckboxGroup value={tasks} onValueChange={setTasks}>
             <View style={styles.group}>
-              <Pressable style={styles.row} onPress={() => {
+              <Button style={styles.row} onPress={() => {
                 setTasks(prev => 
                   prev.includes("task-1") 
                     ? prev.filter(v => v !== "task-1") 
@@ -122,9 +122,9 @@ export default function CheckboxGroupPreview() {
                 >
                   Review pull request #42
                 </CheckboxLabel>
-              </Pressable>
+              </Button>
               
-              <Pressable style={styles.row} onPress={() => {
+              <Button style={styles.row} onPress={() => {
                 setTasks(prev => 
                   prev.includes("task-2") 
                     ? prev.filter(v => v !== "task-2") 
@@ -142,9 +142,9 @@ export default function CheckboxGroupPreview() {
                 >
                   Update documentation
                 </CheckboxLabel>
-              </Pressable>
+              </Button>
               
-              <Pressable style={styles.row} onPress={() => {
+              <Button style={styles.row} onPress={() => {
                 setTasks(prev => 
                   prev.includes("task-3") 
                     ? prev.filter(v => v !== "task-3") 
@@ -162,7 +162,7 @@ export default function CheckboxGroupPreview() {
                 >
                   Fix navigation bug
                 </CheckboxLabel>
-              </Pressable>
+              </Button>
             </View>
           </CheckboxGroup>
           

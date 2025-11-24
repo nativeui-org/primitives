@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
-import { View, Text } from "@native-ui-org/primitives";
+import { View, Text, Button } from "@native-ui-org/primitives";
 import { SwitchGroup, Switch } from "@native-ui-org/primitives";
-import { StyleSheet, Platform, ScrollView, Pressable, Animated } from "react-native";
+import { StyleSheet, Platform, ScrollView, Animated } from "react-native";
 import React, { useState } from "react";
 
 // Animated Switch Component
@@ -75,7 +75,12 @@ export default function SwitchGroupPreview() {
           </Text>
 
           <View style={styles.group}>
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = controlled.includes("option1")
+                    ? controlled.filter(v => v !== "option1")
+                    : [...controlled, "option1"];
+                  setControlled(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={controlled.includes("option1")} 
                 onPressedChange={() => {
@@ -87,9 +92,14 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Option 1</Text>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = controlled.includes("option2")
+                    ? controlled.filter(v => v !== "option2")
+                    : [...controlled, "option2"];
+                  setControlled(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={controlled.includes("option2")} 
                 onPressedChange={() => {
@@ -101,9 +111,14 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Option 2</Text>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = controlled.includes("option3")
+                    ? controlled.filter(v => v !== "option3")
+                    : [...controlled, "option3"];
+                  setControlled(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={controlled.includes("option3")} 
                 onPressedChange={() => {
@@ -115,7 +130,7 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Option 3</Text>
-            </Pressable>
+            </Button>
           </View>
         </View>
 
@@ -126,7 +141,12 @@ export default function SwitchGroupPreview() {
           </Text>
 
           <View style={styles.group}>
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = settings.includes("notifications")
+                    ? settings.filter(v => v !== "notifications")
+                    : [...settings, "notifications"];
+                  setSettings(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={settings.includes("notifications")} 
                 onPressedChange={() => {
@@ -138,9 +158,14 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Push notifications</Text>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = settings.includes("email")
+                    ? settings.filter(v => v !== "email")
+                    : [...settings, "email"];
+                  setSettings(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={settings.includes("email")} 
                 onPressedChange={() => {
@@ -152,9 +177,14 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Email updates</Text>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = settings.includes("darkMode")
+                    ? settings.filter(v => v !== "darkMode")
+                    : [...settings, "darkMode"];
+                  setSettings(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={settings.includes("darkMode")} 
                 onPressedChange={() => {
@@ -166,7 +196,7 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Dark mode</Text>
-            </Pressable>
+            </Button>
           </View>
         </View>
 
@@ -179,7 +209,12 @@ export default function SwitchGroupPreview() {
           <View style={styles.group}>
             <Text style={styles.filterTitle}>Filter by category:</Text>
             
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = filters.includes("electronics")
+                    ? filters.filter(v => v !== "electronics")
+                    : [...filters, "electronics"];
+                  setFilters(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={filters.includes("electronics")} 
                 onPressedChange={() => {
@@ -191,9 +226,14 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Electronics</Text>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = filters.includes("clothing")
+                    ? filters.filter(v => v !== "clothing")
+                    : [...filters, "clothing"];
+                  setFilters(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={filters.includes("clothing")} 
                 onPressedChange={() => {
@@ -205,9 +245,14 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Clothing</Text>
-            </Pressable>
+            </Button>
 
-            <Pressable style={styles.row}>
+            <Button style={styles.row} onPress={() => {
+                  const newValue = filters.includes("books")
+                    ? filters.filter(v => v !== "books")
+                    : [...filters, "books"];
+                  setFilters(newValue);
+                }}>
               <AnimatedSwitch 
                 pressed={filters.includes("books")} 
                 onPressedChange={() => {
@@ -219,7 +264,7 @@ export default function SwitchGroupPreview() {
                 style={styles.switch}
               />
               <Text style={styles.label}>Books</Text>
-            </Pressable>
+            </Button>
           </View>
         </View>
       </View>
