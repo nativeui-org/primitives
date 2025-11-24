@@ -1,5 +1,11 @@
 # @native-ui-org/native-modules
 
+## 1.1.4
+
+### Patch Changes
+
+- 84f143f: upadte lockfiles pnpm
+
 ## 1.1.3
 
 ### Patch Changes
