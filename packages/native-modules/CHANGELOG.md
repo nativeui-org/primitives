@@ -1,5 +1,13 @@
 # @native-ui-org/native-modules
 
+## 1.1.3
+
+### Patch Changes
+
+- 78849ae: update src folder not found on build
+- 12142ef: updating deploy workflow
+- d0af91c: update ci deploy
+
 ## 1.1.2
 
 ### Patch Changes

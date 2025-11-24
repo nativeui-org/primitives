@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.3
+
+### Patch Changes
+
+- 78849ae: update src folder not found on build
+- 12142ef: updating deploy workflow
+- d0af91c: update ci deploy
+- Updated dependencies [78849ae]
+- Updated dependencies [12142ef]
+- Updated dependencies [d0af91c]
+  - @native-ui-org/native-modules@1.1.3
+
 ## 0.10.2
 
 ### Patch Changes
