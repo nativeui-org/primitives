@@ -116,6 +116,56 @@ export const AlertDialogOverlay = React.forwardRef<any, AlertDialogOverlayProps>
   }
 );
 
+AlertDialogOverlay.displayName = "AlertDialogOverlay";
+
+/* ---------------------------------- AlertDialogContent ---------------------------------- */
+
+export type AlertDialogContentProps = ViewProps & {
+  /**
+   * Replace the host element by cloning the child.
+   */
+  asChild?: boolean;
+
+  /**
+   * Force mount the content even when closed (useful for animations).
+   */
+  forceMount?: boolean;
+};
+
+/**
+ * AlertDialog content container.
+ * Renders the dialog content when open.
+ */
+export const AlertDialogContent = React.forwardRef<any, AlertDialogContentProps>(
+  (props, ref) => {
+    const { asChild, forceMount, children, ...rest } = props;
+    const context = useAlertDialogContext();
+
+    if (!context.open && !forceMount) {
+      return null;
+    }
+
+    const Comp = asChild ? Slot : View;
+
+    return (
+      <Comp
+        ref={ref}
+        role="alertdialog"
+        aria-modal={true}
+        aria-labelledby={context.titleId}
+        aria-describedby={context.descriptionId}
+        {...rest}
+      >
+        {children}
+      </Comp>
+    );
+  }
+);
+
+AlertDialogContent.displayName = "AlertDialogContent";
+
+/* ---------------------------------- AlertDialogTitle ---------------------------------- */
+
 export type AlertDialogTitleProps = ViewProps;
 
 export const AlertDialogTitle = React.forwardRef<any, AlertDialogTitleProps>(
