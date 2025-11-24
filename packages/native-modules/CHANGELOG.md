@@ -1,5 +1,11 @@
 # @native-ui-org/native-modules
 
+## 1.1.5
+
+### Patch Changes
+
+- 1b902c8: update deployments
+
 ## 1.1.4
 
 ### Patch Changes

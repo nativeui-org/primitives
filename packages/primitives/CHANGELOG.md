@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.5
+
+### Patch Changes
+
+- 1b902c8: update deployments
+- Updated dependencies [1b902c8]
+  - @native-ui-org/native-modules@1.1.5
+
 ## 0.10.4
 
 ### Patch Changes
