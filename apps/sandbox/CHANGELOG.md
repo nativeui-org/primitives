@@ -1,5 +1,13 @@
 # @native-ui-org/sandbox
 
+## 0.18.2
+
+### Patch Changes
+
+- Updated dependencies [db5fce3]
+  - @native-ui-org/native-modules@1.1.2
+  - @native-ui-org/primitives@0.10.2
+
 ## 0.18.1
 
 ### Patch Changes

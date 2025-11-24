@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.2
+
+### Patch Changes
+
+- db5fce3: updating native modules exports
+- Updated dependencies [db5fce3]
+  - @native-ui-org/native-modules@1.1.2
+
 ## 0.10.1
 
 ### Patch Changes
