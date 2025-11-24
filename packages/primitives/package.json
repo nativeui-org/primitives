@@ -42,7 +42,6 @@
   "dependencies": {
     "@native-ui-org/native-modules": "workspace:*",
     "@react-native/babel-preset": "^0.81.1",
-    "@testing-library/react-native": "^13.3.3",
-    "serializer": "link:react-native-web/jest/serializer"
+    "@testing-library/react-native": "^13.3.3"
   }
 }
