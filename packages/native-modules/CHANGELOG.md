@@ -1,5 +1,11 @@
 # @native-ui-org/native-modules
 
+## 1.1.1
+
+### Patch Changes
+
+- df80bc7: temporary delete tabs and add button components
+
 ## 1.1.0
 
 ### Minor Changes
