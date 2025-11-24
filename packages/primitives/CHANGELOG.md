@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.1
+
+### Patch Changes
+
+- 79fcab3: update testing library deps not working with npm
+- 55b0124: update lockfiles
+
 ## 0.10.0
 
 ### Minor Changes
