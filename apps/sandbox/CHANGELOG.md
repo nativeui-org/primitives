@@ -1,5 +1,18 @@
 # @native-ui-org/sandbox
 
+## 0.18.0
+
+### Minor Changes
+
+- c7e787a: add file, input, and input-file components
+
+### Patch Changes
+
+- Updated dependencies [c7e787a]
+- Updated dependencies [df80bc7]
+  - @native-ui-org/primitives@0.10.0
+  - @native-ui-org/native-modules@1.1.1
+
 ## 0.17.0
 
 ### Minor Changes
