@@ -8,7 +8,7 @@ export {
   ContextMenuSection,
   ContextMenuContext,
   useContextMenu,
-} from '@native-ui-org/native-modules/src/context-menu';
+} from '@native-ui-org/native-modules';
 
 export type {
   ContextMenuProps,
@@ -18,5 +18,5 @@ export type {
   ContextMenuSeparatorProps,
   ContextMenuSubmenuProps,
   ContextMenuSectionProps,
-} from '@native-ui-org/native-modules/src/context-menu';
+} from '@native-ui-org/native-modules';
 

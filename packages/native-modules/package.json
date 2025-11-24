@@ -4,7 +4,6 @@
   "description": "Native modules for NativeUI Primitives (iOS and Android)",
   "main": "build/index.js",
   "react-native": "build/index.native.js",
-  "types": "build/index.d.ts",
   "scripts": {
     "build": "expo-module build",
     "clean": "expo-module clean",
