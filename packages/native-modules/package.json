@@ -14,8 +14,8 @@
     }
   },
   "scripts": {
-    "build": "expo-module build && npm run build:types",
-    "build:types": "tsc --emitDeclarationOnly --declaration --declarationMap false && node scripts/post-build-types.js",
+    "build": "expo-module build && npm run build:js-types",
+    "build:js-types": "tsc && node scripts/post-build-types.js",
     "clean": "expo-module clean",
     "lint": "expo-module lint",
     "test": "expo-module test",
